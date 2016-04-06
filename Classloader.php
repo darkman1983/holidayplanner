@@ -13,8 +13,7 @@ class Classloader {
       
       foreach ( $itr as $filename ) {
         if ( strstr ( $filename, $className ) ) {
-          //print $filename . " : " . $className . "<br>";
-          include_once $filename;
+          require_once $filename;
         }
       }
     }
