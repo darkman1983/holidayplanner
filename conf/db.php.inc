@@ -1,7 +1,4 @@
 ﻿<?php
-//definiert die Datenbankverbindungsparameter<.
-define ('DB_SERVER', 'localhost');
-define ('DB_USER', 'moviedb');
-define ('DB_PASSWORD', 'movieDB2016');
-define ('DB_DATABASE', 'moviedb');
+// Defines the database connection parameters.
+$config = array ("DB_SERVER" => 'localhost','DB_USER' => 'moviedb','DB_PASSWORD' => 'movieDB2016','DB_DATABASE' => 'moviedb' );
 ?>

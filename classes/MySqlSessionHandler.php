@@ -34,8 +34,8 @@ class MySqlSessionHandler{
     public function setDbDetails($dbHost, $dbUser, $dbPassword, $dbDatabase)
     {
         $this->dbConnection = new mysqli($dbHost, $dbUser, $dbPassword, $dbDatabase);
-        if (mysqli_connect_error()) {
-            throw new Exception('Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
+        if ($this->dbConnection->connect_error) {
+            return new ErrorController("baddbcon",$this->request);
         }
     }
     /**

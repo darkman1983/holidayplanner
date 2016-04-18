@@ -24,7 +24,7 @@
           </ul>
         </li>-->
       </ul>
-      <form class="navbar-form navbar-left" role="search">
+      <!--  <form class="navbar-form navbar-left" role="search">
         <div class="row">
   <div class="col-lg-10">
     <div class="input-group">
@@ -35,9 +35,9 @@
     </div>
   </div>
 </div>
-      </form>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="http://hday.localhost/login/">Login</a></li>
+      </form> -->
+      <ul class="nav navbar-nav navbar-right" style="margin-right: 5px">
+        <li><a href="http://hday.localhost/login/" class="glyphicon glyphicon-user btn btn-default navbar-button" role="button">Login</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

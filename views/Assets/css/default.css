@@ -14,6 +14,31 @@ ul.nav li.dropdown:hover ul.dropdown-menu {
 	margin-top:0px
 }
 
+.navbar-default {
+	background: #E87B40;
+}
+
+.navbar-brand {
+	color: #000 !important;
+}
+
+.navbar-nav > li > a {
+	/*margin-top: 5px; 
+	line-height: 5px;*/
+	color: #000 !important;
+}
+
+.navbar-button:hover {
+	background-color:#EEEEEE !important;
+	border-color:#CCCCCC;
+    color:#333333;
+}
+
+.navbar-button {
+	margin-top: 5px !important; 
+	line-height: 5px !important;
+}
+
 nav span.input-group-btn button.btn {
 	margin-top: -1px;
 }

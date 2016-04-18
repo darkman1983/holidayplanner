@@ -19,9 +19,9 @@ class Session {
   public function __construct( ) {
     $this->sessionHandler = new MySqlSessionHandler ( );
     // add db data
-    $this->sessionHandler->setDbDetails ( 'localhost', 'hmAdmin', '987zxy321', 'holiday_management' );
+    //$this->sessionHandler->setDbDetails ( 'localhost', 'hmAdmin', '987zxy321', 'holiday_management' );
     // OR alternatively send a MySQLi ressource
-    //$this->sessionHandler->setDbConnection($mysqli);
+    $this->sessionHandler->setDbConnection(Database::getInstance()->getCon());
     
     $this->sessionHandler->setDbTable ( 'sessions' );
     
