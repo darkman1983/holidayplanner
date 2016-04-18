@@ -33,7 +33,6 @@ class ErrorController extends BaseController
     
     protected function badRegData()
     {
-    	print "Bad reg data function...<br>";
     	$this->view->output($this->model->badRegData($this->urlValues));
     }
 }

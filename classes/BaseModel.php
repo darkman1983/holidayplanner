@@ -9,6 +9,7 @@ class BaseModel {
     {
         $this->viewModel = new ViewModel();
         $this->viewModel->set("AssetPath", "http://hday.localhost/views/Assets/");
+        $this->viewModel->set("BaseUrl", "http://hday.localhost/");
         $this->commonViewData();
     }
 

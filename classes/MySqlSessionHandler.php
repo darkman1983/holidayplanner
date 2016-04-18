@@ -105,6 +105,7 @@ class MySqlSessionHandler{
                        $this->dbConnection->escape_string($id),
                        $this->dbConnection->escape_string($data),
                        time());
+
         return $this->dbConnection->query($sql);
     }
     /**
