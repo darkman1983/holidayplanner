@@ -1,3 +1,11 @@
+<?php 
+$showError = $viewModel->get ( 'showError' );
+
+if (!isset($showError))
+{
+    header("Location: http://hday.localhost/"); /* Browser umleiten */
+}else {
+?>
 <?php include 'views/header.php'; ?>
 <?php include 'views/navbar.php'; ?>
 
@@ -24,7 +32,7 @@ $showError = $viewModel->get ( 'showError' );
   echo "-->";
 }
 ?>
-          <form name="loginFrm" role="form" action="<?php echo @$viewModel->get('BaseUrl'); ?>login/login" method="post">
+          <form name="loginFrm" role="form" action="<?php echo $viewModel->get('BaseUrl'); ?>login/login" method="post">
             <div class="form-group">
               <label for="usrname"><span class="glyphicon glyphicon-user"></span> Benutzername</label>
               <input type="text" class="form-control" name="usrname" id="usrname" placeholder="Benutzername Eingeben">
@@ -46,4 +54,6 @@ $showError = $viewModel->get ( 'showError' );
       </div>
       
     </div>
-<?php include 'views/footer.php'; ?>
+<?php include 'views/footer.php';
+}
+?>

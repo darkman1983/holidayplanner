@@ -23,7 +23,7 @@ class LoginController extends BaseController {
   }
 
   protected function logout( ) {
-    $this->view->output ( $this->model->logout ( ), '' );
+    $this->view->output ( $this->model->logout ( ), 'Login/logout' );
   }
 }
 

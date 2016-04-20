@@ -9,7 +9,7 @@
           <h4 class="modal-title"><span class="glyphicon glyphicon-lock"></span> Login</h4>
         </div>
         <div class="modal-body" style="padding:40px 50px;">
-          <form name="loginFrm" role="form" action="<?php echo @$viewModel->get('BaseUrl'); ?>login/login" method="post">
+          <form name="loginFrm" role="form" action="<?php echo $viewModel->get('BaseUrl'); ?>login/login" method="post">
             <div class="form-group">
               <label for="usrname"><span class="glyphicon glyphicon-user"></span> Benutzername</label>
               <input type="text" class="form-control" name="usrname" id="usrname" placeholder="Benutzername Eingeben">

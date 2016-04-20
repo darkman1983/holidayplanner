@@ -10,28 +10,28 @@
               <div class="row">
                   <div class="col-xs-12">
                       <div class="well">
-                          <form id="loginForm" method="POST" action="<?php echo $viewModel->get('BaseUrl') ?>user/create" role="form" data-toggle="validator">
+                          <form id="loginForm" method="POST" action="<?php echo $viewModel->get('BaseUrl') ?>user/create?do=1" role="form" data-toggle="validator">
                               <div class="form-group" id="usernameGroup">
-                                  <label for="username" class="control-label">Benutzername</label>
+                                  <label for="frm_username" class="control-label">Benutzername</label>
                                   <div class="input-group">
                                     <span class="input-group-addon" id="sizing-addon1">z.B. hmustermann</span>
-                                    <input type="text" class="form-control" id="username" name="username" placeholder="Benutzernamen Eingeben" data-remote="<?php echo $viewModel->get('BaseUrl'); ?>ajax/validateuser" data-error="Oops! Dieser Benutzer existiert schon!" required>
+                                    <input type="text" class="form-control" id="frm_username" name="frm_username" placeholder="Benutzernamen Eingeben" data-remote="<?php echo $viewModel->get('BaseUrl'); ?>ajax/validateuser" data-error="Oops! Dieser Benutzer existiert schon!" required>
                                   </div>
                                   <div class="help-block with-errors"></div>
                               </div>
                               <div class="form-group">
-                                  <label for="uPassword" class="control-label">Passwort</label>
-                                  <input type="password" class="form-control" id="uPassword" name="uPassword" placeholder="Passwort Eingeben" data-minlength="6" data-error="Oops! Das Passwort muss mindestens 6 Zeichen lang sein!" required>
+                                  <label for="frm_uPassword" class="control-label">Passwort</label>
+                                  <input type="password" class="form-control" id="frm_uPassword" name="frm_uPassword" placeholder="Passwort Eingeben" data-minlength="6" data-error="Oops! Das Passwort muss mindestens 6 Zeichen lang sein!" required>
                                   <div class="help-block with-errors"></div>
                               </div>
                               <div class="form-group">
-                                  <label for="confirmPassword" class="control-label">Passwort Wiederholen</label>
-                                  <input type="password" class="form-control" id="ConfirmPassword" name="ConfirmPassword" placeholder="Passwort Eingeben" data-match="#uPassword" data-match-error="Oh nein, die Passwörter stimmen nicht überein!">
+                                  <label for="frm_confirmPassword" class="control-label">Passwort Wiederholen</label>
+                                  <input type="password" class="form-control" id="frm_confirmPassword" name="frm_confirmPassword" placeholder="Passwort Eingeben" data-match="#frm_uPassword" data-match-error="Oh nein, die Passwörter stimmen nicht überein!">
                                   <div class="help-block with-errors"></div>
                               </div>
                               <div class="form-group">
-  								  <label for="userlevel">Benutzerlevel Wählen</label>
-  								  <select class="form-control" id="userlevel" name="userlevel">
+  								  <label for="frm_userlevel">Benutzerlevel Wählen</label>
+  								  <select class="form-control" id="frm_userlevel" name="frm_userlevel">
   								    <option value="1">1 - Normal</option>
   								    <option value="2">2 - Anträge Freigeben</option>
   								    <option value="3">3 - Administrator</option>
@@ -39,23 +39,26 @@
                               </div>
                               <hr>
                               <div class="form-group">
-                                  <label for="email" class="control-label">Email Adresse</label>
+                                  <label for="frm_email" class="control-label">Email Adresse</label>
                                   <div class="input-group">
-                                    <input type="text" class="form-control" id="email" name="email" placeholder="Email Eingeben" required>
+                                    <input type="text" class="form-control" id="frm_email" name="frm_email" placeholder="Email Eingeben" required>
                                     <span class="input-group-addon" id="sizing-addon1">@</span>
-                                    <input type="text" class="form-control" id="emailDomain" name="emailDomain" placeholder="Domain eingeben" required>
+                                    <input type="text" class="form-control" id="frm_emailDomain" name="frm_emailDomain" placeholder="Domain eingeben" required>
                                   </div>
                                   <div class="help-block with-errors"></div>
                               </div>
                               <div class="form-group">
-                                  <label for="firstname" class="control-label">Vorname</label>
-                                  <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Vorname Eingeben" required>
+                                  <label for="frm_firstname" class="control-label">Vorname</label>
+                                  <input type="text" class="form-control" id="frm_firstname" name="frm_firstname" placeholder="Vorname Eingeben" required>
+                                  <div class="help-block with-errors"></div>
                               </div>
                               <div class="form-group">
-                                  <label for="lastname" class="control-label">Nachname</label>
-                                  <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Nachname Eingeben" required>
+                                  <label for="frm_lastname" class="control-label">Nachname</label>
+                                  <input type="text" class="form-control" id="frm_lastname" name="frm_lastname" placeholder="Nachname Eingeben" required>
+                                  <div class="help-block with-errors"></div>
                               </div>
-                              <button type="submit" class="btn btn-success btn-block">Erstellen</button>
+                              <button type="submit" class="btn btn-success btn-default">Erstellen</button>
+                              <a href="<?php echo $viewModel->get('BaseUrl'); ?>user" class="btn btn-danger btn-default"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
                           </form>
                       </div>
                   </div>

@@ -9,8 +9,9 @@ class BaseModel {
     public function __construct()
     {
         $this->viewModel = new ViewModel();
-        $this->viewModel->set("AssetPath", "http://hday.localhost/views/Assets/");
-        $this->viewModel->set("BaseUrl", "http://hday.localhost/");
+        $baseUrl = $_SERVER['SERVER_NAME'];
+        $this->viewModel->set("AssetPath", "http://{$baseUrl}/views/Assets/");
+        $this->viewModel->set("BaseUrl", "http://$baseUrl/");
         
         $this->session = Session::getInstance ( );
         $this->commonViewData();

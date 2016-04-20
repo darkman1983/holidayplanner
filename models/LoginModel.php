@@ -39,7 +39,6 @@ class LoginModel extends BaseModel {
         $this->session->set ( 'loggedIN', true );
         
         $this->viewModel->set ( "loggedIN", $this->session->get ( 'loggedIN' ) );
-        $this->viewModel->set ( "shouldRedirect", true );
       } else {
         $this->viewModel->set ( "showError", "Leider gab es ein Problem beim Login!" );
         $this->session->set ( 'loggedIN', false );
@@ -53,7 +52,6 @@ class LoginModel extends BaseModel {
   
   public function logout() {
     $this->session->destroy();
-    $this->viewModel->set ( "shouldRedirect", true );
     
     return $this->viewModel;
   }

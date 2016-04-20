@@ -29,6 +29,19 @@ class UserModel extends BaseModel {
   {
     return $this->viewModel;
   }
+  
+  public function badUserCreate($urlValues, $dbError)
+  {
+      $this->viewModel->set("urlValues", $urlValues);
+      $this->viewModel->set("dbError", $dbError);
+      
+      return $this->viewModel;
+  }
+  
+  public function success()
+  {
+      return $this->viewModel;
+  }
 }
 
 ?>

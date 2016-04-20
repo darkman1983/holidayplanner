@@ -18,7 +18,8 @@ class AjaxModel extends BaseModel {
   // data passed to the home index view
   public function validateUser( ) {
     
-    $checkUserSql = sprintf("SELECT username FROM users WHERE username = '%s'", $this->urlValues['username']);
+    $checkUserSql = sprintf("SELECT username FROM users WHERE username = '%s'", $this->urlValues['frm_username']);
+    print $checkUserSql;
     $result = $this->db->query($checkUserSql);
     
     if($result->num_rows > 0)
