@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+<?php
+$shouldRedirect = $viewModel->get('shouldRedirect');
+if($shouldRedirect)
+{
+  echo "<meta http-equiv=\"refresh\" content=\"0; URL=".$viewModel->get('BaseUrl')."\">";
+}
+?>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,5 +23,11 @@
   <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="<?php echo @$viewModel->get('AssetPath'); ?>js/jquery.min.js"></script>
+<script src="<?php echo @$viewModel->get('AssetPath'); ?>js/moviedb.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="<?php echo @$viewModel->get('AssetPath'); ?>js/bootstrap.min.js"></script>
+<script src="<?php echo @$viewModel->get('AssetPath'); ?>js/validator.min.js"></script>
 </head>
 <body>

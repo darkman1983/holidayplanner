@@ -39,6 +39,13 @@ class ErrorModel extends BaseModel
     	 
     	return $this->viewModel;
     }
+    
+    public function notAllowed()
+    {
+      $this->viewModel->set("pageTitle","Error - Benutzerlevel reicht nicht aus um die Seite anzuzeigen!");
+      
+      return $this->viewModel;
+    }
 }
 
 ?>

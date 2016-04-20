@@ -9,6 +9,39 @@ body {
   padding-bottom: 20px;
 }
 
+.vertical-center {
+	vertical-align: middle !important;
+}
+
+.nounderline {
+	text-decoration: none !important;
+}
+	
+.table-navbar {
+	padding-right: 0.5em;
+}
+
+.modal-header {
+	padding-bottom: 5px;
+	background: #E87B40 !important;
+}
+
+.modal-title {
+	background: #E87B40 !important;
+}
+
+.padding-right-5 {
+	padding-right: 5px;
+}
+
+.link-color-black {
+	color: #000 !important;
+}
+
+.link-color-lightgrey:hover {
+	color: #6B6B6B !important;
+}
+
 ul.nav li.dropdown:hover ul.dropdown-menu {
 	display: block;
 	margin-top:0px

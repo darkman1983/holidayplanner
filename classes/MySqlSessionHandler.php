@@ -61,7 +61,7 @@ class MySqlSessionHandler{
     public function open()
     {
         //delete old session handlers
-        $limit = time() - (3600 * 24);
+        $limit = strtotime("-20 minutes", time());
         $sql = sprintf("DELETE FROM %s WHERE timestamp < %s", $this->dbTable, $limit);
         return $this->dbConnection->query($sql);
     }
@@ -109,7 +109,7 @@ class MySqlSessionHandler{
         return $this->dbConnection->query($sql);
     }
     /**
-     * Destoroy the session
+     * Destroy the session
      * @param int session id
      * @return bool
      */

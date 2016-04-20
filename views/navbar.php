@@ -15,14 +15,52 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li><a href="<?php echo @$viewModel->get('BaseUrl'); ?>">Index <span class="sr-only">(current)</span></a></li>
-        <!-- <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Menu <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="http://dev.localhost/moviedb2/Movie/theatre/">In Theaters</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">One more separated link</a></li>
-          </ul>
-        </li>-->
+        <?php
+        $loggedIN = $viewModel->get ( 'loggedIN' );
+        $level = $viewModel->get ( 'level' );
+        
+        if ( $loggedIN && $level > 0 ) {
+          $holiday_menu = array ("Übersicht" => array (1,"holiday" ),"Beantragen" => array (1,"holiday/propose" ),"Status Einsehen" => array (1,"holiday/status" ) );
+          
+          echo '<li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Urlaub <span class="caret"></span></a>
+          <ul class="dropdown-menu">';
+          
+          foreach ( $holiday_menu as $entry => &$data ) {
+            if ( $data [0] <= $level ) {
+              if ( $entry != '-' ) {
+                printf ( '<li><a href="%s%s">%s</a></li>', $viewModel->get ( 'BaseUrl' ), $data [1], $entry );
+              } else {
+                echo '<li role="separator" class="divider"></li>';
+              }
+            }
+          }
+          
+          echo '</ul>
+        </li>';
+        }
+        
+        if ( $loggedIN && $level > 1 ) {
+          $holiday_menu = array ("Benutzer" => array(3, "user"), "Freie Tage" => array (3,"freedays" ), "-" => array(3, ""),"Übersicht" => array (2,"holidaymanager" ),"Anträge" => array (2,"holidaymanager/manage" ) );
+        
+          echo '<li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Verwaltung <span class="caret"></span></a>
+          <ul class="dropdown-menu">';
+        
+          foreach ( $holiday_menu as $entry => &$data ) {
+            if ( $data [0] <= $level ) {
+              if ( $entry != '-' ) {
+                printf ( '<li><a href="%s%s">%s</a></li>', $viewModel->get ( 'BaseUrl' ), $data [1], $entry );
+              } else {
+                echo '<li role="separator" class="divider"></li>';
+              }
+            }
+          }
+        
+          echo '</ul>
+        </li>';
+        }
+        ?>
       </ul>
       <!--  <form class="navbar-form navbar-left" role="search">
         <div class="row">
@@ -37,7 +75,21 @@
 </div>
       </form> -->
       <ul class="nav navbar-nav navbar-right" style="margin-right: 5px">
-        <li><a href="#" class="glyphicon glyphicon-user" id="loginBtn">&nbsp;Login</a></li>
+        <?php         
+        if ($loggedIN)
+        {
+          echo sprintf('<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Willkommen %s %s <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="%slogin/logout">Logout</a></li>
+            <!-- <li role="separator" class="divider"></li>
+            <li><a href="#">One more separated link</a></li> -->
+          </ul>
+        </li>', $viewModel->get('firstname'), $viewModel->get('lastname'), $viewModel->get('BaseUrl'));
+        }else {
+          echo '<li><a href="#" class="glyphicon glyphicon-user" id="loginBtn">&nbsp;Login</a></li>';
+        }
+        ?>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

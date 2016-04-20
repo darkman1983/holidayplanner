@@ -1,32 +1,62 @@
 <?php
 
-class LoginModel extends BaseModel
-{
-  private $db = NULL;
-  private $urlValues = array();
-  
-  public function __construct($urlValues)
-  {
-    parent::__construct();
-    
-    $this->db = Database::getInstance()->getCon();
-  }
-    //data passed to the home index view
-    public function index()
-    {   
-        $this->viewModel->set("pageTitle", "It-Solutions Urlaubsplaner :: Login");
+/**
+ * @author tstepputtis
+ *
+ */
+class LoginModel extends BaseModel {
 
-        return $this->viewModel;
-    }
+  private $db = NULL;
+
+  private $urlValues = array ();
+
+  public function __construct( $urlValues ) {
+    parent::__construct ( );
     
-    public function login()
-    {
-      $this->viewModel->set("pageTitle", "It-Solutions Urlaubsplaner :: Login");
+    $this->db = Database::getInstance ( )->getCon ( );
+    $this->urlValues = $urlValues;
+    
+    $this->viewModel->set ( "pageTitle", "It-Solutions Urlaubsplaner :: Login" );
+  }
+  // data passed to the home index view
+  public function index( ) {    
+    return $this->viewModel;
+  }
+
+  public function login( ) {    
+    if ( isset ( $this->urlValues ['usrname'] ) && isset ( $this->urlValues ['psw'] ) ) {
+      $loginCheck_SQL = sprintf ( "SELECT * FROM users WHERE username = '%s' AND password = '%s'", $this->urlValues ['usrname'], sha1 ( $this->urlValues ['usrname'] . ':' . $this->urlValues ['psw'] ) );
+      $resultset = $this->db->query ( $loginCheck_SQL );
       
-      //print_r($this->urlValues);
-    
-      return $this->viewModel;
+      if ( $resultset->num_rows > 0 ) {
+        $result = $resultset->fetch_all ( MYSQLI_ASSOC );
+        
+        $this->session->set ( 'id', $result [0] ['id'] );
+        $this->session->set ( 'firstname', $result [0] ['firstname'] );
+        $this->session->set ( 'lastname', $result [0] ['lastname'] );
+        $this->session->set ( 'email', $result [0] ['email'] );
+        $this->session->set ( 'level', $result [0] ['level'] );
+        $this->session->set ( 'loggedIN', true );
+        
+        $this->viewModel->set ( "loggedIN", $this->session->get ( 'loggedIN' ) );
+        $this->viewModel->set ( "shouldRedirect", true );
+      } else {
+        $this->viewModel->set ( "showError", "Leider gab es ein Problem beim Login!" );
+        $this->session->set ( 'loggedIN', false );
+        $this->session->destroy();
+        $this->session = Session::getInstance ( );
+      }
     }
+    
+    return $this->viewModel;
+  }
+  
+  public function logout() {
+    $this->session->destroy();
+    $this->viewModel->set ( "shouldRedirect", true );
+    
+    return $this->viewModel;
+  }
 }
 
 ?>
