@@ -19,7 +19,6 @@ class AjaxModel extends BaseModel {
   public function validateUser( ) {
     
     $checkUserSql = sprintf("SELECT username FROM users WHERE username = '%s'", $this->urlValues['frm_username']);
-    print $checkUserSql;
     $result = $this->db->query($checkUserSql);
     
     if($result->num_rows > 0)
@@ -32,6 +31,25 @@ class AjaxModel extends BaseModel {
     }
     
     return $this->viewModel;
+  }
+  
+  public function filterUsers($urlValues)
+  {
+      $getFilteredUsersSql = sprintf("SELECT * FROM users WHERE firstname LIKE '%%%s%%' OR lastname LIKE '%%%s%%' OR username LIKE '%%%s%%'%s", $urlValues['usersFilter'], $urlValues['usersFilter'], $urlValues['usersFilter'], empty($urlValues['usersFilter']) ? 'LIMIT 0,10' : '');
+      $result = $this->db->query($getFilteredUsersSql);
+      $this->viewModel->set("filteredUsers", $result->fetch_all(MYSQLI_ASSOC));
+      
+      return $this->viewModel;
+  }
+  
+  public function deleteUser($urlValues)
+  {
+      $deleteUserSql = sprintf("DELETE FROM users WHERE id = '%s'", $urlValues['userID']);
+      $result = $this->db->query($deleteUserSql);
+      
+      $this->filterUsers($urlValues);
+      
+      return $this->viewModel;
   }
 }
 

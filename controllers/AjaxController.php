@@ -15,6 +15,16 @@ class AjaxController extends BaseController
     {
         $this->view->output($this->model->validateUser(), '');
     }
+    
+    protected function filterUsers()
+    {
+        $this->view->output($this->model->filterUsers($this->urlValues), 'Ajax/filterusers');
+    }
+    
+    protected function deleteUser()
+    {
+        $this->view->output($this->model->deleteUser($this->urlValues), 'Ajax/deleteuser');
+    }
 }
 
 ?>

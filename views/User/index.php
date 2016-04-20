@@ -7,17 +7,15 @@
     <div class="modal-header">
     <h2>Benutzer Verwaltung</h2>
     <div class="navbar-header navbar-right table-navbar">
-		<form name="filter" role="filter">
 			<div class="form-group">
-				<input type="text" class="form-control" placeholder="Filter">
+				<input type="text" class="form-control" id="userFilter" name="userFilter" placeholder="Filter">
 			</div>
-		</form>
 	</div>
-	<a href="#" class="glyphicon glyphicon-refresh nounderline navbar-right padding-right-5 link-color-black link-color-lightgrey" title="Benutzertabelle neu Laden"></a>
+	<a href="#" class="glyphicon glyphicon-refresh nounderline navbar-right padding-right-5 link-color-black link-color-lightgrey" id="reloadUsers" title="Benutzertabelle neu Laden"></a>
 	<a href="<?php echo $viewModel->get ( 'BaseUrl' )?>user/create" class="glyphicon glyphicon-plus nounderline navbar-right link-color-black link-color-lightgrey" title="Benutzer Hinzufügen"></a>
 	</div>
 	<div class="modal-body">
-  <div class="table-responsive">
+  <div class="table-responsive" id="users">
   <table class="table table-striped table-hover">
     <thead>
       <tr>
@@ -64,9 +62,20 @@
           printf( "%s - %s", $data['level'], $levels[$data['level']]);
         }
         ?></td>
-        <td class="vertical-center"><a href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>user/delete/<?php echo $data['id']; ?>" class="glyphicon glyphicon-remove nounderline  link-color-black link-color-lightgrey" aria-hidden="true"></a></td>
+        <td class="vertical-center">
+        <?php 
+        if($userID != $data['id'])
+        {
+        ?>
+        <a href="#" class="glyphicon glyphicon-remove nounderline link-color-black link-color-lightgrey" data-href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/deleteuser?usersFilter=&userID=<?php echo $data['id']; ?>" data-toggle="modal" data-target="#confirm-delete" aria-hidden="true"></a>
+        <?php 
+        }
+        ?>
+        </td>
       </tr>
-      <?php } ?>
+      <?php
+}
+        ?>
     </tbody>
   </table>
   </div>
@@ -74,18 +83,46 @@
 </div>
 </div>
 </div>
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Löschen bestätigen</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Sie sind dabei einen Benutzer zu LÖSCHEN, dies kann nicht rückgängig gemacht werden.</p>
+                    <p>Wollen Sie den Benutzer wirklich löschen?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                    <a id="deleteConfirmed" class="btn btn-danger btn-ok">Löschen</a>
+                </div>
+            </div>
+        </div>
+    </div>
 <script>
 $(document).ready(function(){
-	/*$("#usernameGroup").hide();
-	$("#lastname").keyup(function() {
-        var firstname = $("#firstname");
-        var lastname = $("#lastname");
-        var username = firstname.val().toLowerCase().charAt(0) + lastname.val().toLowerCase();
-
-        $("#username").val(username);
-        $("#loginForm").validator('validate');
-        $("#usernameGroup").show();
-    });*/
-});
+	$("#userFilter").keyup(function() {
+		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterusers?usersFilter=" + $("#userFilter").val(), function( data ) {
+			  $( "#users" ).html( data );
+			});
+    });
+	$("#reloadUsers").click(function() {
+		$("#userFilter").val('');
+		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterusers?usersFilter=", function( data ) {
+			$( "#users" ).html( data );
+			});
+		});
+	$('#confirm-delete').on('show.bs.modal', function(e) {
+		$("#deleteConfirmed").click(function() {
+			$.get( $(e.relatedTarget).data('href'), function( data ) {
+				$('#confirm-delete').modal('hide');
+				$( "#users" ).html( data );
+				});
+			});
+		});
+    });
 </script>
 <?php include 'views/footer.php'; ?>
