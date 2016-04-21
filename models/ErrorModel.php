@@ -46,6 +46,14 @@ class ErrorModel extends BaseModel
       
       return $this->viewModel;
     }
+    
+    public function badsession($request)
+    {
+      $this->viewModel->set("pageTitle","Error - Sitzung abgelaufen!");
+      $this->viewModel->set('ajax', $request['ajax']);
+    
+      return $this->viewModel;
+    }
 }
 
 ?>

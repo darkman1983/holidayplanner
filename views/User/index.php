@@ -1,7 +1,6 @@
 <?php include 'views/header.php'; ?>
 <?php include 'views/navbar.php'; ?>
     <div class="container">
-    <div class="">
     <br>
     <div class="modal-content">
     <div class="modal-header">
@@ -29,7 +28,10 @@
       </tr>
     </thead>
     <tbody>
-    <?php foreach($viewModel->get ( 'userData' ) as &$data) { ?>
+    <?php 
+    $userData = $viewModel->get ( 'userData' );
+    foreach($userData as &$data) {
+    ?>
       <tr>
         <td class="vertical-center"><input type="hidden" class="form-control" id="id" name="id" value="<?php echo $data['id']; ?>"><?php echo $data['id']; ?></td>
         <td class="col-xs-2 vertical-center"><input type="text" class="form-control" id="firstname" name="firstname" value="<?php echo $data['firstname']; ?>"></td>
@@ -80,13 +82,31 @@
   </table>
   </div>
 </div>
+<div class="modal-footer modal-pagination">
+<?php 
+$paginationData = $viewModel->get ( 'pagination' );
+?>
+  <nav>
+    <ul class="pagination">
+      <li>
+      <?php
+      echo ($paginationData['page'] > 1) ? '<a href="'.$viewModel->get ( 'BaseUrl' ).'user?page=1" aria-label="Erste Seite">&laquo;</a> <a href="'.$viewModel->get ( 'BaseUrl' ).'user?page=' . ($paginationData['page'] - 1) . '" aria-label="Zurück">&lsaquo;</a>' : '<span class="disabled" aria-hidden="true">&laquo;</span><span class="disabled" aria-hidden="true">&lsaquo;</span>';
+        ?>
+      </li>
+      <li><span class="modal-pagination-black"><?php echo ' Seite ', $paginationData['page'], ' von ', $paginationData['pages'], ', zeige ', $paginationData['start'], '-', $paginationData['end'], ' von ', $paginationData['total'], ' ergebnissen '; ?></span></li>
+      <li>
+      <?php 
+      echo ($paginationData['page'] < $paginationData['pages']) ? '<a href="'.$viewModel->get ( 'BaseUrl' ).'user?page=' . ($paginationData['page'] + 1) . '" aria-label="Weiter">&rsaquo;</a> <a href="'.$viewModel->get ( 'BaseUrl' ).'user?page=' . $paginationData['pages'] . '" aria-label="Letzte Seite">&raquo;</a>' : '<span class="disabled">&rsaquo;</span><span class="disabled">&raquo;</span>';
+      ?>
+      </li>
+    </ul>
+  </nav>
 </div>
 </div>
 </div>
 <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-            
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h4 class="modal-title" id="myModalLabel">Löschen bestätigen</h4>

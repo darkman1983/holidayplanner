@@ -44,8 +44,19 @@
           printf( "%s - %s", $data['level'], $levels[$data['level']]);
         }
         ?></td>
-        <td class="vertical-center"><a href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>user/delete/<?php echo $data['id']; ?>" class="glyphicon glyphicon-remove nounderline  link-color-black link-color-lightgrey" aria-hidden="true"></a></td>
+        <td class="vertical-center">
+        <?php 
+        if($userID != $data['id'])
+        {
+        ?>
+        <a href="#" class="glyphicon glyphicon-remove nounderline link-color-black link-color-lightgrey" data-href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/deleteuser?usersFilter=&userID=<?php echo $data['id']; ?>" data-toggle="modal" data-target="#confirm-delete" aria-hidden="true"></a>
+        <?php 
+        }
+        ?>
+        </td>
       </tr>
-      <?php } ?>
+      <?php
+}
+        ?>
     </tbody>
   </table>

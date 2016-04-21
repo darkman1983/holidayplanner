@@ -48,8 +48,6 @@ class AjaxModel extends BaseModel {
       $result = $this->db->query($deleteUserSql);
       
       $this->filterUsers($urlValues);
-      
-      return $this->viewModel;
   }
 }
 

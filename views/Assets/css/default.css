@@ -30,6 +30,16 @@ body {
 	background: #E87B40 !important;
 }
 
+.modal-pagination {
+	padding: 0px 15px 0px 0px !important;
+	margin: 0 !important;
+}
+
+.modal-pagination-black {
+	background: #FFF !important;
+	color: #000 !important;
+}
+
 .padding-right-5 {
 	padding-right: 5px;
 }
