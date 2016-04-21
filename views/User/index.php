@@ -1,10 +1,12 @@
 <?php include 'views/header.php'; ?>
 <?php include 'views/navbar.php'; ?>
     <div class="container">
-    <br>
     <div class="modal-content">
     <div class="modal-header">
     <h2>Benutzer Verwaltung</h2>
+    <div id="loadingIndicator" class="navbar-header navbar-left hidden">
+      <i class="fa fa-cog fa-spin fa-1x margin-bottom link-color-black" aria-hidden="true" title="Lade Inhalte..."></i>
+    </div>
     <div class="navbar-header navbar-right table-navbar">
 			<div class="form-group">
 				<input type="text" class="form-control" id="userFilter" name="userFilter" placeholder="Filter">
@@ -15,7 +17,7 @@
 	</div>
 	<div class="modal-body">
   <div class="table-responsive" id="users">
-  <table class="table table-striped table-hover">
+  <table class="table table-striped ">
     <thead>
       <tr>
         <th>#</th>
@@ -24,7 +26,7 @@
         <th>Email</th>
         <th>Benutzername</th>
         <th>Berechtigungsstufe</th>
-        <th>Löschen?</th>
+        <th>Löschen - Editieren</th>
       </tr>
     </thead>
     <tbody>
@@ -33,43 +35,38 @@
     foreach($userData as &$data) {
     ?>
       <tr>
-        <td class="vertical-center"><input type="hidden" class="form-control" id="id" name="id" value="<?php echo $data['id']; ?>"><?php echo $data['id']; ?></td>
-        <td class="col-xs-2 vertical-center"><input type="text" class="form-control" id="firstname" name="firstname" value="<?php echo $data['firstname']; ?>"></td>
-        <td class="col-xs-2 vertical-center"><input type="text" class="form-control" id="lastname" name="lastname" value="<?php echo $data['lastname']; ?>"></td>
-        <td class="col-xs-2 vertical-center"><input type="text" class="form-control" id="email" name="email" value="<?php echo $data['email']; ?>"></td>
-        <td class="col-xs-2 vertical-center"><input type="text" class="form-control" id="username" name="username" value="<?php echo $data['username']; ?>"></td>
+        <td class="vertical-center">
+          <span><?php echo $data['id']; ?></span>
+        </td>
+        <td class="col-xs-2 vertical-center">
+          <span><?php echo $data['firstname']; ?></span>
+        </td>
+        <td class="col-xs-2 vertical-center">
+          <span><?php echo $data['lastname']; ?></span>
+        </td>
+        <td class="col-xs-2 vertical-center">
+          <span><?php echo $data['email']; ?></span>
+        </td>
+        <td class="col-xs-2 vertical-center">
+          <span><?php echo $data['username']; ?></span>
+        </td>
+        
         <td class="col-xs-2 vertical-center">
         <?php 
         $userID = $viewModel->get ( 'userID' );
         $levels = array(1 => "Normal", 2 => "Anträge Freigeben", 3 => "Administrator");
-        if ($userID != $data['id'])
-        {
         ?>
-        <select class="form-control" name="level">
         <?php 
-        
-        for($i=1; $i <= count($levels); $i++) {
-          $option = '<option value="%s"%s>%s - %s</option>';
-          if ($data['level'] == $i)
-          {
-            printf($option, $i, ' selected', $i, $levels[$i]);
-          }else {
-            printf($option, $i, '', $i, $levels[$i]);
-          }
-        } 
-        ?>
-        </select>
-        <?php
-        } else {
           printf( "%s - %s", $data['level'], $levels[$data['level']]);
-        }
-        ?></td>
-        <td class="vertical-center">
+        ?>
+        </td>
+        <td class="vertical-center center-text">
         <?php 
         if($userID != $data['id'])
         {
         ?>
-        <a href="#" class="glyphicon glyphicon-remove nounderline link-color-black link-color-lightgrey" data-href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/deleteuser?usersFilter=&userID=<?php echo $data['id']; ?>" data-toggle="modal" data-target="#confirm-delete" aria-hidden="true"></a>
+        <a href="#" class="glyphicon glyphicon-remove nounderline link-color-black link-color-lightgrey glyphicon-medium" data-href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/deleteuser?usersFilter=&userDeleteID=<?php echo $data['id']; ?>" data-toggle="modal" data-target="#confirm-delete" aria-hidden="true"></a>
+        <a href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>user/edit?userEditID=<?php echo $data['id']; ?>" class="glyphicon glyphicon-edit nounderline link-color-black link-color-lightgrey glyphicon-medium" aria-hidden="true"></a>
         <?php 
         }
         ?>
@@ -104,7 +101,7 @@ $paginationData = $viewModel->get ( 'pagination' );
 </div>
 </div>
 </div>
-<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirm-delete" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -125,22 +122,33 @@ $paginationData = $viewModel->get ( 'pagination' );
 <script>
 $(document).ready(function(){
 	$("#userFilter").keyup(function() {
+		$("#loadingIndicator").toggleClass('hidden');
 		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterusers?usersFilter=" + $("#userFilter").val(), function( data ) {
 			  $( "#users" ).html( data );
+			  $("#loadingIndicator").toggleClass('hidden');
 			});
     });
+    
 	$("#reloadUsers").click(function() {
 		$("#userFilter").val('');
+		$("#loadingIndicator").toggleClass('hidden');
 		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterusers?usersFilter=", function( data ) {
 			$( "#users" ).html( data );
+			$("#loadingIndicator").toggleClass('hidden');
 			});
 		});
+	
 	$('#confirm-delete').on('show.bs.modal', function(e) {
 		$("#deleteConfirmed").click(function() {
 			$.get( $(e.relatedTarget).data('href'), function( data ) {
-				$('#confirm-delete').modal('hide');
-				$( "#users" ).html( data );
-				});
+				$('#confirm-delete .modal-header button').remove();
+				$('#confirm-delete .modal-title').text('Benutzer gelöscht!');
+				$('#confirm-delete .modal-body').html('Der Benutzer wurde erfolgreich gelöscht!');
+				$('#confirm-delete .modal-footer').html('');
+				$(window).wait(2000).attr("location","<?php echo $viewModel->get ( 'BaseUrl' ); ?>user");
+				}).fail(function() {
+				    alert( "error" );
+				  });
 			});
 		});
     });

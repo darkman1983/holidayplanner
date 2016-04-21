@@ -8,6 +8,8 @@
 <title><?php echo $viewModel->get('pageTitle'); ?></title>
 <!-- Bootstrap -->
 <link href="<?php echo $viewModel->get('AssetPath'); ?>css/bootstrap.min.css" rel="stylesheet">
+<!-- FontAwesome -->
+<link href="<?php echo $viewModel->get('AssetPath'); ?>css/font-awesome.min.css" rel="stylesheet">
 <!-- Custom CSS -->
 <link href="<?php echo $viewModel->get('AssetPath'); ?>css/default.css" rel="stylesheet">
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -18,6 +20,7 @@
 <![endif]-->
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/jquery.min.js"></script>
+<script src="<?php echo $viewModel->get('AssetPath'); ?>js/jquery.wait.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/moviedb.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/bootstrap.min.js"></script>

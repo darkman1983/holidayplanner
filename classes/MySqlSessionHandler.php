@@ -80,11 +80,12 @@ class MySqlSessionHandler{
      */
     public function read($id)
     {
-        $sql = sprintf("SELECT data FROM %s WHERE id = '%s'", $this->dbTable, $this->dbConnection->escape_string($id));
+        $sql = sprintf("SELECT data, timestamp FROM %s WHERE id = '%s'", $this->dbTable, $this->dbConnection->escape_string($id));
         if ($result = $this->dbConnection->query($sql)) {
             if ($result->num_rows && $result->num_rows > 0) {
                 $record = $result->fetch_assoc();
-                return $record['data'];
+                
+                return $record['data'].sprintf('timestamp|s:%s:"%s";', strlen($record['timestamp']), $record['timestamp']);
             } else {
                 return false;
             }

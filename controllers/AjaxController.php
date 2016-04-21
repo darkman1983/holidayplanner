@@ -1,35 +1,25 @@
 <?php
 
 class AjaxController extends BaseController {
+  private $levels;
+  
   // add to the parent constructor
   public function __construct( $action, $urlValues ) {
     parent::__construct ( $action, $urlValues );
     
-    if ( ! $this->checkAccess ( ) ) {
+    $this->levels = array ("validateuser" => 1,"filterusers" => 2,"deleteuser" => 3 );
+    
+    if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->model = new ErrorModel ( $this->urlValues );
     } else {
       // create the model object
       $this->model = new AjaxModel ( $this->urlValues );
     }
   }
-
-  private function checkAccess( ) {
-    $levels = array ("validateuser" => 1,"filterusers" => 2,"deleteuser" => 3 );
-    
-    if ( ! $this->session->get ( 'loggedIN' ) ) {
-      return false;
-    }
-    
-    if ( $this->session->get ( 'level' ) < $levels [$this->action] ) {
-      return false;
-    }
-    
-    return true;
-  }
   
   // default method
   protected function validateUser( ) {
-    if ( ! $this->checkAccess ( ) ) {
+    if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->badsession ( array("ajax" => true) ), 'Error/notallowed' );
       return;
     }
@@ -38,20 +28,21 @@ class AjaxController extends BaseController {
   }
 
   protected function filterUsers( ) {
-    if ( ! $this->checkAccess ( ) ) {
+    if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->badsession ( array("ajax" => true) ), 'Error/notallowed' );
       return;
     }
     
-    $this->view->output ( $this->model->filterUsers ( $this->urlValues ), 'Ajax/filterusers' );
+    $this->view->output ( $this->model->filterUsers ( ), 'Ajax/filterusers' );
   }
 
   protected function deleteUser( ) {
-    if ( ! $this->checkAccess ( ) ) {
+    if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->badsession ( array("ajax" => true) ), 'Error/notallowed' );
       return;
     }
-    $this->view->output ( $this->model->deleteUser ( $this->urlValues ), 'Ajax/deleteuser' );
+
+    $this->view->output ( $this->model->deleteUser ( ), 'Ajax/deleteuser' );
   }
 }
 

@@ -17,6 +17,23 @@ abstract class BaseController {
         
         $this->session = Session::getInstance();
     }
+    
+    protected function checkAccess( $levels = '' ) {
+      if(empty($levels))
+      {
+        return false;
+      }
+    
+      if ( ! $this->session->get ( 'loggedIN' ) ) {
+        return false;
+      }
+    
+      if ( $this->session->get ( 'level' ) < $levels [$this->action] ) {
+        return false;
+      }
+    
+      return true;
+    }
         
     //executes the requested method
     public function executeAction() {

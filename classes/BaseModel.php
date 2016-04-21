@@ -19,6 +19,7 @@ class BaseModel {
 
     //establish viewModel data that is required for all views in this method (i.e. the main template)
     protected function commonViewData() {
+      $this->viewModel->set ( "logouttime", strtotime("+20 minutes", $this->session->get('timestamp')));
       $this->viewModel->set ( "pageTitle", "It-Solutions Urlaubsplaner" );
       $this->viewModel->set ( "userID", $this->session->get ( 'id' ) );
       $this->viewModel->set ( "loggedIN", $this->session->get ( 'loggedIN' ) );

@@ -1,5 +1,5 @@
   <!-- Modal -->
-  <div class="modal fade" id="loginModal" role="dialog">
+  <div class="modal fade" id="loginModal" data-backdrop="static" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
     
       <!-- Modal content-->
