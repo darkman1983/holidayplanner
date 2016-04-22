@@ -3,36 +3,35 @@
     <div class="container">
     <div class="modal-content">
     <div class="modal-header">
-    <h2>Benutzerverwaltung</h2>
+    <h2>Feiertagsverwaltung</h2>
     <div id="loadingIndicator" class="navbar-header navbar-left hidden">
       <i class="fa fa-cog fa-spin fa-1x margin-bottom link-color-black" aria-hidden="true" title="Lade Inhalte..."></i>
     </div>
     <div class="navbar-header navbar-right table-navbar">
 			<div class="form-group">
-				<input type="text" class="form-control" id="userFilter" name="userFilter" placeholder="Filter">
+				<input type="text" class="form-control" id="feastDaysFilter" name="feastDaysFilter" placeholder="Filter">
 			</div>
 	</div>
-	<a href="#" class="glyphicon glyphicon-refresh nounderline navbar-right padding-right-5 link-color-black link-color-lightgrey" id="reloadUsers" title="Benutzertabelle neu Laden"></a>
-	<a href="<?php echo $viewModel->get ( 'BaseUrl' )?>user/create" class="glyphicon glyphicon-plus nounderline navbar-right link-color-black link-color-lightgrey" title="Benutzer Hinzufügen"></a>
+	<a href="#" class="glyphicon glyphicon-refresh nounderline navbar-right padding-right-5 link-color-black link-color-lightgrey" id="reloadFeastdays" title="Benutzertabelle neu Laden"></a>
+	<a href="<?php echo $viewModel->get ( 'BaseUrl' )?>feastdays/create" class="glyphicon glyphicon-plus nounderline navbar-right link-color-black link-color-lightgrey" title="Benutzer Hinzufügen"></a>
 	</div>
 	<div class="modal-body">
-  <div class="table-responsive" id="users">
+  <div class="table-responsive" id="feastdays">
   <table class="table table-striped ">
     <thead>
       <tr>
         <th>#</th>
-        <th>Vorname</th>
-        <th>Nachname</th>
-        <th>Email</th>
-        <th>Benutzername</th>
-        <th>Berechtigungsstufe</th>
+        <th>Start</th>
+        <th>Dauer</th>
+        <th>Beschreibung</th>
         <th>Löschen - Editieren</th>
       </tr>
     </thead>
     <tbody>
     <?php 
-    $userData = $viewModel->get ( 'userData' );
-    if(!empty($userData)) {
+    $userData = $viewModel->get ( 'feastDaysData' );
+    if(!empty($userData))
+    {
       foreach($userData as &$data) {
     ?>
       <tr>
@@ -40,37 +39,17 @@
           <span><?php echo $data['id']; ?></span>
         </td>
         <td class="col-xs-2 vertical-center">
-          <span><?php echo $data['firstname']; ?></span>
+          <span><?php echo $data['start']; ?></span>
         </td>
         <td class="col-xs-2 vertical-center">
-          <span><?php echo $data['lastname']; ?></span>
+          <span><?php echo $data['duration']; ?></span>
         </td>
         <td class="col-xs-2 vertical-center">
-          <span><?php echo $data['email']; ?></span>
-        </td>
-        <td class="col-xs-2 vertical-center">
-          <span><?php echo $data['username']; ?></span>
-        </td>
-        
-        <td class="col-xs-2 vertical-center">
-        <?php 
-        $userID = $viewModel->get ( 'userID' );
-        $levels = array(1 => "Normal", 2 => "Anträge Freigeben", 3 => "Administrator");
-        ?>
-        <?php 
-          printf( "%s - %s", $data['level'], $levels[$data['level']]);
-        ?>
+          <span><?php echo $data['description']; ?></span>
         </td>
         <td class="vertical-center center-text">
-        <?php 
-        if($userID != $data['id'])
-        {
-        ?>
         <a href="#" class="glyphicon glyphicon-remove nounderline link-color-black link-color-lightgrey glyphicon-medium" data-href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/deleteuser?usersFilter=&userDeleteID=<?php echo $data['id']; ?>" data-toggle="modal" data-target="#confirm-delete" aria-hidden="true"></a>
         <a href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>user/edit?userEditID=<?php echo $data['id']; ?>" class="glyphicon glyphicon-edit nounderline link-color-black link-color-lightgrey glyphicon-medium" aria-hidden="true"></a>
-        <?php 
-        }
-        ?>
         </td>
       </tr>
       <?php
@@ -111,8 +90,8 @@ $paginationData = $viewModel->get ( 'pagination' );
                     <h4 class="modal-title" id="myModalLabel">Löschen bestätigen</h4>
                 </div>
                 <div class="modal-body">
-                    <p>Sie sind dabei einen Benutzer zu LÖSCHEN, dies kann nicht rückgängig gemacht werden.</p>
-                    <p>Wollen Sie den Benutzer wirklich löschen?</p>
+                    <p>Sie sind dabei einen Feiertag zu LÖSCHEN, dies kann nicht rückgängig gemacht werden.</p>
+                    <p>Wollen Sie den Feiertag wirklich löschen?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
@@ -123,7 +102,7 @@ $paginationData = $viewModel->get ( 'pagination' );
     </div>
 <script>
 $(document).ready(function(){
-	$("#userFilter").keyup(function() {
+	$("#feastDaysFilter").keyup(function() {
 		$("#loadingIndicator").toggleClass('hidden');
 		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterusers?usersFilter=" + $("#userFilter").val(), function( data ) {
 			  $( "#users" ).html( data );
@@ -131,11 +110,11 @@ $(document).ready(function(){
 			});
     });
     
-	$("#reloadUsers").click(function() {
-		$("#userFilter").val('');
+	$("#reloadFeastDays").click(function() {
+		$("#FeastDaysFilter").val('');
 		$("#loadingIndicator").toggleClass('hidden');
-		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterusers?usersFilter=", function( data ) {
-			$( "#users" ).html( data );
+		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterfeastdays?feastDaysFilter=", function( data ) {
+			$( "#feastDays" ).html( data );
 			$("#loadingIndicator").toggleClass('hidden');
 			});
 		});
@@ -144,10 +123,10 @@ $(document).ready(function(){
 		$("#deleteConfirmed").click(function() {
 			$.get( $(e.relatedTarget).data('href'), function( data ) {
 				$('#confirm-delete .modal-header button').remove();
-				$('#confirm-delete .modal-title').text('Benutzer gelöscht!');
-				$('#confirm-delete .modal-body').html('Der Benutzer wurde erfolgreich gelöscht!');
+				$('#confirm-delete .modal-title').text('Feiertag gelöscht!');
+				$('#confirm-delete .modal-body').html('Der Feiertag wurde erfolgreich gelöscht!');
 				$('#confirm-delete .modal-footer').html('');
-				$(window).wait(2000).attr("location","<?php echo $viewModel->get ( 'BaseUrl' ); ?>user");
+				$(window).wait(2000).attr("location","<?php echo $viewModel->get ( 'BaseUrl' ); ?>feastdays");
 				}).fail(function() {
 				    alert( "error" );
 				  });
