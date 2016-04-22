@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 21. Apr 2016 um 11:29
+-- Erstellungszeit: 22. Apr 2016 um 10:53
 -- Server-Version: 10.1.9-MariaDB
 -- PHP-Version: 5.6.15
 
@@ -47,8 +47,10 @@ CREATE TABLE `holiday` (
 DROP TABLE IF EXISTS `holiday_custom`;
 CREATE TABLE `holiday_custom` (
   `id` int(11) NOT NULL,
+  `userID` int(11) NOT NULL,
   `start` int(11) NOT NULL,
-  `duration` int(5) NOT NULL
+  `duration` int(5) NOT NULL,
+  `description` mediumtext
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -69,7 +71,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `data`, `timestamp`) VALUES
-('k8t7jmjk9k6hd372tblhrr27v2', 'id|s:1:"1";firstname|s:4:"Timo";lastname|s:10:"Stepputtis";email|s:22:"Timo.Stepputtis@gmx.de";level|s:1:"3";loggedIN|b:1;', 1461230300);
+('k8t7jmjk9k6hd372tblhrr27v2', 'timestamp|s:10:"1461315134";id|s:1:"1";firstname|s:4:"Timo";lastname|s:10:"Stepputtis";email|s:22:"Timo.Stepputtis@gmx.de";level|s:1:"3";loggedIN|b:1;', 1461315157);
 
 -- --------------------------------------------------------
 
@@ -120,7 +122,8 @@ ALTER TABLE `holiday`
 -- Indizes für die Tabelle `holiday_custom`
 --
 ALTER TABLE `holiday_custom`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `start` (`start`);
 
 --
 -- Indizes für die Tabelle `sessions`
