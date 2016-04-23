@@ -32,7 +32,7 @@ class UserController extends BaseController {
       $this->view->output ( $this->model->notAllowed ( ), 'Error/notallowed' );
       return;
     }
-    $this->view->output ( $this->model->index ( ), '' );
+    $this->view->output ( $this->model->index ( $this->urlValues ), '' );
   }
 
   protected function create( ) {
@@ -86,13 +86,8 @@ class UserController extends BaseController {
       $createUserSql = sprintf ( "UPDATE users SET firstname = '%s', lastname = '%s', username = '%s', %semail = '%s', level = '%s' WHERE id = '%s'", $this->urlValues ['frm_firstname'], $this->urlValues ['frm_lastname'], $this->urlValues ['frm_username'], ! empty ( $this->urlValues ['frm_uPassword'] ) ? sprintf ( "password = '%s', ", sha1 ( $this->urlValues ['frm_username'] . ":" . $this->urlValues ['frm_uPassword'] ) ) : '', $this->urlValues ['frm_email'] . "@" . $this->urlValues ['frm_emailDomain'], $this->urlValues ['frm_userlevel'], $this->urlValues ['userEditID'] );
       $result = $this->db->query ( $createUserSql );
       
-      if ( $this->db->affected_rows != 1 ) {
-        $this->view->output ( $this->model->badUserCreate ( $this->urlValues, $this->db->error ), 'User/badusercreate' );
-        return;
-      } else {
-        $this->view->output ( $this->model->success ( ), 'User/success' );
-        return;
-      }
+      $this->view->output ( $this->model->success ( ), 'User/success' );
+      return;
     }
     
     $this->view->output ( $this->model->edit ( $this->urlValues ), '' );

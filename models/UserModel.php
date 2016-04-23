@@ -15,7 +15,7 @@ class UserModel extends BaseModel {
   }
   
   // data passed to the home index view
-  public function index( ) {
+  public function index( $urlValues ) {
     $getTotalUsersSql = "SELECT COUNT(*) FROM users";
     $totalResult = $this->db->query ( $getTotalUsersSql );
     $totalUsers = $totalResult->fetch_row ( );

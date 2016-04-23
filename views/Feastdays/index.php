@@ -21,35 +21,39 @@
     <thead>
       <tr>
         <th>#</th>
-        <th>Start</th>
-        <th>Dauer</th>
+        <th>Startdatum</th>
+        <th>Enddatum</th>
         <th>Beschreibung</th>
+        <th>Angelegt von</th>
         <th>Löschen - Editieren</th>
       </tr>
     </thead>
     <tbody>
     <?php 
-    $userData = $viewModel->get ( 'feastDaysData' );
-    if(!empty($userData))
+    $filteredFeastDays = $viewModel->get ( 'feastDaysData' );
+    if(!empty($filteredFeastDays))
     {
-      foreach($userData as &$data) {
+      foreach($filteredFeastDays as &$data) {
     ?>
       <tr>
         <td class="vertical-center">
           <span><?php echo $data['id']; ?></span>
         </td>
         <td class="col-xs-2 vertical-center">
-          <span><?php echo $data['start']; ?></span>
+          <span><?php echo date("d.m.Y", $data['start']); ?></span>
         </td>
         <td class="col-xs-2 vertical-center">
-          <span><?php echo $data['duration']; ?></span>
+          <span><?php echo ($data['duration'] > 1) ? date("d.m.Y", strtotime(sprintf("+%s days", $data['duration']-1), $data['start'])) : date("d.m.Y", $data['start']); ?></span>
         </td>
-        <td class="col-xs-2 vertical-center">
+        <td class="col-xs-3 vertical-center">
           <span><?php echo $data['description']; ?></span>
         </td>
-        <td class="vertical-center center-text">
-        <a href="#" class="glyphicon glyphicon-remove nounderline link-color-black link-color-lightgrey glyphicon-medium" data-href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/deleteuser?usersFilter=&userDeleteID=<?php echo $data['id']; ?>" data-toggle="modal" data-target="#confirm-delete" aria-hidden="true"></a>
-        <a href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>user/edit?userEditID=<?php echo $data['id']; ?>" class="glyphicon glyphicon-edit nounderline link-color-black link-color-lightgrey glyphicon-medium" aria-hidden="true"></a>
+        <td class="col-xs-2 vertical-center">
+          <span><?php echo $data['username']; ?></span>
+        </td>
+        <td class="col-xs-2 vertical-center center-text">
+        <a href="#" class="glyphicon glyphicon-remove nounderline link-color-black link-color-lightgrey glyphicon-medium" data-href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/deletefeastdays?feastDaysFilter=&feastDaysDeleteID=<?php echo $data['id']; ?>" data-toggle="modal" data-target="#confirm-delete" aria-hidden="true"></a>
+        <a href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>feastdays/edit?feastDaysEditID=<?php echo $data['id']; ?>" class="glyphicon glyphicon-edit nounderline link-color-black link-color-lightgrey glyphicon-medium" aria-hidden="true"></a>
         </td>
       </tr>
       <?php
@@ -104,8 +108,8 @@ $paginationData = $viewModel->get ( 'pagination' );
 $(document).ready(function(){
 	$("#feastDaysFilter").keyup(function() {
 		$("#loadingIndicator").toggleClass('hidden');
-		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterusers?usersFilter=" + $("#userFilter").val(), function( data ) {
-			  $( "#users" ).html( data );
+		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterfeastdays?feastDaysFilter=" + $("#feastDaysFilter").val(), function( data ) {
+			  $( "#feastdays" ).html( data );
 			  $("#loadingIndicator").toggleClass('hidden');
 			});
     });
@@ -114,7 +118,7 @@ $(document).ready(function(){
 		$("#FeastDaysFilter").val('');
 		$("#loadingIndicator").toggleClass('hidden');
 		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterfeastdays?feastDaysFilter=", function( data ) {
-			$( "#feastDays" ).html( data );
+			$( "#feastdays" ).html( data );
 			$("#loadingIndicator").toggleClass('hidden');
 			});
 		});

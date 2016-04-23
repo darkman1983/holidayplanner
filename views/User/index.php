@@ -31,9 +31,9 @@
     </thead>
     <tbody>
     <?php 
-    $userData = $viewModel->get ( 'userData' );
-    if(!empty($userData)) {
-      foreach($userData as &$data) {
+    $filteredFeastDays = $viewModel->get ( 'userData' );
+    if(!empty($filteredFeastDays)) {
+      foreach($filteredFeastDays as &$data) {
     ?>
       <tr>
         <td class="vertical-center">

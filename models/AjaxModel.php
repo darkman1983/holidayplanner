@@ -42,10 +42,42 @@ class AjaxModel extends BaseModel {
     return $this->viewModel;
   }
 
-  public function deleteUser( ) {
-    $deleteUserSql = sprintf ( "DELETE FROM users WHERE id = '%s'", $this->urlValues ['userDeleteID'] );
-    $result = $this->db->query ( $deleteUserSql );
+  public function filterFeastDays( ) {
+    $day = '';
+    $month = '';
+    $year = '';
     
+    if ( strstr ( $this->urlValues ['feastDaysFilter'], "." ) ) {
+      $dateParts = explode ( ".", $this->urlValues ['feastDaysFilter'] );
+      
+      for( $i = 0; $i < count ( $dateParts ); $i ++ ) {
+        switch ( $i ) {
+          case 0 :
+            $day = $dateParts [$i];
+            break;
+          case 1 :
+            $month = $dateParts [$i];
+            break;
+          case 2 :
+            $year = $dateParts [$i];
+            break;
+        }
+      }
+    }
+    
+    $getFilteredUsersSql = sprintf ( "SELECT h.*, u.username FROM holiday_custom h LEFT JOIN users u ON h.userID = u.id  WHERE u.username LIKE '%%%s%%' OR (FROM_UNIXTIME(start, '%%d') = '%s' AND FROM_UNIXTIME(start, '%%m') = '%s' AND FROM_UNIXTIME(start, '%%Y') = '%s') OR description LIKE '%%%s%%' LIMIT 0,20", $this->urlValues ['feastDaysFilter'], $day, $month, $year, $this->urlValues ['feastDaysFilter'] );
+    $result = $this->db->query ( $getFilteredUsersSql );
+    
+    $this->viewModel->set ( "filteredFeastDays", $result->fetch_all ( MYSQLI_ASSOC ) );
+    
+    return $this->viewModel;
+  }
+
+  public function deleteUser( ) {
+    return $this->viewModel;
+  }
+
+  public function deleteFeastDays( ) {
     return $this->viewModel;
   }
 }
