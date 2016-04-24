@@ -6,9 +6,15 @@
  */
 class Utils {
 
+  /**
+   * This function generates the pagination with the given parameters and returns an array for generating the pagination template
+   *
+   * @param array $urlValues          
+   * @param integer $total          
+   * @param integer $limit          
+   * @return array pagination
+   */
   public static function generatePagination( $urlValues, $total, $limit = 10 ) {
-    
-    /* Start Pagination Code */
     
     // How many pages will there be
     $pages = ceil ( $total / $limit );
@@ -25,11 +31,17 @@ class Utils {
     
     $pagination = array ("limit" => $limit,"pages" => ($pages < 1) ? 1 : $pages,"page" => $page,"offset" => $offset,"start" => $start,"end" => $end,"total" => $total );
     
-    /* End Pagination Code */
-    
     return $pagination;
   }
 
+  /**
+   * This function calculates the days between two dates and can leave out weekends
+   *
+   * @param string $start_date          
+   * @param string $end_date          
+   * @param bool $withoutWeekends          
+   * @return number of days
+   */
   public static function getNumberDays( $start_date, $end_date, $withoutWeekends = true ) {
     $startDate = new DateTime ( $start_date );
     $endDate = new DateTime ( $end_date );

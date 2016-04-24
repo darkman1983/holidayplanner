@@ -11,10 +11,10 @@
     </thead>
     <tbody>
     <?php 
-    $filteredFeastDays = $viewModel->get ( 'filteredFeastDays' );
-    if(!empty($filteredFeastDays))
+    $filteredFestDays = $viewModel->get ( 'filteredFeastDays' );
+    if(!empty($filteredFestDays))
     {
-      foreach($filteredFeastDays as &$data) {
+      foreach($filteredFestDays as &$data) {
     ?>
       <tr>
         <td class="vertical-center">

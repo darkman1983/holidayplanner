@@ -1,7 +1,7 @@
 <?php include 'views/header.php'; ?>
 <?php include 'views/navbar.php';
-$filteredFeastDays = $viewModel->get('userData');
-$email = explode('@', $filteredFeastDays[0]['email']);
+$filteredFestDays = $viewModel->get('userData');
+$email = explode('@', $filteredFestDays[0]['email']);
 ?>
     <div class="container">
       <div id="login-overlay" class="modal-dialog">
@@ -16,7 +16,7 @@ $email = explode('@', $filteredFeastDays[0]['email']);
                           <form id="loginForm" method="POST" action="<?php echo $viewModel->get('BaseUrl') ?>user/edit?do=1&userEditID=<?php echo $viewModel->get('userEditID'); ?>" role="form" data-toggle="validator">
                               <div class="form-group" id="usernameGroup">
                                   <label for="frm_username" class="control-label">Benutzername</label>
-                                  <input type="text" class="form-control" id="frm_username" name="frm_username" placeholder="Benutzernamen Eingeben" data-remote="<?php echo $viewModel->get('BaseUrl'); ?>ajax/validateuser?userEditID=<?php echo $filteredFeastDays[0]['id'] ?>" data-error="Oops! Dieser Benutzer existiert schon!" value="<?php echo $filteredFeastDays[0]['username'] ?>" required>
+                                  <input type="text" class="form-control" id="frm_username" name="frm_username" placeholder="Benutzernamen Eingeben" data-remote="<?php echo $viewModel->get('BaseUrl'); ?>ajax/validateuser?userEditID=<?php echo $filteredFestDays[0]['id'] ?>" data-error="Oops! Dieser Benutzer existiert schon!" value="<?php echo $filteredFestDays[0]['username'] ?>" required>
                                   <div class="help-block with-errors"></div>
                               </div>
                               <div class="form-group">
@@ -36,7 +36,7 @@ $email = explode('@', $filteredFeastDays[0]['email']);
   								    $userID = $viewModel->get ( 'userID' );
   								    $levels = array(1 => "Normal", 2 => "Anträge Freigeben", 3 => "Administrator");
   								    foreach ($levels as $level => &$entry) {
-  								      printf( '<option value="%s"%s>%s - %s</option>', $level, ($level == $filteredFeastDays[0]['level']) ? ' selected' : '', $level, $entry);
+  								      printf( '<option value="%s"%s>%s - %s</option>', $level, ($level == $filteredFestDays[0]['level']) ? ' selected' : '', $level, $entry);
   								    }
   								    ?>
   								  </select>
@@ -53,12 +53,12 @@ $email = explode('@', $filteredFeastDays[0]['email']);
                               </div>
                               <div class="form-group">
                                   <label for="frm_firstname" class="control-label">Vorname</label>
-                                  <input type="text" class="form-control" id="frm_firstname" name="frm_firstname" placeholder="Vorname Eingeben" value="<?php echo $filteredFeastDays[0]['firstname'] ?>" required>
+                                  <input type="text" class="form-control" id="frm_firstname" name="frm_firstname" placeholder="Vorname Eingeben" value="<?php echo $filteredFestDays[0]['firstname'] ?>" required>
                                   <div class="help-block with-errors"></div>
                               </div>
                               <div class="form-group">
                                   <label for="frm_lastname" class="control-label">Nachname</label>
-                                  <input type="text" class="form-control" id="frm_lastname" name="frm_lastname" placeholder="Nachname Eingeben" value="<?php echo $filteredFeastDays[0]['lastname'] ?>" required>
+                                  <input type="text" class="form-control" id="frm_lastname" name="frm_lastname" placeholder="Nachname Eingeben" value="<?php echo $filteredFestDays[0]['lastname'] ?>" required>
                                   <div class="help-block with-errors"></div>
                               </div>
                               <button type="submit" class="btn btn-success btn-default">Ändern</button>
