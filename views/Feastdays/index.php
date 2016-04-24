@@ -30,11 +30,11 @@
     </thead>
     <tbody>
     <?php 
-    $filteredFestDays = $viewModel->get ( 'feastDaysData' );
-    if(!empty($filteredFestDays))
+    $filteredUsers = $viewModel->get ( 'feastDaysData' );
+    if(!empty($filteredUsers))
     {
-      $maxNum = strlen(max($filteredFestDays)['id']);
-      foreach($filteredFestDays as &$data) {
+      $maxNum = strlen(max($filteredUsers)['id']);
+      foreach($filteredUsers as &$data) {
     ?>
       <tr>
         <td class="vertical-center">

@@ -12,11 +12,15 @@
     </thead>
     <tbody>
     <?php 
-    foreach($viewModel->get ( 'filteredUsers' ) as &$data) {
+    $filteredUsers = $viewModel->get ( 'filteredUsers' );
+    if(!empty($filteredUsers))
+    {
+      $maxNum = strlen(max($filteredUsers)['id']);
+      foreach($viewModel->get ( 'filteredUsers' ) as &$data) {
     ?>
       <tr>
         <td class="vertical-center">
-          <span><?php echo $data['id']; ?></span>
+          <span><?php echo str_pad($data['id'], $maxNum, 0, STR_PAD_LEFT); ?></span>
         </td>
         <td class="col-xs-2 vertical-center">
           <span><?php echo $data['firstname']; ?></span>
@@ -53,7 +57,8 @@
         </td>
       </tr>
       <?php
-}
+      }
+    }
         ?>
     </tbody>
   </table>
