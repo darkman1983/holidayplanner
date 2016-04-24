@@ -20,29 +20,11 @@ class UserModel extends BaseModel {
     $totalResult = $this->db->query ( $getTotalUsersSql );
     $totalUsers = $totalResult->fetch_row ( );
     
-    /* Start Pagination Code */
+    $pagination = Utils::generatePagination($urlValues, $totalUsers[0]);
     
-    // How many items to list per page
-    $limit = 10;
+    $this->viewModel->set ( "pagination", $pagination );
     
-    // How many pages will there be
-    $pages = ceil ( $totalUsers [0] / $limit );
-    
-    // What page are we currently on?
-    $page = min ( ($pages < 1) ? 1 : $pages, isset ( $urlValues ['page'] ) ? $urlValues ['page'] : 1 );
-    
-    // Calculate the offset for the query
-    $offset = ($page - 1) * $limit;
-    
-    // Some information to display to the user
-    $start = $offset + 1;
-    $end = min ( ($offset + $limit), $totalUsers );
-    
-    $this->viewModel->set ( "pagination", array ("limit" => $limit,"pages" => ($pages < 1) ? 1 : $pages,"page" => $page,"offset" => $offset,"start" => $start,"end" => $end,"total" => $totalUsers [0] ) );
-    
-    /* End Pagination Code */
-    
-    $get_users_sql = sprintf ( "SELECT * FROM users LIMIT %s OFFSET %s", $limit, $offset );
+    $get_users_sql = sprintf ( "SELECT * FROM users LIMIT %s OFFSET %s", $pagination['limit'], $pagination['offset'] );
     $result = $this->db->query ( $get_users_sql );
     $resultsets = $result->fetch_all ( MYSQLI_ASSOC );
     

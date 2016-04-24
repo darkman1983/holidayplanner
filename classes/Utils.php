@@ -6,6 +6,30 @@
  */
 class Utils {
 
+  public static function generatePagination( $urlValues, $total, $limit = 10 ) {
+    
+    /* Start Pagination Code */
+    
+    // How many pages will there be
+    $pages = ceil ( $total / $limit );
+    
+    // What page are we currently on?
+    $page = min ( ($pages < 1) ? 1 : $pages, isset ( $urlValues ['page'] ) ? $urlValues ['page'] : 1 );
+    
+    // Calculate the offset for the query
+    $offset = ($page - 1) * $limit;
+    
+    // Some information to display to the user
+    $start = $offset + 1;
+    $end = min ( ($offset + $limit), $total );
+    
+    $pagination = array ("limit" => $limit,"pages" => ($pages < 1) ? 1 : $pages,"page" => $page,"offset" => $offset,"start" => $start,"end" => $end,"total" => $total );
+    
+    /* End Pagination Code */
+    
+    return $pagination;
+  }
+
   public static function getNumberDays( $start_date, $end_date, $withoutWeekends = true ) {
     $startDate = new DateTime ( $start_date );
     $endDate = new DateTime ( $end_date );
