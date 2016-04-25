@@ -17,10 +17,9 @@ $(document).ready(function(){
         minTimeout: 6000,
         maxTimeout: 15000
         }, function(remoteData, success, chr, handle) {
-            var result = {};
             if(success)
             {
-                result = $.parseJSON(remoteData);
+                var result = $.parseJSON(remoteData);
 
                 if(!result['loggedIN'] && $(location).attr('href') != "<?php echo $viewModel->get ( 'BaseUrl' ); ?>")
                 {
