@@ -22,10 +22,10 @@
           <span><?php echo str_pad($data['id'], $maxNum, 0, STR_PAD_LEFT); ?></span>
         </td>
         <td class="col-xs-2 vertical-center">
-          <span><?php echo date("d.m.y", $data['start']); ?></span>
+          <span><?php echo date("d.m.Y", $data['start']); ?></span>
         </td>
         <td class="col-xs-2 vertical-center">
-          <span><?php echo ($data['duration'] > 1) ? date("d.m.y", strtotime(sprintf("+%s days", $data['duration']), $data['start'])) : date("d.m.y", $data['start']); ?></span>
+          <span><?php echo ($data['duration'] > 1) ? date("d.m.Y", strtotime(sprintf("+%s days", $data['duration']), $data['start'])) : date("d.m.Y", $data['start']); ?></span>
         </td>
         <td class="col-xs-3 vertical-center">
           <span><?php echo $data['description']; ?></span>
