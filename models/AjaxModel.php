@@ -32,8 +32,8 @@ class AjaxModel extends BaseModel {
     
     return $this->viewModel;
   }
-
-  public function checkLoginStatus( ) {
+  
+  public function getLogoutTime() {
     return $this->viewModel;
   }
 

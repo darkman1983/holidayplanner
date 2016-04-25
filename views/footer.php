@@ -1,8 +1,8 @@
 <hr>
 <?php include 'views/login.php'; ?>
-      <footer>
-        <p>&copy; 2016 Timo Stepputtis</p>
-      </footer>
+<footer>
+	<p>&copy; 2016 Timo Stepputtis</p>
+</footer>
 <script>
 $(document).ready(function(){
     $("#loginBtn").click(function(){
@@ -13,20 +13,32 @@ $(document).ready(function(){
         $('#usrname').focus();
     });
 
-    $.PeriodicalUpdater('<?php echo $viewModel->get ( 'BaseUrl' ); ?>ajax/checkloginstatus', {
+    $.periodic({period: 10000, decay: 1.2, max_period: 15000}, function() {
+        var logouttime = <?php echo $viewModel->get ( 'logouttime' ); ?>;
+        var currentTime = Math.round(new Date().getTime()/1000);
+
+     if(logouttime < currentTime)
+     {
+         $(window).attr("location","<?php echo $viewModel->get ( 'BaseUrl' ); ?>");
+     }
+   	 
+   	});
+
+    /*$.PeriodicalUpdater('<?php echo $viewModel->get ( 'BaseUrl' ); ?>ajax/checkloginstatus', {
         minTimeout: 6000,
         maxTimeout: 15000
-        }, function(remoteData, success, chr, handle) {
+        }, function(remoteData, success, chr, handle) {            
             if(success)
             {
+            	var currentTime = Math.round(new Date().getTime()/1000);
                 var result = $.parseJSON(remoteData);
 
-                if(!result['loggedIN'] && $(location).attr('href') != "<?php echo $viewModel->get ( 'BaseUrl' ); ?>")
+                if(result['logouttime'] < currentTime)
                 {
                     $(window).attr("location","<?php echo $viewModel->get ( 'BaseUrl' ); ?>");
                 }
             }
-    });
+    });*/
 });
 </script>
 </body>

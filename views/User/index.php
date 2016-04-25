@@ -162,6 +162,9 @@ $(document).ready(function(){
 			  $( "#users" ).html( data );
 			  $("#loadingIndicator").toggleClass('hidden');
 			});
+		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/getlogouttime", function( data ) {
+			$( "#logouttime" ).html( data );
+			});
     });
     
 	$("#reloadUsers").click(function() {
@@ -171,6 +174,9 @@ $(document).ready(function(){
 		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterusers?usersFilter=&page=" + $.getUrlParam('page'), function( data ) {
 			$( "#users" ).html( data );
 			$("#loadingIndicator").toggleClass('hidden');
+			});
+		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/getlogouttime", function( data ) {
+			$( "#logouttime" ).html( data );
 			});
 		});
 	

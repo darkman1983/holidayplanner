@@ -17,7 +17,8 @@
 			return vars;
 		},
 		getUrlParam : function(name) {
-			return $.getUrlParams()[name];
+			var parameters = $.getUrlParams();
+			return parameters[name] || '';
 		}
 	});
 })(jQuery);

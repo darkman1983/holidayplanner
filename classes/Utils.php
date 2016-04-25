@@ -20,7 +20,7 @@ class Utils {
     $pages = ceil ( $total / $limit );
     
     // What page are we currently on?
-    $page = min ( ($pages < 1) ? 1 : $pages, isset ( $urlValues ['page'] ) ? $urlValues ['page'] : 1 );
+    $page = min ( ($pages < 1) ? 1 : $pages, (isset ( $urlValues ['page'] ) && ! empty ( $urlValues ['page'] )) ? $urlValues ['page'] : 1 );
     
     // Calculate the offset for the query
     $offset = ($page - 1) * $limit;

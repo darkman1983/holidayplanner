@@ -95,7 +95,5 @@
   </div><!-- /.container-fluid -->
 </nav>
 <?php if($viewModel->get('loggedIN')) { ?>
-<div id="logouttime" class="logouttime">
-Automatischer logout <?php echo date("H:i:s", $viewModel->get('logouttime')); ?> Uhr
-</div>
+<?php include 'views/logouttime.php';?>
 <?php } ?>

@@ -12,7 +12,7 @@
 				<input type="text" class="form-control" id="feastDaysFilter" name="feastDaysFilter" placeholder="Filter">
 			</div>
 	</div>
-	<a href="#" class="glyphicon glyphicon-refresh nounderline navbar-right padding-right-5 link-color-black link-color-lightgrey" id="reloadFeastdays" title="Benutzertabelle neu Laden"></a>
+	<a href="#" class="glyphicon glyphicon-refresh nounderline navbar-right padding-right-5 link-color-black link-color-lightgrey" id="reloadFeastDays" title="Benutzertabelle neu Laden"></a>
 	<a href="<?php echo $viewModel->get ( 'BaseUrl' )?>feastdays/create" class="glyphicon glyphicon-plus nounderline navbar-right link-color-black link-color-lightgrey" title="Benutzer Hinzufügen"></a>
 	</div>
 	<div class="modal-body">
@@ -113,6 +113,9 @@ $(document).ready(function(){
 			  $( "#feastdays" ).html( data );
 			  $("#loadingIndicator").toggleClass('hidden');
 			});
+		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/getlogouttime", function( data ) {
+			$( "#logouttime" ).html( data );
+			});
     });
     
 	$("#reloadFeastDays").click(function() {
@@ -121,6 +124,9 @@ $(document).ready(function(){
 		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterfeastdays?feastDaysFilter=&page=" + $.getUrlParam('page'), function( data ) {
 			$( "#feastdays" ).html( data );
 			$("#loadingIndicator").toggleClass('hidden');
+			});
+		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/getlogouttime", function( data ) {
+			$( "#logouttime" ).html( data );
 			});
 		});
 	
@@ -135,6 +141,9 @@ $(document).ready(function(){
 				}).fail(function() {
 				    alert( "error" );
 				  });
+			$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/getlogouttime", function( data ) {
+				$( "#logouttime" ).html( data );
+				});
 			});
 		});
     });

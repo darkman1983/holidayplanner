@@ -8,11 +8,11 @@ class AjaxController extends BaseController {
   public function __construct( $action, $urlValues ) {
     parent::__construct ( $action, $urlValues );
     
-    $this->levels = array ("validateuser" => 1, "filterusers" => 2,"deleteuser" => 3,"filterfeastdays" => 3 );
+    $this->levels = array ("validateuser" => 1, "getlogouttime" => 1, "filterusers" => 2,"deleteuser" => 3,"filterfeastdays" => 3 );
     
     $this->db = Database::getInstance()->getCon();
     
-    if ( !$this->action == 'checkloginstatus' && ! $this->checkAccess ( $this->levels ) ) {
+    if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->model = new ErrorModel ( $this->urlValues );
     } else {
       // create the model object
@@ -30,13 +30,9 @@ class AjaxController extends BaseController {
     $this->view->output ( $this->model->validateUser ( ), '' );
   }
   
-  protected function checkLoginStatus( ) {
-    /*if ( ! $this->checkAccess ( $this->levels ) ) {
-      $this->view->output ( $this->model->badsession ( array("ajax" => true) ), 'Error/notallowed' );
-      return;
-    }*/
-  
-    $this->view->output ( $this->model->checkLoginStatus ( ), '' );
+  protected function getLogoutTime()
+  {
+    $this->view->output ( $this->model->getLogoutTime ( ), '' );
   }
 
   protected function filterUsers( ) {

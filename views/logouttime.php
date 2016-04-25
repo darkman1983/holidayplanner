@@ -1,0 +1,3 @@
+<div id="logouttime" class="logouttime">
+Automatischer logout <?php echo date("H:i:s", $viewModel->get('logouttime')); ?> Uhr
+</div>

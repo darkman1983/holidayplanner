@@ -24,7 +24,7 @@
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/jquery.min.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/jquery.wait.min.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/jquery.urlparam.js"></script>
-<script src="<?php echo $viewModel->get('AssetPath'); ?>js/jquery.periodicalupdater.js"></script>
+<script src="<?php echo $viewModel->get('AssetPath'); ?>js/jquery.periodic.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/bootstrap.min.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/moment-with-locales.min.js"></script>
