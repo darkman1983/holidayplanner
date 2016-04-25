@@ -9,7 +9,12 @@
     </div>
     <div class="navbar-header navbar-right table-navbar">
 			<div class="form-group">
+			  <div class="input-group help-addon max-200">
 				<input type="text" class="form-control" id="userFilter" name="userFilter" placeholder="Filter">
+				<div class="input-group-btn">
+                  <button class="btn btn-default" data-toggle="modal" data-target="#filter-help"><i class="glyphicon glyphicon-question-sign"></i></button>
+                </div>
+			  </div>
 			</div>
 	</div>
 	<a href="#" class="glyphicon glyphicon-refresh nounderline navbar-right padding-right-5 link-color-black link-color-lightgrey" id="reloadUsers" title="Benutzertabelle neu Laden"></a>
@@ -122,11 +127,38 @@ $paginationData = $viewModel->get ( 'pagination' );
             </div>
         </div>
     </div>
+<div class="modal fade" id="filter-help" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Filterhilfe</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Wenn sie einen Suchbegriff eingeben, wird automatisch gesucht in:</p>
+                    <p>Vorname, Nachname, Email und Benutzername</p>
+                    <p>Während gefiltert wird, ist die Datensatznavigation nicht verfügbar!</p>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-ok btn-success" data-dismiss="modal">Verstanden</a>
+                </div>
+            </div>
+        </div>
+    </div>
 <script>
 $(document).ready(function(){
 	$("#userFilter").keyup(function() {
+		var withPage = '';
+		
+		if($(this).val() != '')
+		{
+		$(".pagination").hide();
+		}else {
+			withPage = "&page=" + $.getUrlParam('page');
+			$(".pagination").show();
+		}
 		$("#loadingIndicator").toggleClass('hidden');
-		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterusers?usersFilter=" + $("#userFilter").val(), function( data ) {
+		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterusers?usersFilter=" + $("#userFilter").val() + withPage , function( data ) {
 			  $( "#users" ).html( data );
 			  $("#loadingIndicator").toggleClass('hidden');
 			});
@@ -134,8 +166,9 @@ $(document).ready(function(){
     
 	$("#reloadUsers").click(function() {
 		$("#userFilter").val('');
+		$(".pagination").show();
 		$("#loadingIndicator").toggleClass('hidden');
-		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterusers?usersFilter=", function( data ) {
+		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterusers?usersFilter=&page=" + $.getUrlParam('page'), function( data ) {
 			$( "#users" ).html( data );
 			$("#loadingIndicator").toggleClass('hidden');
 			});

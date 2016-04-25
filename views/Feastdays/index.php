@@ -118,7 +118,7 @@ $(document).ready(function(){
 	$("#reloadFeastDays").click(function() {
 		$("#FeastDaysFilter").val('');
 		$("#loadingIndicator").toggleClass('hidden');
-		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterfeastdays?feastDaysFilter=", function( data ) {
+		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterfeastdays?feastDaysFilter=&page=" + $.getUrlParam('page'), function( data ) {
 			$( "#feastdays" ).html( data );
 			$("#loadingIndicator").toggleClass('hidden');
 			});
