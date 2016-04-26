@@ -82,8 +82,9 @@ class FeastdaysController extends BaseController {
     }
     
     if ( $dataValid ) {
-      $days = Utils::getNumberDays ( $this->urlValues ['frm_startdate'], $this->urlValues ['frm_enddate'] );
-      $editFestDaysSql = sprintf ( "UPDATE feastdays SET start = '%s', duration = '%s', description = '%s' WHERE id = '%s'", strtotime ( $this->urlValues ['frm_startdate'] ), $days, $this->urlValues ['frm_description'], $this->urlValues ['feastDaysEditID'] );
+      $dates = explode(" - ", $this->urlValues ['frm_daterange']);
+      $days = Utils::getNumberDays ( $dates[0], $dates[1] );
+      $editFestDaysSql = sprintf ( "UPDATE feastdays SET start = '%s', duration = '%s', description = '%s' WHERE id = '%s'", strtotime ( $dates[0] ), $days, $this->urlValues ['frm_description'], $this->urlValues ['feastDaysEditID'] );
       $result = $this->db->query ( $editFestDaysSql );
       
       $this->view->output ( $this->model->success ( ), 'Feastdays/success' );

@@ -40,7 +40,7 @@ class FeastDaysModel extends BaseModel {
   }
   
   public function edit( $urlValues ) {
-    $getFeastDaysSql = sprintf ( "SELECT * FROM holiday_custom WHERE id = '%s'", $urlValues ['feastDaysEditID'] );
+    $getFeastDaysSql = sprintf ( "SELECT * FROM feastdays WHERE id = '%s'", $urlValues ['feastDaysEditID'] );
     $result = $this->db->query ( $getFeastDaysSql );
     $resultsets = $result->fetch_all ( MYSQLI_ASSOC );
     

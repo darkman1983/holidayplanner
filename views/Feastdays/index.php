@@ -108,6 +108,15 @@ $paginationData = $viewModel->get ( 'pagination' );
 <script>
 $(document).ready(function(){
 	$("#feastDaysFilter").keyup(function() {
+		var withPage = '';
+		
+		if($(this).val() != '')
+		{
+		$(".pagination").hide();
+		}else {
+			withPage = "&page=" + $.getUrlParam('page');
+			$(".pagination").show();
+		}
 		$("#loadingIndicator").toggleClass('hidden');
 		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterfeastdays?feastDaysFilter=" + $("#feastDaysFilter").val(), function( data ) {
 			  $( "#feastdays" ).html( data );

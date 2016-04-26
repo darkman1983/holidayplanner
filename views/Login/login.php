@@ -41,9 +41,6 @@ $showError = $viewModel->get ( 'showError' );
               <label for="psw"><span class="glyphicon glyphicon-eye-open"></span> Passwort</label>
               <input type="password" class="form-control" name="psw" id="psw" placeholder="Passwort Eingeben">
             </div>
-            <div class="checkbox">
-              <label><input type="checkbox" name="sl" value="true" checked>Eingeloggt bleiben</label>
-            </div>
               <button type="submit" class="btn btn-success btn-block"><span class="glyphicon glyphicon-off"></span> Login</button>
           </form>
         </div>

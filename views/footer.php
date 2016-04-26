@@ -5,6 +5,8 @@
 </footer>
 <script>
 $(document).ready(function(){
+	var loggedIN = <?php echo $viewModel->get ( 'loggedIN' ) ? 'true' : 'false'; ?>;
+	
     $("#loginBtn").click(function(){
         $("#loginModal").modal();
     });
@@ -12,8 +14,7 @@ $(document).ready(function(){
     $('#loginModal').on('shown.bs.modal', function () {
         $('#usrname').focus();
     });
-
-    var loggedIN = <?php echo $viewModel->get ( 'loggedIN' ) ? 'true' : 'false'; ?>;
+    
     if(loggedIN)
     {
         $.periodic({period: 10000, decay: 1.2, max_period: 15000}, function() {
@@ -22,9 +23,9 @@ $(document).ready(function(){
             //console.log('[' + moment().format('DD.MM.YYYY HH:mm:ss') + '] ' + "Executing periodic updater...");
 
             if(logouttime < currentTime)
-                {
+              {
                 $(window).attr("location","<?php echo $viewModel->get ( 'BaseUrl' ); ?>login/logout");
-                }
+              }
             });
         }
     });

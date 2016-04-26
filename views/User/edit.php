@@ -1,7 +1,6 @@
 <?php include 'views/header.php'; ?>
 <?php include 'views/navbar.php';
 $filteredUsers = $viewModel->get('userData');
-$email = explode('@', $filteredUsers[0]['email']);
 ?>
     <div class="container">
       <div id="login-overlay" class="modal-dialog">
@@ -14,22 +13,22 @@ $email = explode('@', $filteredUsers[0]['email']);
                   <div class="col-xs-12">
                       <div class="well">
                           <form id="loginForm" method="POST" action="<?php echo $viewModel->get('BaseUrl') ?>user/edit?do=1&userEditID=<?php echo $viewModel->get('userEditID'); ?>" role="form" data-toggle="validator">
-                              <div class="form-group" id="usernameGroup">
+                              <div class="form-group has-feedback" id="usernameGroup">
                                   <label for="frm_username" class="control-label">Benutzername</label>
                                   <input type="text" class="form-control" id="frm_username" name="frm_username" placeholder="Benutzernamen Eingeben" data-remote="<?php echo $viewModel->get('BaseUrl'); ?>ajax/validateuser?userEditID=<?php echo $filteredUsers[0]['id'] ?>" data-error="Oops! Dieser Benutzer existiert schon!" value="<?php echo $filteredUsers[0]['username'] ?>" required>
                                   <div class="help-block with-errors"></div>
                               </div>
-                              <div class="form-group">
+                              <div class="form-group has-feedback">
                                   <label for="frm_uPassword" class="control-label">Passwort</label>
                                   <input type="password" class="form-control" id="frm_uPassword" name="frm_uPassword" placeholder="Neues Passwort Eingeben">
                                   <div class="help-block with-errors"></div>
                               </div>
-                              <div class="form-group">
+                              <div class="form-group has-feedback">
                                   <label for="frm_confirmPassword" class="control-label">Passwort Wiederholen</label>
                                   <input type="password" class="form-control" id="frm_confirmPassword" name="frm_confirmPassword" placeholder="Passwort Wiederholen" data-match="#frm_uPassword" data-match-error="Oh nein, die Passwörter stimmen nicht überein!">
                                   <div class="help-block with-errors"></div>
                               </div>
-                              <div class="form-group">
+                              <div class="form-group has-feedback">
   								  <label for="frm_userlevel">Benutzerlevel Wählen</label>
   								  <select class="form-control" id="frm_userlevel" name="frm_userlevel">
   								    <?php
@@ -42,21 +41,17 @@ $email = explode('@', $filteredUsers[0]['email']);
   								  </select>
                               </div>
                               <hr>
-                              <div class="form-group">
+                              <div class="form-group has-feedback">
                                   <label for="frm_email" class="control-label">Email Adresse</label>
-                                  <div class="input-group">
-                                    <input type="text" class="form-control" id="frm_email" name="frm_email" placeholder="Email Eingeben" value="<?php echo $email[0]; ?>" required>
-                                    <span class="input-group-addon" id="sizing-addon1">@</span>
-                                    <input type="text" class="form-control" id="frm_emailDomain" name="frm_emailDomain" placeholder="Domain eingeben" value="<?php echo $email[1]; ?>" required>
-                                  </div>
+                                  <input type="email" class="form-control" id="frm_email" name="frm_email" placeholder="Email Eingeben" value="<?php echo $filteredUsers[0]['email']; ?>" required>
                                   <div class="help-block with-errors"></div>
                               </div>
-                              <div class="form-group">
+                              <div class="form-group has-feedback">
                                   <label for="frm_firstname" class="control-label">Vorname</label>
                                   <input type="text" class="form-control" id="frm_firstname" name="frm_firstname" placeholder="Vorname Eingeben" value="<?php echo $filteredUsers[0]['firstname'] ?>" required>
                                   <div class="help-block with-errors"></div>
                               </div>
-                              <div class="form-group">
+                              <div class="form-group has-feedback">
                                   <label for="frm_lastname" class="control-label">Nachname</label>
                                   <input type="text" class="form-control" id="frm_lastname" name="frm_lastname" placeholder="Nachname Eingeben" value="<?php echo $filteredUsers[0]['lastname'] ?>" required>
                                   <div class="help-block with-errors"></div>
