@@ -13,33 +13,21 @@ $(document).ready(function(){
         $('#usrname').focus();
     });
 
-    $.periodic({period: 10000, decay: 1.2, max_period: 15000}, function() {
-        var logouttime = <?php echo $viewModel->get ( 'logouttime' ); ?>;
-        var currentTime = Math.round(new Date().getTime()/1000);
+    var loggedIN = <?php echo $viewModel->get ( 'loggedIN' ) ? 'true' : 'false'; ?>;
+    if(loggedIN)
+    {
+        $.periodic({period: 10000, decay: 1.2, max_period: 15000}, function() {
+            var logouttime = <?php echo $viewModel->get ( 'logouttime' ); ?>;
+            var currentTime = Math.round(new Date().getTime()/1000);
+            //console.log('[' + moment().format('DD.MM.YYYY HH:mm:ss') + '] ' + "Executing periodic updater...");
 
-     if(logouttime < currentTime)
-     {
-         $(window).attr("location","<?php echo $viewModel->get ( 'BaseUrl' ); ?>");
-     }
-   	 
-   	});
-
-    /*$.PeriodicalUpdater('<?php echo $viewModel->get ( 'BaseUrl' ); ?>ajax/checkloginstatus', {
-        minTimeout: 6000,
-        maxTimeout: 15000
-        }, function(remoteData, success, chr, handle) {            
-            if(success)
-            {
-            	var currentTime = Math.round(new Date().getTime()/1000);
-                var result = $.parseJSON(remoteData);
-
-                if(result['logouttime'] < currentTime)
+            if(logouttime < currentTime)
                 {
-                    $(window).attr("location","<?php echo $viewModel->get ( 'BaseUrl' ); ?>");
+                $(window).attr("location","<?php echo $viewModel->get ( 'BaseUrl' ); ?>login/logout");
                 }
-            }
-    });*/
-});
+            });
+        }
+    });
 </script>
 </body>
 </html>
