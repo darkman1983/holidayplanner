@@ -71,8 +71,8 @@ class AjaxController extends BaseController {
       return;
     }
     
-    $deleteUserSql = sprintf ( "DELETE FROM holiday_custom WHERE id = '%s'", $this->urlValues ['feastDaysDeleteID'] );
-    $result = $this->db->query ( $deleteUserSql );
+    $deleteFeastDaysSql = sprintf ( "DELETE FROM feastdays WHERE id = '%s'", $this->urlValues ['feastDaysDeleteID'] );
+    $result = $this->db->query ( $deleteFeastDaysSql );
   
     $this->view->output ( $this->model->deleteFeastDays ( ), 'Ajax/deletefeastdays' );
   }

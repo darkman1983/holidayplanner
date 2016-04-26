@@ -18,16 +18,16 @@ class FeastDaysModel extends BaseModel {
   public function index( $urlValues ) {
     $this->viewModel->set ( "pageTitle", "It-Solutions Urlaubsplaner" );
     
-    $getHolidayCustomCountSql = "SELECT COUNT(*) FROM holiday_custom";
-    $totalResult = $this->db->query ( $getHolidayCustomCountSql );
-    $totalHolidayCustom = $totalResult->fetch_row ( );
+    $getFeastDaysCountSql = "SELECT COUNT(*) FROM feastdays";
+    $totalResult = $this->db->query ( $getFeastDaysCountSql );
+    $totalFeastDaysCustom = $totalResult->fetch_row ( );
     
-    $pagination = Utils::generatePagination($urlValues, $totalHolidayCustom[0]);
+    $pagination = Utils::generatePagination($urlValues, $totalFeastDaysCustom[0]);
     
     $this->viewModel->set ( "pagination", $pagination );
     
-    $getHolidayCustomSql = sprintf ( "SELECT h.id, h.start, h.duration, h.description, u.username FROM holiday_custom h LEFT JOIN users u ON h.userID = u.id LIMIT %s OFFSET %s", $pagination['limit'], $pagination['offset'] );
-    $result = $this->db->query ( $getHolidayCustomSql );
+    $getFeastDaysSql = sprintf ( "SELECT f.*, u.username FROM feastdays f LEFT JOIN users u ON f.userID = u.id LIMIT %s OFFSET %s", $pagination['limit'], $pagination['offset'] );
+    $result = $this->db->query ( $getFeastDaysSql );
     $resultsets = $result->fetch_all ( MYSQLI_ASSOC );
     
     $this->viewModel->set ( "feastDaysData", $resultsets );

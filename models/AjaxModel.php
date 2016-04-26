@@ -60,11 +60,11 @@ class AjaxModel extends BaseModel {
     $year = '';
     
     if ( empty ( $this->urlValues ['feastDaysFilter'] ) ) {
-      $getHolidayCustomTotalSql = "SELECT COUNT(*) FROM holiday_custom";
-      $totalResult = $this->db->query ( $getHolidayCustomTotalSql );
-      $totalHolidayCustom = $totalResult->fetch_row ( );
+      $getFeastDaysTotalSql = "SELECT COUNT(*) FROM feastdays";
+      $totalResult = $this->db->query ( $getFeastDaysTotalSql );
+      $totalFeastDays = $totalResult->fetch_row ( );
       
-      $pagination = Utils::generatePagination ( $this->urlValues, $totalHolidayCustom [0] );
+      $pagination = Utils::generatePagination ( $this->urlValues, $totalFeastDays [0] );
     }
     
     if ( strstr ( $this->urlValues ['feastDaysFilter'], "." ) ) {
@@ -85,8 +85,8 @@ class AjaxModel extends BaseModel {
       }
     }
     
-    $getFilteredUsersSql = sprintf ( "SELECT h.*, u.username FROM holiday_custom h LEFT JOIN users u ON h.userID = u.id  WHERE u.username LIKE '%%%s%%' OR (FROM_UNIXTIME(start, '%%d') = '%s' AND FROM_UNIXTIME(start, '%%m') = '%s' AND FROM_UNIXTIME(start, '%%Y') = '%s') OR description LIKE '%%%s%%'%s", $this->urlValues ['feastDaysFilter'], $day, $month, $year, $this->urlValues ['feastDaysFilter'], empty ( $this->urlValues ['feastDaysFilter'] ) ? sprintf ( " LIMIT %s OFFSET %s", $pagination ['limit'], $pagination ['offset'] ) : '' );
-    $result = $this->db->query ( $getFilteredUsersSql );
+    $getFilteredFeastDaysSql = sprintf ( "SELECT f.*, u.username FROM feastdays f LEFT JOIN users u ON f.userID = u.id  WHERE u.username LIKE '%%%s%%' OR (FROM_UNIXTIME(start, '%%d') = '%s' AND FROM_UNIXTIME(start, '%%m') = '%s' AND FROM_UNIXTIME(start, '%%Y') = '%s') OR description LIKE '%%%s%%'%s", $this->urlValues ['feastDaysFilter'], $day, $month, $year, $this->urlValues ['feastDaysFilter'], empty ( $this->urlValues ['feastDaysFilter'] ) ? sprintf ( " LIMIT %s OFFSET %s", $pagination ['limit'], $pagination ['offset'] ) : '' );
+    $result = $this->db->query ( $getFilteredFeastDaysSql );
     
     $this->viewModel->set ( "filteredFeastDays", $result->fetch_all ( MYSQLI_ASSOC ) );
     

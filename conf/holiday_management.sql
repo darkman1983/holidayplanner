@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 26. Apr 2016 um 12:05
+-- Erstellungszeit: 26. Apr 2016 um 13:28
 -- Server-Version: 10.1.9-MariaDB
 -- PHP-Version: 5.6.15
 
@@ -25,6 +25,36 @@ USE `holiday_management`;
 -- --------------------------------------------------------
 
 --
+-- Tabellenstruktur für Tabelle `feastdays`
+--
+
+DROP TABLE IF EXISTS `feastdays`;
+CREATE TABLE `feastdays` (
+  `id` int(11) NOT NULL,
+  `userID` int(11) NOT NULL,
+  `start` int(11) NOT NULL,
+  `duration` int(5) NOT NULL,
+  `description` tinytext
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Daten für Tabelle `feastdays`
+--
+
+INSERT INTO `feastdays` (`id`, `userID`, `start`, `duration`, `description`) VALUES
+(1, 1, 1451602800, 1, 'Neujahr'),
+(2, 1, 1458860400, 1, 'Karfreitag'),
+(3, 1, 1459116000, 1, 'Ostermontag'),
+(4, 1, 1462053600, 1, 'Tag der Arbeit'),
+(5, 1, 1462399200, 1, 'Christi Himmefahrt'),
+(6, 1, 1463349600, 1, 'Pfingstmontag'),
+(7, 1, 1475445600, 1, 'Tag der Deutschen Einheit'),
+(8, 1, 1482620400, 1, '1. Weihnachtstag'),
+(9, 1, 1482706800, 1, '2. Weihnachtstag');
+
+-- --------------------------------------------------------
+
+--
 -- Tabellenstruktur für Tabelle `holiday`
 --
 
@@ -35,39 +65,10 @@ CREATE TABLE `holiday` (
   `start` int(11) NOT NULL,
   `duration` int(5) NOT NULL,
   `note` tinytext CHARACTER SET armscii8,
+  `response_note` tinytext,
   `type` char(1) NOT NULL,
   `approved` tinyint(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Tabellenstruktur für Tabelle `holiday_custom`
---
-
-DROP TABLE IF EXISTS `holiday_custom`;
-CREATE TABLE `holiday_custom` (
-  `id` int(11) NOT NULL,
-  `userID` int(11) NOT NULL,
-  `start` int(11) NOT NULL,
-  `duration` int(5) NOT NULL,
-  `description` mediumtext
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Daten für Tabelle `holiday_custom`
---
-
-INSERT INTO `holiday_custom` (`id`, `userID`, `start`, `duration`, `description`) VALUES
-(1, 1, 1451602800, 1, 'Neujahr'),
-(2, 1, 1458860400, 1, 'Karfreitag'),
-(3, 1, 1459116000, 1, 'Ostermontag'),
-(4, 1, 1462053600, 1, 'Tag der Arbeit'),
-(5, 1, 1462399200, 1, 'Christi Himmefahrt'),
-(6, 1, 1463349600, 1, 'Pfingstmontag'),
-(7, 1, 1475445600, 1, 'Tag der Deutschen Einheit'),
-(8, 1, 1482620400, 1, '1. Weihnachtstag'),
-(9, 1, 1482706800, 1, '2. Weihnachtstag');
 
 -- --------------------------------------------------------
 
@@ -87,7 +88,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `data`, `timestamp`) VALUES
-('k8t7jmjk9k6hd372tblhrr27v2', 'timestamp|s:10:"1461664831";id|s:1:"1";firstname|s:4:"Timo";lastname|s:10:"Stepputtis";email|s:22:"Timo.Stepputtis@gmx.de";level|s:1:"3";loggedIN|b:1;', 1461664870);
+('k8t7jmjk9k6hd372tblhrr27v2', 'timestamp|s:10:"1461670074";id|s:1:"1";firstname|s:4:"Timo";lastname|s:10:"Stepputtis";email|s:22:"Timo.Stepputtis@gmx.de";level|s:1:"3";loggedIN|b:1;', 1461670075);
 
 -- --------------------------------------------------------
 
@@ -129,17 +130,17 @@ INSERT INTO `users` (`id`, `firstname`, `lastname`, `username`, `password`, `ema
 --
 
 --
+-- Indizes für die Tabelle `feastdays`
+--
+ALTER TABLE `feastdays`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `start` (`start`);
+
+--
 -- Indizes für die Tabelle `holiday`
 --
 ALTER TABLE `holiday`
   ADD PRIMARY KEY (`id`);
-
---
--- Indizes für die Tabelle `holiday_custom`
---
-ALTER TABLE `holiday_custom`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `start` (`start`);
 
 --
 -- Indizes für die Tabelle `sessions`
@@ -159,15 +160,15 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT für Tabelle `feastdays`
+--
+ALTER TABLE `feastdays`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+--
 -- AUTO_INCREMENT für Tabelle `holiday`
 --
 ALTER TABLE `holiday`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT für Tabelle `holiday_custom`
---
-ALTER TABLE `holiday_custom`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT für Tabelle `users`
 --
