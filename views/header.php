@@ -11,7 +11,9 @@
 <!-- FontAwesome -->
 <link href="<?php echo $viewModel->get('AssetPath'); ?>css/font-awesome.min.css" rel="stylesheet">
 <!-- DateTimePicker -->
-<link href="<?php echo $viewModel->get('AssetPath'); ?>css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="<?php echo $viewModel->get('AssetPath'); ?>css/daterangepicker.css" rel="stylesheet">
+<!-- InputLimiter -->
+<link href="<?php echo $viewModel->get('AssetPath'); ?>css/inputlimiter.css" rel="stylesheet">
 <!-- Custom CSS -->
 <link href="<?php echo $viewModel->get('AssetPath'); ?>css/default.css" rel="stylesheet">
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -25,10 +27,11 @@
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/jquery.wait.min.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/jquery.urlparam.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/jquery.periodic.js"></script>
+<script src="<?php echo $viewModel->get('AssetPath'); ?>js/jquery.inputlimiter.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/bootstrap.min.js"></script>
-<script src="<?php echo $viewModel->get('AssetPath'); ?>js/moment-with-locales.min.js"></script>
-<script src="<?php echo $viewModel->get('AssetPath'); ?>js/bootstrap-datetimepicker.min.js"></script>
+<script src="<?php echo $viewModel->get('AssetPath'); ?>js/moment.min.js"></script>
+<script src="<?php echo $viewModel->get('AssetPath'); ?>js/daterangepicker.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/validator.min.js"></script>
 </head>
 <body>

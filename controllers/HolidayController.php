@@ -1,6 +1,10 @@
 <?php
 
-class FeastdaysController extends BaseController {
+/**
+ * @author tstepputtis
+ *
+ */
+class HolidayController extends BaseController {
 
   private $db = NULL;
 
@@ -10,13 +14,13 @@ class FeastdaysController extends BaseController {
   public function __construct( $action, $urlValues ) {
     parent::__construct ( $action, $urlValues );
     
-    $this->levels = array ("index" => 3,"create" => 3,"edit" => 3 );
+    $this->levels = array ("index" => 1,"propose" => 1,"edit" => 3 );
     
     // create the model object
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->model = new ErrorModel ( );
     } else {
-      $this->model = new FeastDaysModel ( );
+      $this->model = new HolidayModel ( );
     }
     
     $this->db = Database::getInstance ( )->getCon ( );
@@ -28,11 +32,10 @@ class FeastdaysController extends BaseController {
       $this->view->output ( $this->model->notAllowed ( ), 'Error/notallowed' );
       return;
     }
-    
     $this->view->output ( $this->model->index ( $this->urlValues ), '' );
   }
 
-  protected function create( ) {
+  protected function propose( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->notAllowed ( ), 'Error/notallowed' );
       return;
@@ -52,21 +55,19 @@ class FeastdaysController extends BaseController {
     }
     
     if ( $dataValid ) {
-      $dates = explode(" - ", $this->urlValues ['frm_daterange']);
-      $days = Utils::getNumberDays ( $dates[0], $dates[1] );
-      $createHolidayCustomSql = sprintf ( "INSERT INTO holiday_custom SET userID = '%s', start = '%s', duration = '%s', description = '%s'", $this->session->get ( 'id' ), strtotime ( $dates[0] ), $days, $this->urlValues ['frm_description'] );
-      $result = $this->db->query ( $createHolidayCustomSql );
+      $createUserSql = sprintf ( "INSERT INTO holiday SET employeeID = '%s', start = '%s', duration = '%s', type = '%s', note = '%s'", $this->urlValues ['frm_firstname'], $this->urlValues ['frm_lastname'], $this->urlValues ['frm_username'], sha1 ( $this->urlValues ['frm_username'] . ":" . $this->urlValues ['frm_uPassword'] ), $this->urlValues ['frm_email'], $this->urlValues ['frm_userlevel'] );
+      $result = $this->db->query ( $createUserSql );
       
       if ( $this->db->affected_rows != 1 ) {
-        $this->view->output ( $this->model->badFeastDaysCreate ( $this->urlValues, $this->db->error ), 'Feastdays/badfeastdayscreate' );
+        $this->view->output ( $this->model->badUserCreate ( $this->urlValues, $this->db->error ), 'User/badusercreate' );
         return;
       } else {
-        $this->view->output ( $this->model->success ( ), 'Feastdays/success' );
+        $this->view->output ( $this->model->success ( ), 'User/success' );
         return;
       }
     }
     
-    $this->view->output ( $this->model->create ( ), '' );
+    $this->view->output ( $this->model->propose ( ), '' );
   }
 
   protected function edit( ) {
@@ -82,11 +83,10 @@ class FeastdaysController extends BaseController {
     }
     
     if ( $dataValid ) {
-      $days = Utils::getNumberDays ( $this->urlValues ['frm_startdate'], $this->urlValues ['frm_enddate'] );
-      $editFestDaysSql = sprintf ( "UPDATE holiday_custom SET start = '%s', duration = '%s', description = '%s' WHERE id = '%s'", strtotime ( $this->urlValues ['frm_startdate'] ), $days, $this->urlValues ['frm_description'], $this->urlValues ['feastDaysEditID'] );
-      $result = $this->db->query ( $editFestDaysSql );
+      $createUserSql = sprintf ( "UPDATE users SET firstname = '%s', lastname = '%s', username = '%s', %semail = '%s', level = '%s' WHERE id = '%s'", $this->urlValues ['frm_firstname'], $this->urlValues ['frm_lastname'], $this->urlValues ['frm_username'], ! empty ( $this->urlValues ['frm_uPassword'] ) ? sprintf ( "password = '%s', ", sha1 ( $this->urlValues ['frm_username'] . ":" . $this->urlValues ['frm_uPassword'] ) ) : '', $this->urlValues ['frm_email'] . "@" . $this->urlValues ['frm_emailDomain'], $this->urlValues ['frm_userlevel'], $this->urlValues ['userEditID'] );
+      $result = $this->db->query ( $createUserSql );
       
-      $this->view->output ( $this->model->success ( ), 'Feastdays/success' );
+      $this->view->output ( $this->model->success ( ), 'User/success' );
       return;
     }
     

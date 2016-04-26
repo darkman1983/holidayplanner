@@ -25,7 +25,7 @@ class LoginModel extends BaseModel {
 
   public function login( ) {    
     if ( isset ( $this->urlValues ['usrname'] ) && isset ( $this->urlValues ['psw'] ) ) {
-      $loginCheck_SQL = sprintf ( "SELECT * FROM users WHERE username = '%s' AND password = '%s'", $this->urlValues ['usrname'], sha1 ( $this->urlValues ['usrname'] . ':' . $this->urlValues ['psw'] ) );
+      $loginCheck_SQL = sprintf ( "SELECT * FROM users WHERE username = '%s' AND password = '%s'", strtolower($this->urlValues ['usrname']), sha1 ( strtolower($this->urlValues ['usrname']) . ':' . $this->urlValues ['psw'] ) );
       $resultset = $this->db->query ( $loginCheck_SQL );
       
       if ( $resultset->num_rows > 0 ) {

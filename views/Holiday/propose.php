@@ -4,15 +4,15 @@
       <div id="login-overlay" class="modal-dialog">
       <div class="modal-content">
           <div class="modal-header">
-              <h4 class="modal-title" id="myModalLabel">Neuen Feiertag anlegen</h4>
+              <h4 class="modal-title" id="myModalLabel">Urlaubsantrag stellen</h4>
           </div>
           <div class="modal-body">
               <div class="row">
                   <div class="col-xs-12">
                       <div class="well">
                           <form id="loginForm" method="POST" action="<?php echo $viewModel->get('BaseUrl') ?>feastdays/create?do=1" role="form" data-toggle="validator">
-                              <div class="form-group has-feedback" id="usernameGroup">
-                                  <label for="frm_daterange" class="control-label">Feiertage wählen</label>
+                              <div class="form-group has-feedback has-feedback-left" id="usernameGroup">
+                                  <label for="frm_daterange" class="control-label">Urlaubstage wählen</label>
                                   <div class='input-group input-daterange'>
                                     <span class="input-group-addon" id="sizing-addon1">Format: TT.MM.JJJJ - TT.MM.JJJJ</span>
                                     <input type="text" class="form-control" id="frm_daterange" name="frm_daterange" placeholder="Bitte Datum Wählen oder Eingeben" required>
@@ -20,9 +20,9 @@
                                   </div>
                                   <div class="help-block with-errors"></div>
                               </div>
-                              <div class="form-group has-feedback">
-                                  <label for="frm_description" class="control-label">Beschreibung</label>
-                                  <textarea rows="4" cols="2" class="form-control" id="frm_description" name="frm_description" placeholder="Beschreibung Eingeben" required></textarea>
+                              <div class="form-group">
+                                  <label for="frm_note" class="control-label">Anmerkungen</label>
+                                  <textarea rows="4" cols="2" class="form-control" id="frm_note" name="frm_note" placeholder="Anmerkung Eingeben"></textarea>
                                   <div class="help-block with-errors"></div>
                               </div>
                               <button type="submit" class="btn btn-success btn-default">Erstellen</button>
@@ -75,6 +75,8 @@ $(document).ready(function(){
 	}, function(start, end, label) {
 	  //console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
 	});
+
+	$('textarea').inputlimiter();
 });
 </script>
 <?php include 'views/footer.php'; ?>

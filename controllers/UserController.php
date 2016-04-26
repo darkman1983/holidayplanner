@@ -55,7 +55,7 @@ class UserController extends BaseController {
     }
     
     if ( $dataValid ) {
-      $createUserSql = sprintf ( "INSERT INTO users SET firstname = '%s', lastname = '%s', username = '%s', password = '%s', email = '%s', level = '%s'", $this->urlValues ['frm_firstname'], $this->urlValues ['frm_lastname'], $this->urlValues ['frm_username'], sha1 ( $this->urlValues ['frm_username'] . ":" . $this->urlValues ['frm_uPassword'] ), $this->urlValues ['frm_email'] . "@" . $this->urlValues ['frm_emailDomain'], $this->urlValues ['frm_userlevel'] );
+      $createUserSql = sprintf ( "INSERT INTO users SET firstname = '%s', lastname = '%s', username = '%s', password = '%s', email = '%s', level = '%s'", ucfirst($this->urlValues ['frm_firstname']), ucfirst($this->urlValues ['frm_lastname']), strtolower($this->urlValues ['frm_username']), sha1 ( strtolower($this->urlValues ['usrname']) . ":" . $this->urlValues ['frm_uPassword'] ), $this->urlValues ['frm_email'], $this->urlValues ['frm_userlevel'] );
       $result = $this->db->query ( $createUserSql );
       
       if ( $this->db->affected_rows != 1 ) {
