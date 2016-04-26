@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 26. Apr 2016 um 13:28
--- Server-Version: 10.1.9-MariaDB
--- PHP-Version: 5.6.15
+-- Erstellungszeit: 26. Apr 2016 um 17:47
+-- Server-Version: 10.1.10-MariaDB
+-- PHP-Version: 7.0.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -70,6 +70,36 @@ CREATE TABLE `holiday` (
   `approved` tinyint(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Daten für Tabelle `holiday`
+--
+
+INSERT INTO `holiday` (`id`, `employeeID`, `start`, `duration`, `note`, `response_note`, `type`, `approved`) VALUES
+(12, 1, 1461679741, 2, NULL, NULL, 'H', 0),
+(14, 1, 1461679741, 2, NULL, NULL, 'I', 0);
+
+--
+-- Trigger `holiday`
+--
+DROP TRIGGER IF EXISTS `delete_trigger`;
+DELIMITER $$
+CREATE TRIGGER `delete_trigger` AFTER DELETE ON `holiday` FOR EACH ROW IF OLD.type = 'H' THEN
+UPDATE users SET remainingHoliday = remainingHoliday + OLD.duration WHERE  OLD.employeeID = id;
+ELSE
+UPDATE users SET remainingHoliday = remainingHoliday - OLD.duration WHERE  OLD.employeeID = id;
+END IF
+$$
+DELIMITER ;
+DROP TRIGGER IF EXISTS `insert_trigger`;
+DELIMITER $$
+CREATE TRIGGER `insert_trigger` AFTER INSERT ON `holiday` FOR EACH ROW IF NEW.type = 'H' THEN
+UPDATE users SET remainingHoliday = remainingHoliday - NEW.duration WHERE  NEW.employeeID = id;
+ELSE
+UPDATE users SET remainingHoliday = remainingHoliday + NEW.duration WHERE  NEW.employeeID = id;
+END IF
+$$
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
@@ -88,7 +118,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `data`, `timestamp`) VALUES
-('k8t7jmjk9k6hd372tblhrr27v2', 'timestamp|s:10:"1461670074";id|s:1:"1";firstname|s:4:"Timo";lastname|s:10:"Stepputtis";email|s:22:"Timo.Stepputtis@gmx.de";level|s:1:"3";loggedIN|b:1;', 1461670075);
+('f67s4sbfo45fml2splptkop505', 'timestamp|s:10:"1461684990";id|s:1:"1";firstname|s:4:"Timo";lastname|s:10:"Stepputtis";email|s:22:"Timo.Stepputtis@gmx.de";level|s:1:"3";loggedIN|b:1;', 1461685145);
 
 -- --------------------------------------------------------
 
@@ -104,6 +134,8 @@ CREATE TABLE `users` (
   `username` varchar(80) NOT NULL,
   `password` varchar(40) DEFAULT NULL,
   `email` varchar(100) NOT NULL,
+  `maxHoliday` int(2) DEFAULT '30',
+  `remainingHoliday` int(2) DEFAULT '30',
   `level` int(1) NOT NULL DEFAULT '0' COMMENT '0 = Initial 1 = Normal user 2 = Can approve holiday 3 = Can create users'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -111,19 +143,19 @@ CREATE TABLE `users` (
 -- Daten für Tabelle `users`
 --
 
-INSERT INTO `users` (`id`, `firstname`, `lastname`, `username`, `password`, `email`, `level`) VALUES
-(1, 'Timo', 'Stepputtis', 'tstepputtis', '9c402c4806d33430b781492227a47adf30624e9c', 'Timo.Stepputtis@gmx.de', 3),
-(2, 'Heinz', 'Mustermann', 'heinz', '023087601ffa058f24441d227962c1f9b15aa85d', 'heinz@gmx.de', 1),
-(3, 'Harry', 'Beinfurt', 'harry', 'b8cf35b1e4d9c6ac9f02c27e32d5341848d3a272', 'harry@gmx.de', 1),
-(4, 'Tim', 'Rohrbruch', 'timmy', 'c43d74a74283c11cf6002b023ca8aab9851a2b68', 'timmy@gmx.de', 1),
-(5, 'Karl', 'Kleisterbaum', 'karlito', '2b65529da7df79cd70da9a8ceb7a2a2ea6800993', 'karl@gmx.de', 1),
-(6, 'Phillip', 'Becker', 'phillip', 'a1875a5070b9a6cf28e90f6339f27796bee73922', 'phillip@gmx.de', 1),
-(7, 'Andreas', 'Maier', 'andreas', 'f99d9af5fa25aa965419fc507fd7e71b788bdd3a', 'andreas@gmx.de', 1),
-(8, 'Hannelore', 'Geisner', 'hannelore', '251e21782378011e81f08eac4a385f4e35ac2e34', 'hannelore@web.de', 1),
-(9, 'Gisela', 'Geier', 'gisela', '4f09c93b28559bdbbe59cc30777ce82e0915f716', 'gisela@gmail.com', 1),
-(10, 'Alexandra', 'Kraft', 'alexandra', 'd11b93c86b976997fec1026436201d32b5d0efa6', 'alex.andra@yahoo.com', 1),
-(11, 'Olliver', 'Gunst', 'olli', 'b04225b21bdde516eb1b7d30fc28e9cd6a44b8af', 'olli.p@t-online.de', 1),
-(12, 'Ralf', 'Zacherl', 'ralf', 'e72f4fe7d3f27849dc7d171935ec6db7541dc211', 'ralfz@rtl2.de', 1);
+INSERT INTO `users` (`id`, `firstname`, `lastname`, `username`, `password`, `email`, `maxHoliday`, `remainingHoliday`, `level`) VALUES
+(1, 'Timo', 'Stepputtis', 'tstepputtis', '9c402c4806d33430b781492227a47adf30624e9c', 'Timo.Stepputtis@gmx.de', 30, 30, 3),
+(2, 'Heinz', 'Mustermann', 'heinz', '023087601ffa058f24441d227962c1f9b15aa85d', 'heinz@gmx.de', 30, 30, 1),
+(3, 'Harry', 'Beinfurt', 'harry', 'b8cf35b1e4d9c6ac9f02c27e32d5341848d3a272', 'harry@gmx.de', 30, 30, 1),
+(4, 'Tim', 'Rohrbruch', 'timmy', 'c43d74a74283c11cf6002b023ca8aab9851a2b68', 'timmy@gmx.de', 30, 30, 1),
+(5, 'Karl', 'Kleisterbaum', 'karlito', '2b65529da7df79cd70da9a8ceb7a2a2ea6800993', 'karl@gmx.de', 30, 30, 1),
+(6, 'Phillip', 'Becker', 'phillip', 'a1875a5070b9a6cf28e90f6339f27796bee73922', 'phillip@gmx.de', 30, 30, 1),
+(7, 'Andreas', 'Maier', 'andreas', 'f99d9af5fa25aa965419fc507fd7e71b788bdd3a', 'andreas@gmx.de', 30, 30, 1),
+(8, 'Hannelore', 'Geisner', 'hannelore', '251e21782378011e81f08eac4a385f4e35ac2e34', 'hannelore@web.de', 30, 30, 1),
+(9, 'Gisela', 'Geier', 'gisela', '4f09c93b28559bdbbe59cc30777ce82e0915f716', 'gisela@gmail.com', 30, 30, 1),
+(10, 'Alexandra', 'Kraft', 'alexandra', 'd11b93c86b976997fec1026436201d32b5d0efa6', 'alex.andra@yahoo.com', 30, 30, 1),
+(11, 'Olliver', 'Gunst', 'olli', 'b04225b21bdde516eb1b7d30fc28e9cd6a44b8af', 'olli.p@t-online.de', 30, 30, 1),
+(12, 'Ralf', 'Zacherl', 'ralf', 'e72f4fe7d3f27849dc7d171935ec6db7541dc211', 'ralfz@rtl2.de', 30, 30, 1);
 
 --
 -- Indizes der exportierten Tabellen
@@ -168,12 +200,24 @@ ALTER TABLE `feastdays`
 -- AUTO_INCREMENT für Tabelle `holiday`
 --
 ALTER TABLE `holiday`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT für Tabelle `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+DELIMITER $$
+--
+-- Ereignisse
+--
+DROP EVENT `update_remainingHoliday`$$
+CREATE DEFINER=`root`@`localhost` EVENT `update_remainingHoliday` ON SCHEDULE EVERY 1 YEAR STARTS '2016-01-01 00:00:00' ON COMPLETION PRESERVE ENABLE DO UPDATE users SET remainingHoliday = remainingHoliday + maxHoliday$$
+
+DROP EVENT `remove_remainingHoliday`$$
+CREATE DEFINER=`root`@`localhost` EVENT `remove_remainingHoliday` ON SCHEDULE EVERY 1 YEAR STARTS '2016-03-01 00:00:00' ON COMPLETION PRESERVE ENABLE DO UPDATE users SET remainingHoliday = IF(remainingHoliday > 30, 30, remainingHoliday)$$
+
+DELIMITER ;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
