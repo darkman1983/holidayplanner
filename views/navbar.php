@@ -54,6 +54,8 @@
         }
         ?>
       </ul>
+      </li>
+      </ul>
       <!--  <form class="navbar-form navbar-left" role="search">
         <div class="row">
   <div class="col-lg-10">
@@ -79,7 +81,7 @@
           </ul>
         </li>', $viewModel->get('firstname'), $viewModel->get('lastname'), $viewModel->get('BaseUrl'));
         }else {
-          echo '<li><a href="#" class="glyphicon glyphicon-user" id="loginBtn">&nbsp;Login</a></li>';
+          echo '<li><a href="#" class="glyphicon glyphicon-user text-uppercase bold-font" id="loginBtn">&nbsp;Login</a></li>';
         }
         ?>
       </ul>
