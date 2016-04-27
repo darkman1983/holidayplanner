@@ -10,7 +10,7 @@
               <div class="row">
                   <div class="col-xs-12">
                       <div class="well">
-                          <form id="loginForm" method="POST" action="<?php echo $viewModel->get('BaseUrl') ?>feastdays/create?do=1" role="form" data-toggle="validator">
+                          <form id="loginForm" method="POST" action="<?php echo $viewModel->get('BaseUrl') ?>holiday/propose?do=1" role="form" data-toggle="validator">
                               <div class="form-group has-feedback has-feedback-left" id="usernameGroup">
                                   <label for="frm_daterange" class="control-label">Urlaubstage wählen</label>
                                   <div class='input-group input-daterange'>

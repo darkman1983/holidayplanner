@@ -12,10 +12,10 @@
     </thead>
     <tbody>
     <?php 
-    $filteredUsers = $viewModel->get ( 'filteredUsers' );
-    if(!empty($filteredUsers))
+    $userHolidayData = $viewModel->get ( 'filteredUsers' );
+    if(!empty($userHolidayData))
     {
-      $maxNum = strlen(max($filteredUsers)['id']);
+      $maxNum = strlen(max($userHolidayData)['id']);
       foreach($viewModel->get ( 'filteredUsers' ) as &$data) {
     ?>
       <tr>

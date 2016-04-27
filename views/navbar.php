@@ -19,34 +19,26 @@
         $loggedIN = $viewModel->get ( 'loggedIN' );
         $level = $viewModel->get ( 'level' );
         
-        if ( $loggedIN && $level > 0 ) {
-          $holiday_menu = array ("Übersicht" => array (1,"holiday" ),"Beantragen" => array (1,"holiday/propose" ),"Status Einsehen" => array (1,"holiday/status" ) );
-          
-          echo '<li class="dropdown">
+        if($loggedIN) {
+        ?>
+        <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Urlaub <span class="caret"></span></a>
-          <ul class="dropdown-menu">';
-          
-          foreach ( $holiday_menu as $entry => &$data ) {
-            if ( $data [0] <= $level ) {
-              if ( $entry != '-' ) {
-                printf ( '<li><a href="%s%s">%s</a></li>', $viewModel->get ( 'BaseUrl' ), $data [1], $entry );
-              } else {
-                echo '<li role="separator" class="divider"></li>';
-              }
-            }
-          }
-          
-          echo '</ul>
-        </li>';
+        <ul class="dropdown-menu">
+        <li><a href="<?php echo $viewModel->get('BaseUrl'); ?>holiday">Übersicht</a></li>
+        <?php if($level == 1) { ?><li><a href="<?php echo $viewModel->get('BaseUrl'); ?>feastdays">Urlaubs- & Feiertage</a></li><?php } ?>
+        </ul>
+        </li>
+        <?php
         }
         
         if ( $loggedIN && $level > 1 ) {
-          $holiday_menu = array ("Benutzer" => array(3, "user"), "Feiertage" => array (3,"feastdays" ), "-" => array(3, ""),"Übersicht" => array (2,"holidaymanager" ),"Anträge" => array (2,"holidaymanager/manage" ) );
+          $holiday_menu = array ("Benutzer" => array(3, "user"), "Urlaubs- & Feiertage" => array (3,"feastdays" ), "-" => array(3, ""),"Übersicht" => array (2,"holidaymanager" ),"Anträge" => array (2,"holidaymanager/manage" ) );
         
-          echo '<li class="dropdown">
+        ?>
+        <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Verwaltung <span class="caret"></span></a>
-          <ul class="dropdown-menu">';
-        
+        <ul class="dropdown-menu">
+        <?php
           foreach ( $holiday_menu as $entry => &$data ) {
             if ( $data [0] <= $level ) {
               if ( $entry != '-' ) {

@@ -43,8 +43,8 @@ class Utils {
    * @return number of days
    */
   public static function getNumberDays( $start_date, $end_date, $withoutWeekends = true ) {
-    $startDate = new DateTime ( $start_date );
-    $endDate = new DateTime ( $end_date );
+    $startDate = new DateTime ( Utils::is_timestamp($start_date) ? date("d.m.Y", $start_date) : $start_date );
+    $endDate = new DateTime ( Utils::is_timestamp($end_date) ? date("d.m.Y", $end_date) : $end_date );
     $interval = $startDate->diff ( $endDate );
     $woweekends = 0;
     for( $i = 0; $i <= $interval->d; $i ++ ) {
@@ -57,6 +57,14 @@ class Utils {
     }
     
     return $woweekends;
+  }
+
+  public static function is_timestamp( $timestamp ) {
+    if ( strtotime ( date ( 'd-m-Y H:i:s', $timestamp ) ) === ( int ) $timestamp ) {
+      return true;
+    }
+    
+    return false;
   }
 }
 

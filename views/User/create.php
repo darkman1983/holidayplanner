@@ -15,7 +15,7 @@
                                   <label for="frm_username" class="control-label">Benutzername</label>
                                   <div class="input-group">
                                     <span class="input-group-addon" id="sizing-addon1">z.B. hmustermann</span>
-                                    <input type="text" class="form-control" id="frm_username" name="frm_username" placeholder="Benutzernamen Eingeben" data-remote="<?php echo $viewModel->get('BaseUrl'); ?>ajax/validateuser" data-error="Oops! Dieser Benutzer existiert schon!" required>
+                                    <input type="text" class="form-control" id="frm_username" name="frm_username" placeholder="Benutzernamen Eingeben" data-remote="<?php echo $viewModel->get('BaseUrl'); ?>ajax/validateuser" data-error="Oops! Feld leer oder Benutzer existiert schon!" required>
                                   </div>
                                   <div class="help-block with-errors"></div>
                               </div>

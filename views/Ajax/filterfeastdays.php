@@ -11,21 +11,21 @@
     </thead>
     <tbody>
     <?php 
-    $filteredUsers = $viewModel->get ( 'filteredFeastDays' );
-    if(!empty($filteredUsers))
+    $userHolidayData = $viewModel->get ( 'filteredFeastDays' );
+    if(!empty($userHolidayData))
     {
-      $maxNum = strlen(max($filteredUsers)['id']);
-      foreach($filteredUsers as &$data) {
+      $maxNum = strlen(max($userHolidayData)['id']);
+      foreach($userHolidayData as &$data) {
     ?>
       <tr>
         <td class="vertical-center">
           <span><?php echo str_pad($data['id'], $maxNum, 0, STR_PAD_LEFT); ?></span>
         </td>
         <td class="col-xs-2 vertical-center">
-          <span><?php echo date("d.m.Y", $data['start']); ?></span>
+          <span><?php echo date("d.m.Y", $data['startdate']); ?></span>
         </td>
         <td class="col-xs-2 vertical-center">
-          <span><?php echo ($data['duration'] > 1) ? date("d.m.Y", strtotime(sprintf("+%s days", $data['duration']), $data['start'])) : date("d.m.Y", $data['start']); ?></span>
+          <span><?php echo date("d.m.Y", $data['enddate']); ?></span>
         </td>
         <td class="col-xs-3 vertical-center">
           <span><?php echo $data['description']; ?></span>

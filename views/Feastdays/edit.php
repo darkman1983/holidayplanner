@@ -18,7 +18,7 @@ $feastDaysData = $viewModel->get('feastDaysData');
                                   <label for="frm_daterange" class="control-label">Feiertage wählen</label>
                                   <div class='input-group input-daterange'>
                                     <span class="input-group-addon" id="sizing-addon1">Format: TT.MM.JJJJ - TT.MM.JJJJ</span>
-                                    <input type="text" class="form-control" id="frm_daterange" name="frm_daterange" value="<?php echo sprintf("%s - %s", date("d.m.Y", $feastDaysData['start']), date("d.m.Y", ($feastDaysData['duration'] == 1) ? $feastDaysData['start'] : strtotime(sprintf("+%s days", $feastDaysData['duration']), $feastDaysData['start']))); ?>" placeholder="Bitte Datum Wählen oder Eingeben" required>
+                                    <input type="text" class="form-control" id="frm_daterange" name="frm_daterange" value="<?php echo sprintf("%s - %s", date("d.m.Y", $feastDaysData['startdate']), date("d.m.Y", $feastDaysData['enddate'])); ?>" placeholder="Bitte Datum Wählen oder Eingeben" required>
                                     <i class="form-control-feedback glyphicon glyphicon-calendar"></i>
                                   </div>
                                   <div class="help-block with-errors"></div>

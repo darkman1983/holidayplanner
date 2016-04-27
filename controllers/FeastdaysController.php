@@ -10,7 +10,7 @@ class FeastdaysController extends BaseController {
   public function __construct( $action, $urlValues ) {
     parent::__construct ( $action, $urlValues );
     
-    $this->levels = array ("index" => 3,"create" => 3,"edit" => 3 );
+    $this->levels = array ("index" => 1,"create" => 3,"edit" => 3 );
     
     // create the model object
     if ( ! $this->checkAccess ( $this->levels ) ) {
@@ -53,8 +53,7 @@ class FeastdaysController extends BaseController {
     
     if ( $dataValid ) {
       $dates = explode(" - ", $this->urlValues ['frm_daterange']);
-      $days = Utils::getNumberDays ( $dates[0], $dates[1] );
-      $createFeastDaysSql = sprintf ( "INSERT INTO feastdays SET userID = '%s', start = '%s', duration = '%s', description = '%s'", $this->session->get ( 'id' ), strtotime ( $dates[0] ), $days, $this->urlValues ['frm_description'] );
+      $createFeastDaysSql = sprintf ( "INSERT INTO feastdays SET userID = '%s', startdate = '%s', enddate = '%s', description = '%s'", $this->session->get ( 'id' ), strtotime ( $dates[0] ), strtotime ( $dates[1] ), $this->urlValues ['frm_description'] );
       $result = $this->db->query ( $createFeastDaysSql );
       
       if ( $this->db->affected_rows != 1 ) {
@@ -83,8 +82,7 @@ class FeastdaysController extends BaseController {
     
     if ( $dataValid ) {
       $dates = explode(" - ", $this->urlValues ['frm_daterange']);
-      $days = Utils::getNumberDays ( $dates[0], $dates[1] );
-      $editFestDaysSql = sprintf ( "UPDATE feastdays SET start = '%s', duration = '%s', description = '%s' WHERE id = '%s'", strtotime ( $dates[0] ), $days, $this->urlValues ['frm_description'], $this->urlValues ['feastDaysEditID'] );
+      $editFestDaysSql = sprintf ( "UPDATE feastdays SET startdate = '%s', enddate = '%s', description = '%s' WHERE id = '%s'", strtotime ( $dates[0] ), strtotime ( $dates[1] ), $this->urlValues ['frm_description'], $this->urlValues ['feastDaysEditID'] );
       $result = $this->db->query ( $editFestDaysSql );
       
       $this->view->output ( $this->model->success ( ), 'Feastdays/success' );

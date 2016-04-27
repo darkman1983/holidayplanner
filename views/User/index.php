@@ -36,10 +36,10 @@
     </thead>
     <tbody>
     <?php 
-    $filteredUsers = $viewModel->get ( 'userData' );
-    if(!empty($filteredUsers)) {
-      $maxNum = strlen(max($filteredUsers)['id']);
-      foreach($filteredUsers as &$data) {
+    $userHolidayData = $viewModel->get ( 'userData' );
+    if(!empty($userHolidayData)) {
+      $maxNum = strlen(max($userHolidayData)['id']);
+      foreach($userHolidayData as &$data) {
     ?>
       <tr>
         <td class="vertical-center">
@@ -67,16 +67,17 @@
           printf( "%s - %s", $data['level'], $levels[$data['level']]);
         ?>
         </td>
-        <td class="vertical-center center-text">
+        <td class="vertical-center center-text a-spacing-4">
         <?php 
         if($userID != $data['id'])
         {
         ?>
-        <a href="#" class="glyphicon glyphicon-remove nounderline link-color-black link-color-lightgrey glyphicon-medium" data-href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/deleteuser?usersFilter=&userDeleteID=<?php echo $data['id']; ?>" data-toggle="modal" data-target="#confirm-delete" aria-hidden="true"></a>
-        <a href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>user/edit?userEditID=<?php echo $data['id']; ?>" class="glyphicon glyphicon-edit nounderline link-color-black link-color-lightgrey glyphicon-medium" aria-hidden="true"></a>
-        <?php 
-        }
-        ?>
+        <a href="#" class="glyphicon glyphicon-remove nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Löschen" data-href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/deleteuser?usersFilter=&userDeleteID=<?php echo $data['id']; ?>" data-toggle="modal" data-target="#confirm-delete" aria-hidden="true"></a>
+        <a href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>user/edit?userEditID=<?php echo $data['id']; ?>" class="glyphicon glyphicon-edit nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Bearbeiten" aria-hidden="true"></a>
+        <?php } else { ?>
+        <a href="#" class="glyphicon glyphicon-remove glyphicon-medium nounderline link-disabled"></a>
+        <a href="#" class="glyphicon glyphicon-edit glyphicon-medium nounderline link-disabled"></a>
+        <?php } ?>
         </td>
       </tr>
       <?php

@@ -3,7 +3,7 @@
     <div class="container">
     <div class="modal-content">
     <div class="modal-header">
-    <h2>Feiertagsverwaltung</h2>
+    <h2><?php if($viewModel->get('level') == 1){ ?>Urlaubs- & Feiertage<?php }else{ ?>Urlaubs- & Feiertagsverwaltung<?php } ?></h2>
     <div id="loadingIndicator" class="navbar-header navbar-left hidden">
       <i class="fa fa-cog fa-spin fa-1x margin-bottom link-color-black" aria-hidden="true" title="Lade Inhalte..."></i>
     </div>
@@ -13,7 +13,7 @@
 			</div>
 	</div>
 	<a href="#" class="glyphicon glyphicon-refresh nounderline navbar-right padding-right-5 link-color-black link-color-lightgrey" id="reloadFeastDays" title="Benutzertabelle neu Laden"></a>
-	<a href="<?php echo $viewModel->get ( 'BaseUrl' )?>feastdays/create" class="glyphicon glyphicon-plus nounderline navbar-right link-color-black link-color-lightgrey" title="Benutzer Hinzufügen"></a>
+	<?php if($viewModel->get('level') > 1){ ?><a href="<?php echo $viewModel->get ( 'BaseUrl' )?>feastdays/create" class="glyphicon glyphicon-plus nounderline navbar-right link-color-black link-color-lightgrey" title="Benutzer Hinzufügen"></a><?php } ?>
 	</div>
 	<div class="modal-body">
   <div class="table-responsive" id="feastdays">
@@ -24,38 +24,45 @@
         <th>Startdatum</th>
         <th>Enddatum</th>
         <th>Beschreibung</th>
+        <?php if($viewModel->get('level') > 1){ ?>
         <th>Angelegt von</th>
-        <th>Löschen - Editieren</th>
+        <th class="center-text">Aktion</th>
+        <?php } ?>
+        <th></th>
       </tr>
     </thead>
     <tbody>
     <?php 
-    $filteredUsers = $viewModel->get ( 'feastDaysData' );
-    if(!empty($filteredUsers))
+    $userHolidayData = $viewModel->get ( 'feastDaysData' );
+    if(!empty($userHolidayData))
     {
-      $maxNum = strlen(max($filteredUsers)['id']);
-      foreach($filteredUsers as &$data) {
+      $maxNum = strlen(max($userHolidayData)['id']);
+      foreach($userHolidayData as &$data) {
     ?>
       <tr>
-        <td class="vertical-center">
+        <td class="col-xs-1 vertical-center">
           <span><?php echo str_pad($data['id'], $maxNum, 0, STR_PAD_LEFT); ?></span>
         </td>
         <td class="col-xs-2 vertical-center">
-          <span><?php echo date("d.m.Y", $data['start']); ?></span>
+          <span><?php echo date("d.m.Y", $data['startdate']); ?></span>
         </td>
         <td class="col-xs-2 vertical-center">
-          <span><?php echo ($data['duration'] > 1) ? date("d.m.Y", strtotime(sprintf("+%s days", $data['duration']-1), $data['start'])) : date("d.m.Y", $data['start']); ?></span>
+          <span><?php echo date("d.m.Y", $data['enddate']); ?></span>
         </td>
         <td class="col-xs-3 vertical-center">
           <span><?php echo $data['description']; ?></span>
         </td>
+        <?php if($viewModel->get('level') > 1){ ?>
         <td class="col-xs-2 vertical-center">
           <span><?php echo $data['username']; ?></span>
         </td>
-        <td class="col-xs-2 vertical-center center-text">
-        <a href="#" class="glyphicon glyphicon-remove nounderline link-color-black link-color-lightgrey glyphicon-medium" data-href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/deletefeastdays?feastDaysFilter=&feastDaysDeleteID=<?php echo $data['id']; ?>" data-toggle="modal" data-target="#confirm-delete" aria-hidden="true"></a>
-        <a href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>feastdays/edit?feastDaysEditID=<?php echo $data['id']; ?>" class="glyphicon glyphicon-edit nounderline link-color-black link-color-lightgrey glyphicon-medium" aria-hidden="true"></a>
+        <td class="col-xs-2 vertical-center center-text a-spacing-4">
+        <a href="#" class="glyphicon glyphicon-remove nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Löschen" data-href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/deletefeastdays?feastDaysFilter=&feastDaysDeleteID=<?php echo $data['id']; ?>" data-toggle="modal" data-target="#confirm-delete" aria-hidden="true"></a>
+        <a href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>feastdays/edit?feastDaysEditID=<?php echo $data['id']; ?>" title="Bearbeiten" class="glyphicon glyphicon-edit nounderline link-color-black link-color-lightgrey glyphicon-medium" aria-hidden="true"></a>
         </td>
+        <?php } else { ?>
+        <td class="col-xs-4"></td>
+        <?php } ?>
       </tr>
       <?php
       }
@@ -73,13 +80,13 @@ $paginationData = $viewModel->get ( 'pagination' );
     <ul class="pagination">
       <li>
       <?php
-      echo ($paginationData['page'] > 1) ? '<a href="'.$viewModel->get ( 'BaseUrl' ).'user?page=1" aria-label="Erste Seite">&laquo;</a> <a href="'.$viewModel->get ( 'BaseUrl' ).'user?page=' . ($paginationData['page'] - 1) . '" aria-label="Zurück">&lsaquo;</a>' : '<span class="disabled" aria-hidden="true">&laquo;</span><span class="disabled" aria-hidden="true">&lsaquo;</span>';
+      echo ($paginationData['page'] > 1) ? '<a href="'.$viewModel->get ( 'BaseUrl' ).'feastdays?page=1" aria-label="Erste Seite">&laquo;</a> <a href="'.$viewModel->get ( 'BaseUrl' ).'feastdays?page=' . ($paginationData['page'] - 1) . '" aria-label="Zurück">&lsaquo;</a>' : '<span class="disabled" aria-hidden="true">&laquo;</span><span class="disabled" aria-hidden="true">&lsaquo;</span>';
         ?>
       </li>
       <li><span class="modal-pagination-black"><?php echo ' Seite ', $paginationData['page'], ' von ', $paginationData['pages'], ', zeige ', $paginationData['start'], '-', $paginationData['end'], ' von ', $paginationData['total'], ' ergebnissen '; ?></span></li>
       <li>
       <?php 
-      echo ($paginationData['page'] < $paginationData['pages']) ? '<a href="'.$viewModel->get ( 'BaseUrl' ).'user?page=' . ($paginationData['page'] + 1) . '" aria-label="Weiter">&rsaquo;</a> <a href="'.$viewModel->get ( 'BaseUrl' ).'user?page=' . $paginationData['pages'] . '" aria-label="Letzte Seite">&raquo;</a>' : '<span class="disabled">&rsaquo;</span><span class="disabled">&raquo;</span>';
+      echo ($paginationData['page'] < $paginationData['pages']) ? '<a href="'.$viewModel->get ( 'BaseUrl' ).'feastdays?page=' . ($paginationData['page'] + 1) . '" aria-label="Weiter">&rsaquo;</a> <a href="'.$viewModel->get ( 'BaseUrl' ).'feastdays?page=' . $paginationData['pages'] . '" aria-label="Letzte Seite">&raquo;</a>' : '<span class="disabled">&rsaquo;</span><span class="disabled">&raquo;</span>';
       ?>
       </li>
     </ul>

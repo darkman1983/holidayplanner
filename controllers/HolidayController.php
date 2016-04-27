@@ -14,7 +14,7 @@ class HolidayController extends BaseController {
   public function __construct( $action, $urlValues ) {
     parent::__construct ( $action, $urlValues );
     
-    $this->levels = array ("index" => 1,"propose" => 1,"edit" => 3 );
+    $this->levels = array ("index" => 1,"propose" => 1 );
     
     // create the model object
     if ( ! $this->checkAccess ( $this->levels ) ) {
@@ -55,42 +55,20 @@ class HolidayController extends BaseController {
     }
     
     if ( $dataValid ) {
-      $createUserSql = sprintf ( "INSERT INTO holiday SET employeeID = '%s', start = '%s', duration = '%s', type = '%s', note = '%s'", $this->urlValues ['frm_firstname'], $this->urlValues ['frm_lastname'], $this->urlValues ['frm_username'], sha1 ( $this->urlValues ['frm_username'] . ":" . $this->urlValues ['frm_uPassword'] ), $this->urlValues ['frm_email'], $this->urlValues ['frm_userlevel'] );
+      $dates = explode(" - ", $this->urlValues ['frm_daterange']);
+      $createUserSql = sprintf ( "INSERT INTO holiday SET employeeID = '%s', startdate = '%s', enddate = '%s', type = '%s', note = '%s', submitdate = '%s'", $this->session->get('id'), strtotime($dates[0]), strtotime($dates[1]), 'H', $this->urlValues['frm_note'], time() );
       $result = $this->db->query ( $createUserSql );
       
       if ( $this->db->affected_rows != 1 ) {
         $this->view->output ( $this->model->badUserCreate ( $this->urlValues, $this->db->error ), 'User/badusercreate' );
         return;
       } else {
-        $this->view->output ( $this->model->success ( ), 'User/success' );
+        $this->view->output ( $this->model->success ( ), 'Holiday/success' );
         return;
       }
     }
     
     $this->view->output ( $this->model->propose ( ), '' );
-  }
-
-  protected function edit( ) {
-    if ( ! $this->checkAccess ( $this->levels ) ) {
-      $this->view->output ( $this->model->notAllowed ( ), 'Error/notallowed' );
-      return;
-    }
-    
-    $dataValid = false;
-    
-    if ( isset ( $this->urlValues ['do'] ) && $this->urlValues ['do'] == 1 ) {
-      $dataValid = true;
-    }
-    
-    if ( $dataValid ) {
-      $createUserSql = sprintf ( "UPDATE users SET firstname = '%s', lastname = '%s', username = '%s', %semail = '%s', level = '%s' WHERE id = '%s'", $this->urlValues ['frm_firstname'], $this->urlValues ['frm_lastname'], $this->urlValues ['frm_username'], ! empty ( $this->urlValues ['frm_uPassword'] ) ? sprintf ( "password = '%s', ", sha1 ( $this->urlValues ['frm_username'] . ":" . $this->urlValues ['frm_uPassword'] ) ) : '', $this->urlValues ['frm_email'] . "@" . $this->urlValues ['frm_emailDomain'], $this->urlValues ['frm_userlevel'], $this->urlValues ['userEditID'] );
-      $result = $this->db->query ( $createUserSql );
-      
-      $this->view->output ( $this->model->success ( ), 'User/success' );
-      return;
-    }
-    
-    $this->view->output ( $this->model->edit ( $this->urlValues ), '' );
   }
 }
 

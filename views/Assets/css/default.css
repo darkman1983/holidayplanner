@@ -13,8 +13,16 @@ h1 {
 	font-size:3em !important;
 }
 
+a {
+	outline: none !important;
+}
+
 .vertical-center {
 	vertical-align: middle !important;
+}
+
+.vertical-bottom {
+	vertical-align: bottom !important;
 }
 
 .nounderline {
@@ -23,6 +31,10 @@ h1 {
 	
 .table-navbar {
 	padding-right: 0.5em;
+}
+
+.table-nomargin {
+	margin: 0;
 }
 
 .modal-header {
@@ -34,9 +46,17 @@ h1 {
 	background: #E87B40 !important;
 }
 
+.modal-body-nopadding-bottom {
+	padding-bottom: 0px;
+}
+
 .modal-pagination {
 	padding: 0px 15px 0px 0px !important;
 	margin: 0 !important;
+}
+
+.pagination-nomargintop {
+	margin-top: 0 !important;
 }
 
 .modal-pagination-black {
@@ -48,6 +68,12 @@ h1 {
 	padding-right: 5px;
 }
 
+.link-disabled, .link-disabled:hover, .link-disabled:active, .link-disabled:focus, .link-disabled:visited {
+	color: #CCCCCC !important;
+	outline: none !important;
+	border: none !important;
+}
+
 .link-color-black {
 	color: #000 !important;
 }
@@ -56,6 +82,9 @@ h1 {
 	color: #6B6B6B !important;
 }
 
+.a-spacing-4 a {
+	margin-right: 4px;
+}
 ul.nav li.dropdown:hover ul.dropdown-menu {
 	display: block;
 	margin-top:0px
@@ -194,4 +223,8 @@ footer {
 
 .max-200 {
 	max-width: 200px;
+}
+
+.bold-font {
+	font-weight: bold;
 }
