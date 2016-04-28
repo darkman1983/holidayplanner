@@ -24,7 +24,7 @@ class HolidayModel extends BaseModel {
     
     $this->viewModel->set ( "pagination", $pagination );
     
-    $getHolidaySql = sprintf ( "SELECT h.*, DATEDIFF(FROM_UNIXTIME(h.enddate, '%%Y-%%m-%%d'), FROM_UNIXTIME(h.startdate, '%%Y-%%m-%%d'))+1 AS days FROM holiday h WHERE h.employeeID = '%s' LIMIT %s OFFSET %s", $this->session->get('id'), $pagination['limit'], $pagination['offset'] );
+    $getHolidaySql = sprintf ( "SELECT h.*, (SELECT getNumDays(h.startdate, h.enddate, 3)) AS days FROM holiday h WHERE h.employeeID = '%s' LIMIT %s OFFSET %s", $this->session->get('id'), $pagination['limit'], $pagination['offset'] );
     $result = $this->db->query ( $getHolidaySql );
     $resultsets = $result->fetch_all ( MYSQLI_ASSOC );
     

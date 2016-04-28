@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 27. Apr 2016 um 15:48
+-- Erstellungszeit: 28. Apr 2016 um 13:32
 -- Server-Version: 10.1.9-MariaDB
 -- PHP-Version: 5.6.15
 
@@ -21,6 +21,55 @@ SET time_zone = "+00:00";
 --
 CREATE DATABASE IF NOT EXISTS `holiday_management` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `holiday_management`;
+
+DELIMITER $$
+--
+-- Funktionen
+--
+DROP FUNCTION IF EXISTS `getNumDays`$$
+CREATE DEFINER=`root`@`localhost` FUNCTION `getNumDays` (`start_date` INT, `end_date` INT, `whatToGet` INT) RETURNS INT(11) READS SQL DATA
+    COMMENT 'Parameters start_date and end_date as UNIX_TIMESTAMP'
+BEGIN
+DECLARE sd VARCHAR(11);
+DECLARE ed VARCHAR(11);
+DECLARE fd INT;
+DECLARE ws VARCHAR(11);
+DECLARE we INT;
+DECLARE td INT;
+DECLARE md INT;
+
+SET sd = FROM_UNIXTIME(start_date, "%Y-%m-%d");
+SET ed = FROM_UNIXTIME(end_date, "%Y-%m-%d");
+SET fd = (SELECT COUNT(*) FROM feastdays WHERE sd <= FROM_UNIXTIME(startdate, "%Y-%m-%d") AND ed >= FROM_UNIXTIME(enddate, "%Y-%m-%d"));
+SET ws = sd;
+SET we = 0;
+SET td = 0;
+
+WHILE ws <= ed DO
+IF WEEKDAY(ws) IN (5,6) THEN
+SET we = we + 1;
+END IF;
+SET ws = DATE_ADD(ws, INTERVAL 1 DAY);
+END WHILE;
+
+CASE
+WHEN whatToGet = 1 THEN
+SET md = we;
+WHEN whatToGet = 2 THEN
+SET md = fd;
+WHEN whatToGet = 3 THEN
+SET md = fd + we;
+ELSE
+SET md = 0;
+END CASE;
+
+SET td = (SELECT (DATEDIFF(ed, sd) + 1) - md AS Days);
+
+RETURN td;
+
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -85,9 +134,7 @@ CREATE TABLE `holiday` (
 --
 
 INSERT INTO `holiday` (`id`, `employeeID`, `startdate`, `enddate`, `submitdate`, `note`, `response_note`, `type`, `approved`) VALUES
-(5, 1, 1461794400, 1461880800, 1461747855, 'Testurlaubsantrag', NULL, 'H', 0),
-(6, 1, 1462140000, 1462485600, 1461747963, 'Fetter Urlaub', NULL, 'H', 1),
-(7, 1, 1461880800, 1461880800, 1461756745, 'Krank', NULL, 'I', 0);
+(9, 1, 1491948000, 1492380000, 1461835864, 'Testurlaub', NULL, 'H', 0);
 
 --
 -- Trigger `holiday`
@@ -95,18 +142,18 @@ INSERT INTO `holiday` (`id`, `employeeID`, `startdate`, `enddate`, `submitdate`,
 DROP TRIGGER IF EXISTS `delete_trigger`;
 DELIMITER $$
 CREATE TRIGGER `delete_trigger` AFTER DELETE ON `holiday` FOR EACH ROW IF OLD.type = 'H' THEN
-UPDATE users SET remainingHoliday = remainingHoliday + (DATEDIFF(FROM_UNIXTIME(OLD.enddate, "%Y-%m-%d"), FROM_UNIXTIME(OLD.startdate, "%Y-%m-%d")) + 1) WHERE  OLD.employeeID = id;
+UPDATE users SET remainingHoliday = remainingHoliday + (SELECT getNumDays(OLD.startdate, OLD.enddate, 3)) WHERE  OLD.employeeID = id;
 ELSE
-UPDATE users SET remainingHoliday = remainingHoliday - (DATEDIFF(FROM_UNIXTIME(OLD.enddate, "%Y-%m-%d"), FROM_UNIXTIME(OLD.startdate, "%Y-%m-%d")) + 1) WHERE  OLD.employeeID = id;
+UPDATE users SET remainingHoliday = remainingHoliday - (SELECT getNumDays(OLD.startdate, OLD.enddate, 3)) WHERE  OLD.employeeID = id;
 END IF
 $$
 DELIMITER ;
 DROP TRIGGER IF EXISTS `insert_trigger`;
 DELIMITER $$
 CREATE TRIGGER `insert_trigger` AFTER INSERT ON `holiday` FOR EACH ROW IF NEW.type = 'H' THEN
-UPDATE users SET remainingHoliday = remainingHoliday - (DATEDIFF(FROM_UNIXTIME(NEW.enddate, "%Y-%m-%d"), FROM_UNIXTIME(NEW.startdate, "%Y-%m-%d")) + 1) WHERE  NEW.employeeID = id;
+UPDATE users SET remainingHoliday = remainingHoliday - (SELECT getNumDays(NEW.startdate, NEW.enddate, 3)) WHERE  NEW.employeeID = id;
 ELSE
-UPDATE users SET remainingHoliday = remainingHoliday + (DATEDIFF(FROM_UNIXTIME(NEW.enddate, "%Y-%m-%d"), FROM_UNIXTIME(NEW.startdate, "%Y-%m-%d")) + 1) WHERE  NEW.employeeID = id;
+UPDATE users SET remainingHoliday = remainingHoliday + (SELECT getNumDays(NEW.startdate, NEW.enddate, 3)) WHERE  NEW.employeeID = id;
 END IF
 $$
 DELIMITER ;
@@ -129,7 +176,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `data`, `timestamp`) VALUES
-('k8t7jmjk9k6hd372tblhrr27v2', 'timestamp|s:10:"1461764848";id|s:1:"1";firstname|s:4:"Timo";lastname|s:10:"Stepputtis";email|s:22:"Timo.Stepputtis@gmx.de";level|s:1:"3";loggedIN|b:1;', 1461764850);
+('k8t7jmjk9k6hd372tblhrr27v2', '', 1461837850);
 
 -- --------------------------------------------------------
 
@@ -155,7 +202,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `firstname`, `lastname`, `username`, `password`, `email`, `maxHoliday`, `remainingHoliday`, `level`) VALUES
-(1, 'Timo', 'Stepputtis', 'tstepputtis', '9c402c4806d33430b781492227a47adf30624e9c', 'Timo.Stepputtis@gmx.de', 30, 24, 3),
+(1, 'Timo', 'Stepputtis', 'tstepputtis', '9c402c4806d33430b781492227a47adf30624e9c', 'Timo.Stepputtis@gmx.de', 30, 28, 3),
 (2, 'Heinz', 'Mustermann', 'heinz', '023087601ffa058f24441d227962c1f9b15aa85d', 'heinz@gmx.de', 30, 30, 1),
 (3, 'Harry', 'Beinfurt', 'harry', 'b8cf35b1e4d9c6ac9f02c27e32d5341848d3a272', 'harry@gmx.de', 30, 30, 1),
 (4, 'Tim', 'Rohrbruch', 'timmy', 'c43d74a74283c11cf6002b023ca8aab9851a2b68', 'timmy@gmx.de', 30, 30, 1),
@@ -211,7 +258,7 @@ ALTER TABLE `feastdays`
 -- AUTO_INCREMENT für Tabelle `holiday`
 --
 ALTER TABLE `holiday`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT für Tabelle `users`
 --
@@ -221,7 +268,7 @@ DELIMITER $$
 --
 -- Ereignisse
 --
-DROP EVENT `update_remainingHoliday`$$
+DROP EVENT IF EXISTS `update_remainingHoliday`$$
 CREATE DEFINER=`root`@`localhost` EVENT `update_remainingHoliday` ON SCHEDULE EVERY 1 YEAR STARTS '2016-01-01 00:00:00' ON COMPLETION PRESERVE ENABLE DO UPDATE users SET remainingHoliday = remainingHoliday + maxHoliday$$
 
 DELIMITER ;
