@@ -79,7 +79,7 @@
         </td>
         <td class="vertical-center">
           <span><?php 
-          switch(($data['type'] == 'I')? 3 : $data['approved'])
+          switch(($data['type'] == 'I') ? 3 : $data['approved'])
           {
             case 0:
               $txt = "Unbearbeitet";
@@ -122,7 +122,8 @@
   </div>
 </div>
 <div class="modal-footer modal-pagination">
-<div class="bold-font text-center vertical-bottom">Jahresurlaub: <?php echo $userData[0]['remainingHoliday']; ?> Tage von <?php echo $userData[0]['maxHoliday']; ?> verbleibend</div>
+<div class="bold-font text-center vertical-middle padding-t5">Jahresurlaub: <?php echo $userData[0]['remainingHoliday']; ?> Tage von <?php echo $userData[0]['maxHoliday']; ?> verbleibend</div>
+<hr class="hr-reduce-margin">
 <?php 
 $paginationData = $viewModel->get ( 'pagination' );
 ?>

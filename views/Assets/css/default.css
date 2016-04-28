@@ -228,3 +228,12 @@ footer {
 .bold-font {
 	font-weight: bold;
 }
+
+.padding-t5 {
+	padding-top: 5px;
+}
+
+.hr-reduce-margin {
+	margin-top: 5px !important;
+	margin-bottom: 5px !important;
+}
