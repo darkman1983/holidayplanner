@@ -42,10 +42,6 @@ class Loader {
     
     $this->session = Session::getInstance ( );
   }
-
-  public function createSession( ) {
-    return $this->session;
-  }
   
   // factory method which establishes the requested controller as an object
   public function createController( ) {
