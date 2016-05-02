@@ -2,8 +2,7 @@
     <thead>
       <tr>
         <th>#</th>
-        <th>Startdatum</th>
-        <th>Enddatum</th>
+        <th>Datum</th>
         <th>Beschreibung</th>
         <th>Angelegt von</th>
         <th>Löschen - Editieren</th>
@@ -22,10 +21,7 @@
           <span><?php echo str_pad($data['id'], $maxNum, 0, STR_PAD_LEFT); ?></span>
         </td>
         <td class="col-xs-2 vertical-center">
-          <span><?php echo date("d.m.Y", $data['startdate']); ?></span>
-        </td>
-        <td class="col-xs-2 vertical-center">
-          <span><?php echo date("d.m.Y", $data['enddate']); ?></span>
+          <span><?php echo date("d.m.Y", $data['date']); ?></span>
         </td>
         <td class="col-xs-3 vertical-center">
           <span><?php echo $data['description']; ?></span>

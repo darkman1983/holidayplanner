@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 28. Apr 2016 um 13:32
+-- Erstellungszeit: 02. Mai 2016 um 14:40
 -- Server-Version: 10.1.9-MariaDB
 -- PHP-Version: 5.6.15
 
@@ -40,7 +40,7 @@ DECLARE md INT;
 
 SET sd = FROM_UNIXTIME(start_date, "%Y-%m-%d");
 SET ed = FROM_UNIXTIME(end_date, "%Y-%m-%d");
-SET fd = (SELECT COUNT(*) FROM feastdays WHERE sd <= FROM_UNIXTIME(startdate, "%Y-%m-%d") AND ed >= FROM_UNIXTIME(enddate, "%Y-%m-%d"));
+SET fd = (SELECT COUNT(*) FROM feastdays WHERE FROM_UNIXTIME(date, "%Y-%m-%d") BETWEEN sd AND ed AND WEEKDAY(FROM_UNIXTIME(date, "%Y-%m-%d")) NOT IN(5,6));
 SET ws = sd;
 SET we = 0;
 SET td = 0;
@@ -81,8 +81,7 @@ DROP TABLE IF EXISTS `feastdays`;
 CREATE TABLE `feastdays` (
   `id` int(11) NOT NULL,
   `userID` int(11) NOT NULL,
-  `startdate` int(11) NOT NULL,
-  `enddate` int(11) NOT NULL,
+  `date` int(11) NOT NULL,
   `description` tinytext
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -90,25 +89,25 @@ CREATE TABLE `feastdays` (
 -- Daten für Tabelle `feastdays`
 --
 
-INSERT INTO `feastdays` (`id`, `userID`, `startdate`, `enddate`, `description`) VALUES
-(1, 1, 1451602800, 1451602800, 'Neujahr'),
-(2, 1, 1458860400, 1458860400, 'Karfreitag'),
-(3, 1, 1459116000, 1459116000, 'Ostermontag'),
-(4, 1, 1462053600, 1462053600, 'Tag der Arbeit'),
-(5, 1, 1462399200, 1462399200, 'Christi Himmefahrt'),
-(6, 1, 1463349600, 1463349600, 'Pfingstmontag'),
-(7, 1, 1475445600, 1475445600, 'Tag der Deutschen Einheit'),
-(8, 1, 1482620400, 1482620400, '1. Weihnachtstag'),
-(9, 1, 1482706800, 1482706800, '2. Weihnachtstag'),
-(11, 1, 1492120800, 1492120800, 'Karfreitag'),
-(12, 1, 1492380000, 1492380000, 'Ostermontag'),
-(13, 1, 1493589600, 1493589600, 'Tag der Arbeit'),
-(14, 1, 1495663200, 1495663200, 'Christi Himmelfahrt'),
-(15, 1, 1496613600, 1496613600, 'Pfingstmontag'),
-(16, 1, 1506981600, 1506981600, 'Tag der Deutschen Einheit'),
-(17, 1, 1509404400, 1509404400, 'Reformationstag - HH'),
-(18, 1, 1514156400, 1514156400, '1. Weichnatchstag'),
-(19, 1, 1514242800, 1514242800, '2. Weichnatschtag');
+INSERT INTO `feastdays` (`id`, `userID`, `date`, `description`) VALUES
+(1, 1, 1451602800, 'Neujahr'),
+(2, 1, 1458860400, 'Karfreitag'),
+(3, 1, 1459116000, 'Ostermontag'),
+(4, 1, 1462053600, 'Tag der Arbeit'),
+(5, 1, 1462399200, 'Christi Himmefahrt'),
+(6, 1, 1463349600, 'Pfingstmontag'),
+(7, 1, 1475445600, 'Tag der Deutschen Einheit'),
+(8, 1, 1482620400, '1. Weihnachtstag'),
+(9, 1, 1482706800, '2. Weihnachtstag'),
+(11, 1, 1492120800, 'Karfreitag'),
+(12, 1, 1492380000, 'Ostermontag'),
+(13, 1, 1493589600, 'Tag der Arbeit'),
+(14, 1, 1495663200, 'Christi Himmelfahrt'),
+(15, 1, 1496613600, 'Pfingstmontag'),
+(16, 1, 1506981600, 'Tag der Deutschen Einheit'),
+(17, 1, 1509404400, 'Reformationstag - HH'),
+(18, 1, 1514156400, '1. Weichnatchstag'),
+(19, 1, 1514242800, '2. Weichnatschtag');
 
 -- --------------------------------------------------------
 
@@ -176,7 +175,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `data`, `timestamp`) VALUES
-('k8t7jmjk9k6hd372tblhrr27v2', '', 1461837850);
+('k8t7jmjk9k6hd372tblhrr27v2', '', 1462191683);
 
 -- --------------------------------------------------------
 
@@ -224,7 +223,7 @@ INSERT INTO `users` (`id`, `firstname`, `lastname`, `username`, `password`, `ema
 --
 ALTER TABLE `feastdays`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `start` (`startdate`);
+  ADD UNIQUE KEY `start` (`date`);
 
 --
 -- Indizes für die Tabelle `holiday`
@@ -253,7 +252,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT für Tabelle `feastdays`
 --
 ALTER TABLE `feastdays`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 --
 -- AUTO_INCREMENT für Tabelle `holiday`
 --
@@ -268,7 +267,7 @@ DELIMITER $$
 --
 -- Ereignisse
 --
-DROP EVENT IF EXISTS `update_remainingHoliday`$$
+DROP EVENT `update_remainingHoliday`$$
 CREATE DEFINER=`root`@`localhost` EVENT `update_remainingHoliday` ON SCHEDULE EVERY 1 YEAR STARTS '2016-01-01 00:00:00' ON COMPLETION PRESERVE ENABLE DO UPDATE users SET remainingHoliday = remainingHoliday + maxHoliday$$
 
 DELIMITER ;

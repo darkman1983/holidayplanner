@@ -52,8 +52,7 @@ class FeastdaysController extends BaseController {
     }
     
     if ( $dataValid ) {
-      $dates = explode(" - ", $this->urlValues ['frm_daterange']);
-      $createFeastDaysSql = sprintf ( "INSERT INTO feastdays SET userID = '%s', startdate = '%s', enddate = '%s', description = '%s'", $this->session->get ( 'id' ), strtotime ( $dates[0] ), strtotime ( $dates[1] ), $this->urlValues ['frm_description'] );
+      $createFeastDaysSql = sprintf ( "INSERT INTO feastdays SET userID = '%s', date = '%s', description = '%s'", $this->session->get ( 'id' ), strtotime ( $this->urlValues ['frm_date'] ), $this->urlValues ['frm_description'] );
       $result = $this->db->query ( $createFeastDaysSql );
       
       if ( $this->db->affected_rows != 1 ) {
@@ -81,8 +80,7 @@ class FeastdaysController extends BaseController {
     }
     
     if ( $dataValid ) {
-      $dates = explode(" - ", $this->urlValues ['frm_daterange']);
-      $editFestDaysSql = sprintf ( "UPDATE feastdays SET startdate = '%s', enddate = '%s', description = '%s' WHERE id = '%s'", strtotime ( $dates[0] ), strtotime ( $dates[1] ), $this->urlValues ['frm_description'], $this->urlValues ['feastDaysEditID'] );
+      $editFestDaysSql = sprintf ( "UPDATE feastdays SET date = '%s', description = '%s' WHERE id = '%s'", strtotime ( $this->urlValues ['frm_date'] ), $this->urlValues ['frm_description'], $this->urlValues ['feastDaysEditID'] );
       $result = $this->db->query ( $editFestDaysSql );
       
       $this->view->output ( $this->model->success ( ), 'Feastdays/success' );

@@ -24,6 +24,7 @@
         <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Urlaub <span class="caret"></span></a>
         <ul class="dropdown-menu">
+        <li class="dropdown-header">Allgemein</li>
         <li><a href="<?php echo $viewModel->get('BaseUrl'); ?>holiday">Übersicht</a></li>
         <?php if($level == 1) { ?><li><a href="<?php echo $viewModel->get('BaseUrl'); ?>feastdays">Urlaubs- & Feiertage</a></li><?php } ?>
         </ul>
@@ -32,18 +33,24 @@
         }
         
         if ( $loggedIN && $level > 1 ) {
-          $holiday_menu = array ("Benutzer" => array(3, "user"), "Urlaubs- & Feiertage" => array (3,"feastdays" ), "-" => array(3, ""),"Übersicht" => array (2,"holidaymanager" ),"Anträge" => array (2,"holidaymanager/manage" ) );
+          $holiday_menu = array("**Allgemein" => array(3, ""), "Benutzer" => array(3, "user"), "Urlaubs- & Feiertage" => array (3,"feastdays" ), "**Urlaub" => array(2, ""),"Übersicht" => array (2,"holidaymanager" ),"Anträge" => array (2,"holidaymanager/manage" ) );
         
         ?>
         <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Verwaltung <span class="caret"></span></a>
         <ul class="dropdown-menu">
         <?php
+        $first = '';
           foreach ( $holiday_menu as $entry => &$data ) {
             if ( $data [0] <= $level ) {
-              if ( $entry != '-' ) {
+              if (empty($first)) {
+                $first = $entry;
+              }
+              if ( !strstr($entry, '**') ) {
                 printf ( '<li><a href="%s%s">%s</a></li>', $viewModel->get ( 'BaseUrl' ), $data [1], $entry );
               } else {
+                echo ($entry != $first) ? '<li role="separator" class="divider"></li>' : '';
+                printf('<li class="dropdown-header">%s</li>', substr($entry, 2));
                 echo '<li role="separator" class="divider"></li>';
               }
             }

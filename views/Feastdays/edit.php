@@ -15,10 +15,10 @@ $feastDaysData = $viewModel->get('feastDaysData');
                       <div class="well">
                           <form id="loginForm" method="POST" action="<?php echo $viewModel->get('BaseUrl') ?>feastdays/edit?do=1&feastDaysEditID=<?php echo $viewModel->get('feastDaysEditID'); ?>" role="form" data-toggle="validator">
                               <div class="form-group has-feedback" id="usernameGroup">
-                                  <label for="frm_daterange" class="control-label">Feiertage wählen</label>
+                                  <label for="frm_daterange" class="control-label">Feiertag wählen</label>
                                   <div class='input-group input-daterange'>
-                                    <span class="input-group-addon" id="sizing-addon1">Format: TT.MM.JJJJ - TT.MM.JJJJ</span>
-                                    <input type="text" class="form-control" id="frm_daterange" name="frm_daterange" value="<?php echo sprintf("%s - %s", date("d.m.Y", $feastDaysData['startdate']), date("d.m.Y", $feastDaysData['enddate'])); ?>" placeholder="Bitte Datum Wählen oder Eingeben" required>
+                                    <span class="input-group-addon" id="sizing-addon1">Format: TT.MM.JJJJ</span>
+                                    <input type="text" class="form-control" id="frm_date" name="frm_date" value="<?php echo date("d.m.Y", $feastDaysData['date']); ?>" placeholder="Bitte Datum Wählen oder Eingeben" required>
                                     <i class="form-control-feedback glyphicon glyphicon-calendar"></i>
                                   </div>
                                   <div class="help-block with-errors"></div>
@@ -40,7 +40,8 @@ $feastDaysData = $viewModel->get('feastDaysData');
       </div>
 <script>
 $(document).ready(function(){
-		$('#frm_daterange').daterangepicker({
+		$('#frm_date').daterangepicker({
+			"singleDatePicker": true,
 		    "showWeekNumbers": true,
 		    "locale": {
 		        "format": "DD.MM.YYYY",

@@ -25,7 +25,7 @@ class Database {
    * Get the database configuration and save it to private variable, than unset the configuration array and initialise the database connection
    */
   public function __construct( ) {
-    require_once ('conf/db.php.inc');
+    require_once ('conf/dbConfig.php');
     
     $this->conf = $config;
     
