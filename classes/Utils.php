@@ -74,10 +74,10 @@ class Utils {
 <head>
 <style type="text/css">
 h1 {
-    font-family: Arial;
+    font-family: Arial !important;
 }
 table {
-    font-family: Arial;
+    font-family: Arial !important;
     font-size: 14px;
 }
 table .table-border-outer tr:nth-child(-n+3) {
