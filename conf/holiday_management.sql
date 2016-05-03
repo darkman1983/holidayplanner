@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 02. Mai 2016 um 14:40
--- Server-Version: 10.1.9-MariaDB
--- PHP-Version: 5.6.15
+-- Erstellungszeit: 03. Mai 2016 um 23:05
+-- Server-Version: 10.1.10-MariaDB
+-- PHP-Version: 7.0.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -107,7 +107,8 @@ INSERT INTO `feastdays` (`id`, `userID`, `date`, `description`) VALUES
 (16, 1, 1506981600, 'Tag der Deutschen Einheit'),
 (17, 1, 1509404400, 'Reformationstag - HH'),
 (18, 1, 1514156400, '1. Weichnatchstag'),
-(19, 1, 1514242800, '2. Weichnatschtag');
+(19, 1, 1514242800, '2. Weichnatschtag'),
+(21, 1, 1464213600, 'FrÃ¶hlich');
 
 -- --------------------------------------------------------
 
@@ -122,7 +123,7 @@ CREATE TABLE `holiday` (
   `startdate` int(11) NOT NULL,
   `enddate` int(11) NOT NULL,
   `submitdate` int(11) NOT NULL,
-  `note` tinytext CHARACTER SET armscii8,
+  `note` tinytext,
   `response_note` tinytext,
   `type` char(1) NOT NULL,
   `approved` tinyint(1) DEFAULT '0'
@@ -133,29 +134,9 @@ CREATE TABLE `holiday` (
 --
 
 INSERT INTO `holiday` (`id`, `employeeID`, `startdate`, `enddate`, `submitdate`, `note`, `response_note`, `type`, `approved`) VALUES
-(9, 1, 1491948000, 1492380000, 1461835864, 'Testurlaub', NULL, 'H', 0);
-
---
--- Trigger `holiday`
---
-DROP TRIGGER IF EXISTS `delete_trigger`;
-DELIMITER $$
-CREATE TRIGGER `delete_trigger` AFTER DELETE ON `holiday` FOR EACH ROW IF OLD.type = 'H' THEN
-UPDATE users SET remainingHoliday = remainingHoliday + (SELECT getNumDays(OLD.startdate, OLD.enddate, 3)) WHERE  OLD.employeeID = id;
-ELSE
-UPDATE users SET remainingHoliday = remainingHoliday - (SELECT getNumDays(OLD.startdate, OLD.enddate, 3)) WHERE  OLD.employeeID = id;
-END IF
-$$
-DELIMITER ;
-DROP TRIGGER IF EXISTS `insert_trigger`;
-DELIMITER $$
-CREATE TRIGGER `insert_trigger` AFTER INSERT ON `holiday` FOR EACH ROW IF NEW.type = 'H' THEN
-UPDATE users SET remainingHoliday = remainingHoliday - (SELECT getNumDays(NEW.startdate, NEW.enddate, 3)) WHERE  NEW.employeeID = id;
-ELSE
-UPDATE users SET remainingHoliday = remainingHoliday + (SELECT getNumDays(NEW.startdate, NEW.enddate, 3)) WHERE  NEW.employeeID = id;
-END IF
-$$
-DELIMITER ;
+(9, 1, 1491948000, 1492380000, 1461835864, 'Testurlaub', NULL, 'H', 0),
+(13, 1, 1466373600, 1466892000, 1462281339, 'Messe', NULL, 'H', 0),
+(28, 1, 1465768800, 1466028000, 1462283297, 'test', NULL, 'H', 0);
 
 -- --------------------------------------------------------
 
@@ -175,7 +156,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `data`, `timestamp`) VALUES
-('k8t7jmjk9k6hd372tblhrr27v2', '', 1462191683);
+('f67s4sbfo45fml2splptkop505', '', 1462302772);
 
 -- --------------------------------------------------------
 
@@ -192,7 +173,6 @@ CREATE TABLE `users` (
   `password` varchar(40) DEFAULT NULL,
   `email` varchar(100) NOT NULL,
   `maxHoliday` int(2) DEFAULT '30',
-  `remainingHoliday` int(2) DEFAULT '30',
   `level` int(1) NOT NULL DEFAULT '0' COMMENT '0 = Initial 1 = Normal user 2 = Can approve holiday 3 = Can create users'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -200,19 +180,19 @@ CREATE TABLE `users` (
 -- Daten für Tabelle `users`
 --
 
-INSERT INTO `users` (`id`, `firstname`, `lastname`, `username`, `password`, `email`, `maxHoliday`, `remainingHoliday`, `level`) VALUES
-(1, 'Timo', 'Stepputtis', 'tstepputtis', '9c402c4806d33430b781492227a47adf30624e9c', 'Timo.Stepputtis@gmx.de', 30, 28, 3),
-(2, 'Heinz', 'Mustermann', 'heinz', '023087601ffa058f24441d227962c1f9b15aa85d', 'heinz@gmx.de', 30, 30, 1),
-(3, 'Harry', 'Beinfurt', 'harry', 'b8cf35b1e4d9c6ac9f02c27e32d5341848d3a272', 'harry@gmx.de', 30, 30, 1),
-(4, 'Tim', 'Rohrbruch', 'timmy', 'c43d74a74283c11cf6002b023ca8aab9851a2b68', 'timmy@gmx.de', 30, 30, 1),
-(5, 'Karl', 'Kleisterbaum', 'karlito', '2b65529da7df79cd70da9a8ceb7a2a2ea6800993', 'karl@gmx.de', 30, 30, 1),
-(6, 'Phillip', 'Becker', 'phillip', 'a1875a5070b9a6cf28e90f6339f27796bee73922', 'phillip@gmx.de', 30, 30, 1),
-(7, 'Andreas', 'Maier', 'andreas', 'f99d9af5fa25aa965419fc507fd7e71b788bdd3a', 'andreas@gmx.de', 30, 30, 1),
-(8, 'Hannelore', 'Geisner', 'hannelore', '251e21782378011e81f08eac4a385f4e35ac2e34', 'hannelore@web.de', 30, 30, 1),
-(9, 'Gisela', 'Geier', 'gisela', '4f09c93b28559bdbbe59cc30777ce82e0915f716', 'gisela@gmail.com', 30, 30, 1),
-(10, 'Alexandra', 'Kraft', 'alexandra', 'd11b93c86b976997fec1026436201d32b5d0efa6', 'alex.andra@yahoo.com', 30, 30, 1),
-(11, 'Olliver', 'Gunst', 'olli', 'b04225b21bdde516eb1b7d30fc28e9cd6a44b8af', 'olli.p@t-online.de', 30, 30, 1),
-(12, 'Ralf', 'Zacherl', 'ralf', 'e72f4fe7d3f27849dc7d171935ec6db7541dc211', 'ralfz@rtl2.de', 30, 30, 1);
+INSERT INTO `users` (`id`, `firstname`, `lastname`, `username`, `password`, `email`, `maxHoliday`, `level`) VALUES
+(1, 'Timo', 'Stepputtis', 'tstepputtis', '9c402c4806d33430b781492227a47adf30624e9c', 'Timo.Stepputtis@gmx.de', 30, 3),
+(2, 'Heinz', 'Mustermann', 'heinz', '023087601ffa058f24441d227962c1f9b15aa85d', 'heinz@gmx.de', 30, 1),
+(3, 'Harry', 'Beinfurt', 'harry', 'b8cf35b1e4d9c6ac9f02c27e32d5341848d3a272', 'harry@gmx.de', 30, 1),
+(4, 'Tim', 'Rohrbruch', 'timmy', 'c43d74a74283c11cf6002b023ca8aab9851a2b68', 'timmy@gmx.de', 30, 1),
+(5, 'Karl', 'Kleisterbaum', 'karlito', '2b65529da7df79cd70da9a8ceb7a2a2ea6800993', 'karl@gmx.de', 30, 1),
+(6, 'Phillip', 'Becker', 'phillip', 'a1875a5070b9a6cf28e90f6339f27796bee73922', 'phillip@gmx.de', 30, 1),
+(7, 'Andreas', 'Maier', 'andreas', 'f99d9af5fa25aa965419fc507fd7e71b788bdd3a', 'andreas@gmx.de', 30, 1),
+(8, 'Hannelore', 'Geisner', 'hannelore', '251e21782378011e81f08eac4a385f4e35ac2e34', 'hannelore@web.de', 30, 1),
+(9, 'Gisela', 'Geier', 'gisela', '4f09c93b28559bdbbe59cc30777ce82e0915f716', 'gisela@gmail.com', 30, 1),
+(10, 'Alexandra', 'Kraft', 'alexandra', 'd11b93c86b976997fec1026436201d32b5d0efa6', 'alex.andra@yahoo.com', 30, 1),
+(11, 'Olliver', 'Gunst', 'olli', 'b04225b21bdde516eb1b7d30fc28e9cd6a44b8af', 'olli.p@t-online.de', 30, 1),
+(12, 'Ralf', 'Zacherl', 'ralf', 'e72f4fe7d3f27849dc7d171935ec6db7541dc211', 'ralfz@rtl2.de', 30, 1);
 
 --
 -- Indizes der exportierten Tabellen
@@ -252,26 +232,17 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT für Tabelle `feastdays`
 --
 ALTER TABLE `feastdays`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 --
 -- AUTO_INCREMENT für Tabelle `holiday`
 --
 ALTER TABLE `holiday`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 --
 -- AUTO_INCREMENT für Tabelle `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
-DELIMITER $$
---
--- Ereignisse
---
-DROP EVENT `update_remainingHoliday`$$
-CREATE DEFINER=`root`@`localhost` EVENT `update_remainingHoliday` ON SCHEDULE EVERY 1 YEAR STARTS '2016-01-01 00:00:00' ON COMPLETION PRESERVE ENABLE DO UPDATE users SET remainingHoliday = remainingHoliday + maxHoliday$$
-
-DELIMITER ;
-
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
