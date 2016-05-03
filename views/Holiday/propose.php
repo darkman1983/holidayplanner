@@ -26,7 +26,7 @@
                                   <div class="help-block with-errors"></div>
                               </div>
                               <button type="submit" class="btn btn-success btn-default">Erstellen</button>
-                              <a href="<?php echo $viewModel->get('BaseUrl'); ?>feastdays" class="btn btn-danger btn-default"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
+                              <a href="<?php echo $viewModel->get('BaseUrl'); ?>holiday" class="btn btn-danger btn-default"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
                           </form>
                       </div>
                   </div>
@@ -46,7 +46,6 @@ $(document).ready(function(){
 	        "cancelLabel": "Schließen",
 	        "fromLabel": "Von",
 	        "toLabel": "Bis",
-	        "customRangeLabel": "Custom",
 	        "daysOfWeek": [
 	            "So",
 	            "Mo",
@@ -71,7 +70,9 @@ $(document).ready(function(){
 	            "Dezember"
 	        ],
 	        "firstDay": 1
-	    }
+	    },
+	    "minDate": "<?php echo date("d.m.Y", time()) ?>",
+        "maxDate": "<?php echo date("d.m.Y", strtotime("Dec 31")); ?>"
 	}, function(start, end, label) {
 	  //console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
 	});

@@ -106,7 +106,7 @@
         <td class="vertical-center center-text a-spacing-4">
         <?php if($data['approved'] == 0 && $data['type'] != 'I') { ?>
         <a href="#" class="glyphicon glyphicon-remove nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Löschen" data-href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/deleteHoliday?holidayFilter=&holidayDeleteID=<?php echo $data['id']; ?>" data-toggle="modal" data-target="#confirm-delete" aria-hidden="true"></a>
-        <a href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>holiday/edit?holidayEditID=<?php echo $data['id']; ?>" class="glyphicon glyphicon-edit nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Bearbeiten" aria-hidden="true"></a>
+        <!-- <a href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>holiday/edit?holidayEditID=<?php echo $data['id']; ?>" class="glyphicon glyphicon-edit nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Bearbeiten" aria-hidden="true"></a>  -->
         <?php } else { ?>
         <a href="#" class="glyphicon glyphicon-remove glyphicon-medium nounderline link-disabled"></a>
         <a href="#" class="glyphicon glyphicon-edit glyphicon-medium nounderline link-disabled"></a>
@@ -127,7 +127,7 @@
   </div>
 </div>
 <div class="modal-footer modal-pagination">
-<div class="bold-font text-center vertical-middle padding-t5">Jahresurlaub: <?php echo $userData[0]['remainingHoliday']; ?> Tage von <?php echo $userData[0]['maxHoliday']; ?> verbleibend</div>
+<div class="bold-font text-center vertical-middle padding-t5">Jahresurlaub: <?php echo $userData[0]['maxHoliday'] - $userHolidayData[0]['remainingHoliday']; ?> Tage von <?php echo $userData[0]['maxHoliday']; ?> verbleibend</div>
 <hr class="hr-reduce-margin">
 <?php 
 $paginationData = $viewModel->get ( 'pagination' );

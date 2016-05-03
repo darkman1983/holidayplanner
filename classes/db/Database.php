@@ -39,6 +39,7 @@ class Database {
    */
   private function _init( ) {
     $this->con = new mysqli ( $this->conf ['DB_SERVER'], $this->conf ['DB_USER'], $this->conf ['DB_PASSWORD'], $this->conf ['DB_DATABASE'] );
+    $this->con->set_charset("utf-8");
   }
 
   /**
