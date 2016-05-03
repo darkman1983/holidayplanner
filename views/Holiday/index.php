@@ -112,7 +112,7 @@
         <a href="#" class="glyphicon glyphicon-edit glyphicon-medium nounderline link-disabled"></a>
         <?php } ?>
         <?php if($data['type'] != 'I') { ?>
-        <a href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>print?printID=<?php echo $data['id']; ?>" class="fa fa-file-pdf-o nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Als PDF anzeigen" aria-hidden="true"></a>
+        <a href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>pdf/showPdf?pdfID=<?php echo $data['id']; ?>" class="fa fa-file-pdf-o nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Als PDF anzeigen" target="_blank" aria-hidden="true"></a>
         <?php } else {?>
         <a href="#" class="fa fa-file-pdf-o glyphicon-medium nounderline link-disabled"></a>
         <?php } ?>
