@@ -9,7 +9,12 @@
     </div>
     <div class="navbar-header navbar-right table-navbar">
 			<div class="form-group">
+			<div class="input-group help-addon max-200">
 				<input type="text" class="form-control" id="holidayFilter" name="holidayFilter" placeholder="Filter">
+				<div class="input-group-btn">
+                  <button class="btn btn-default" data-toggle="modal" data-target="#filter-help"><i class="glyphicon glyphicon-question-sign"></i></button>
+                </div>
+			</div>
 			</div>
 	</div>
 	<a href="#" class="glyphicon glyphicon-refresh nounderline navbar-right padding-right-5 link-color-black link-color-lightgrey" id="reloadFeastDays" title="Urlaubsanträge neu laden"></a>
@@ -107,9 +112,9 @@
         <a href="#" class="glyphicon glyphicon-edit glyphicon-medium nounderline link-disabled"></a>
         <?php } ?>
         <?php if($data['type'] != 'I') { ?>
-        <a href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>print?printID=<?php echo $data['id']; ?>" class="glyphicon glyphicon-print nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Drucken" aria-hidden="true"></a>
+        <a href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>print?printID=<?php echo $data['id']; ?>" class="fa fa-file-pdf-o nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Als PDF anzeigen" aria-hidden="true"></a>
         <?php } else {?>
-        <a href="#" class="glyphicon glyphicon-print glyphicon-medium nounderline link-disabled"></a>
+        <a href="#" class="fa fa-file-pdf-o glyphicon-medium nounderline link-disabled"></a>
         <?php } ?>
         </td>
       </tr>
@@ -159,6 +164,24 @@ $paginationData = $viewModel->get ( 'pagination' );
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
                     <a id="deleteConfirmed" class="btn btn-danger btn-ok">Löschen</a>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="modal fade" id="filter-help" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Filterhilfe</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Wenn sie einen Suchbegriff eingeben, wird automatisch gesucht in:</p>
+                    <p>Startdatum, Anmerkung, Rückmeldung, Status</p>
+                    <p>Während gefiltert wird, ist die Datensatznavigation nicht verfügbar!</p>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-ok btn-success" data-dismiss="modal">Verstanden</a>
                 </div>
             </div>
         </div>
