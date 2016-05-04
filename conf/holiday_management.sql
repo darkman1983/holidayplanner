@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 03. Mai 2016 um 23:05
--- Server-Version: 10.1.10-MariaDB
--- PHP-Version: 7.0.4
+-- Erstellungszeit: 04. Mai 2016 um 11:44
+-- Server-Version: 10.1.9-MariaDB
+-- PHP-Version: 5.6.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -141,6 +141,28 @@ INSERT INTO `holiday` (`id`, `employeeID`, `startdate`, `enddate`, `submitdate`,
 -- --------------------------------------------------------
 
 --
+-- Tabellenstruktur für Tabelle `mhy`
+--
+
+DROP TABLE IF EXISTS `mhy`;
+CREATE TABLE `mhy` (
+  `employeeID` int(11) NOT NULL,
+  `maxHoliday` int(11) NOT NULL,
+  `year` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Max Holiday per year for each user';
+
+--
+-- Daten für Tabelle `mhy`
+--
+
+INSERT INTO `mhy` (`employeeID`, `maxHoliday`, `year`) VALUES
+(1, 30, 2015),
+(1, 30, 2016),
+(1, 30, 2017);
+
+-- --------------------------------------------------------
+
+--
 -- Tabellenstruktur für Tabelle `sessions`
 --
 
@@ -156,7 +178,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `data`, `timestamp`) VALUES
-('f67s4sbfo45fml2splptkop505', '', 1462302772);
+('k8t7jmjk9k6hd372tblhrr27v2', 'timestamp|s:10:"1462354883";id|s:1:"1";firstname|s:4:"Timo";lastname|s:10:"Stepputtis";email|s:22:"Timo.Stepputtis@gmx.de";level|s:1:"3";loggedIN|b:1;', 1462354961);
 
 -- --------------------------------------------------------
 
@@ -172,7 +194,6 @@ CREATE TABLE `users` (
   `username` varchar(80) NOT NULL,
   `password` varchar(40) DEFAULT NULL,
   `email` varchar(100) NOT NULL,
-  `maxHoliday` int(2) DEFAULT '30',
   `level` int(1) NOT NULL DEFAULT '0' COMMENT '0 = Initial 1 = Normal user 2 = Can approve holiday 3 = Can create users'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -180,19 +201,19 @@ CREATE TABLE `users` (
 -- Daten für Tabelle `users`
 --
 
-INSERT INTO `users` (`id`, `firstname`, `lastname`, `username`, `password`, `email`, `maxHoliday`, `level`) VALUES
-(1, 'Timo', 'Stepputtis', 'tstepputtis', '9c402c4806d33430b781492227a47adf30624e9c', 'Timo.Stepputtis@gmx.de', 30, 3),
-(2, 'Heinz', 'Mustermann', 'heinz', '023087601ffa058f24441d227962c1f9b15aa85d', 'heinz@gmx.de', 30, 1),
-(3, 'Harry', 'Beinfurt', 'harry', 'b8cf35b1e4d9c6ac9f02c27e32d5341848d3a272', 'harry@gmx.de', 30, 1),
-(4, 'Tim', 'Rohrbruch', 'timmy', 'c43d74a74283c11cf6002b023ca8aab9851a2b68', 'timmy@gmx.de', 30, 1),
-(5, 'Karl', 'Kleisterbaum', 'karlito', '2b65529da7df79cd70da9a8ceb7a2a2ea6800993', 'karl@gmx.de', 30, 1),
-(6, 'Phillip', 'Becker', 'phillip', 'a1875a5070b9a6cf28e90f6339f27796bee73922', 'phillip@gmx.de', 30, 1),
-(7, 'Andreas', 'Maier', 'andreas', 'f99d9af5fa25aa965419fc507fd7e71b788bdd3a', 'andreas@gmx.de', 30, 1),
-(8, 'Hannelore', 'Geisner', 'hannelore', '251e21782378011e81f08eac4a385f4e35ac2e34', 'hannelore@web.de', 30, 1),
-(9, 'Gisela', 'Geier', 'gisela', '4f09c93b28559bdbbe59cc30777ce82e0915f716', 'gisela@gmail.com', 30, 1),
-(10, 'Alexandra', 'Kraft', 'alexandra', 'd11b93c86b976997fec1026436201d32b5d0efa6', 'alex.andra@yahoo.com', 30, 1),
-(11, 'Olliver', 'Gunst', 'olli', 'b04225b21bdde516eb1b7d30fc28e9cd6a44b8af', 'olli.p@t-online.de', 30, 1),
-(12, 'Ralf', 'Zacherl', 'ralf', 'e72f4fe7d3f27849dc7d171935ec6db7541dc211', 'ralfz@rtl2.de', 30, 1);
+INSERT INTO `users` (`id`, `firstname`, `lastname`, `username`, `password`, `email`, `level`) VALUES
+(1, 'Timo', 'Stepputtis', 'tstepputtis', '9c402c4806d33430b781492227a47adf30624e9c', 'Timo.Stepputtis@gmx.de', 3),
+(2, 'Heinz', 'Mustermann', 'heinz', '023087601ffa058f24441d227962c1f9b15aa85d', 'heinz@gmx.de', 1),
+(3, 'Harry', 'Beinfurt', 'harry', 'b8cf35b1e4d9c6ac9f02c27e32d5341848d3a272', 'harry@gmx.de', 1),
+(4, 'Tim', 'Rohrbruch', 'timmy', 'c43d74a74283c11cf6002b023ca8aab9851a2b68', 'timmy@gmx.de', 1),
+(5, 'Karl', 'Kleisterbaum', 'karlito', '2b65529da7df79cd70da9a8ceb7a2a2ea6800993', 'karl@gmx.de', 1),
+(6, 'Phillip', 'Becker', 'phillip', 'a1875a5070b9a6cf28e90f6339f27796bee73922', 'phillip@gmx.de', 1),
+(7, 'Andreas', 'Maier', 'andreas', 'f99d9af5fa25aa965419fc507fd7e71b788bdd3a', 'andreas@gmx.de', 1),
+(8, 'Hannelore', 'Geisner', 'hannelore', '251e21782378011e81f08eac4a385f4e35ac2e34', 'hannelore@web.de', 1),
+(9, 'Gisela', 'Geier', 'gisela', '4f09c93b28559bdbbe59cc30777ce82e0915f716', 'gisela@gmail.com', 1),
+(10, 'Alexandra', 'Kraft', 'alexandra', 'd11b93c86b976997fec1026436201d32b5d0efa6', 'alex.andra@yahoo.com', 1),
+(11, 'Olliver', 'Gunst', 'olli', 'b04225b21bdde516eb1b7d30fc28e9cd6a44b8af', 'olli.p@t-online.de', 1),
+(12, 'Ralf', 'Zacherl', 'ralf', 'e72f4fe7d3f27849dc7d171935ec6db7541dc211', 'ralfz@rtl2.de', 1);
 
 --
 -- Indizes der exportierten Tabellen
@@ -210,6 +231,12 @@ ALTER TABLE `feastdays`
 --
 ALTER TABLE `holiday`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `mhy`
+--
+ALTER TABLE `mhy`
+  ADD UNIQUE KEY `maxHoliday` (`maxHoliday`,`year`);
 
 --
 -- Indizes für die Tabelle `sessions`
@@ -243,6 +270,15 @@ ALTER TABLE `holiday`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+DELIMITER $$
+--
+-- Ereignisse
+--
+DROP EVENT `update_remainingHoliday`$$
+CREATE DEFINER=`root`@`localhost` EVENT `update_remainingHoliday` ON SCHEDULE EVERY 1 YEAR STARTS '2016-01-01 00:00:00' ON COMPLETION PRESERVE ENABLE DO UPDATE users SET remainingHoliday = remainingHoliday + maxHoliday$$
+
+DELIMITER ;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
