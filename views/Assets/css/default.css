@@ -55,6 +55,19 @@ a {
 	margin: 0 !important;
 }
 
+.modal-dialog-full {
+  width: 98%;
+  height: 92%;
+  margin: 0;
+  padding: 0;
+}
+
+.modal-content-full, .modal-body-full {
+  height: 93%;
+  min-height: 90%;
+  border-radius: 0;
+}
+
 .pagination-nomargintop {
 	margin-top: 0 !important;
 }

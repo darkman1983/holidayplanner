@@ -24,17 +24,17 @@ class HolidayModel extends BaseModel {
     
     $this->viewModel->set ( "pagination", $pagination );
     
-    $getHolidaySql = sprintf ( "SELECT h.*, (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.type = 'H' AND YEAR(FROM_UNIXTIME(ho.startdate)) = YEAR(FROM_UNIXTIME(%s))) - (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.type = 'I' AND YEAR(FROM_UNIXTIME(ho.startdate)) = YEAR(FROM_UNIXTIME(%s))) AS remainingHoliday, (SELECT getNumDays(h.startdate, h.enddate, 3)) AS days FROM holiday h WHERE h.employeeID = '%s' LIMIT %s OFFSET %s", time(), time(), $this->session->get('id'), $pagination['limit'], $pagination['offset'] );
+    $getHolidaySql = sprintf ( "SELECT h.*, (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.type = 'H' AND FROM_UNIXTIME(ho.startdate, '%%Y') = FROM_UNIXTIME(%s, '%%Y')) - (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.type = 'I' AND FROM_UNIXTIME(ho.startdate, '%%Y') = FROM_UNIXTIME(%s, '%%Y')) AS remainingHoliday, (SELECT getNumDays(h.startdate, h.enddate, 3)) AS days FROM holiday h WHERE h.employeeID = '%s' LIMIT %s OFFSET %s", time(), time(), $this->session->get('id'), $pagination['limit'], $pagination['offset'] );
     $result = $this->db->query ( $getHolidaySql );
     $resultsets = $result->fetch_all ( MYSQLI_ASSOC );
     
     $this->viewModel->set ( "userHolidayData", $resultsets );
     
-    $getUserSql = sprintf ( "SELECT * FROM users WHERE id = '%s'", $this->session->get('id') );
-    $result = $this->db->query ( $getUserSql );
+    $getMaxHolidaySql = sprintf ( "SELECT maxHoliday FROM mhy WHERE year = FROM_UNIXTIME(%s, '%%Y') AND employeeID = '%s'", time(), $this->session->get('id') );
+    $result = $this->db->query ( $getMaxHolidaySql );
     $resultsets = $result->fetch_all ( MYSQLI_ASSOC );
     
-    $this->viewModel->set ( "userData", $resultsets );
+    $this->viewModel->set ( "maxHoliday", $resultsets[0]['maxHoliday'] );
     
     return $this->viewModel;
   }

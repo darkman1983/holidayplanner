@@ -39,8 +39,9 @@
     </thead>
     <tbody>
     <?php 
-    $userData = $viewModel->get ( 'userData' );
     $userHolidayData = $viewModel->get ( 'userHolidayData' );
+    $maxHoliday = $viewModel->get ( 'maxHoliday' );
+
     if(!empty($userHolidayData))
     {
       $maxNum = strlen(max($userHolidayData)['id']);
@@ -112,7 +113,7 @@
         <a href="#" class="glyphicon glyphicon-edit glyphicon-medium nounderline link-disabled"></a>
         <?php } ?>
         <?php if($data['type'] != 'I') { ?>
-        <a href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>pdf/showPdf?pdfID=<?php echo $data['id']; ?>" class="fa fa-file-pdf-o nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Als PDF anzeigen" target="_blank" aria-hidden="true"></a>
+        <a href="#" class="fa fa-file-pdf-o nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Als PDF anzeigen" data-href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>pdf/showPdf?pdfID=<?php echo $data['id']; ?>" data-toggle="modal" data-target="#viewPdf" aria-hidden="true"></a>
         <?php } else {?>
         <a href="#" class="fa fa-file-pdf-o glyphicon-medium nounderline link-disabled"></a>
         <?php } ?>
@@ -127,7 +128,7 @@
   </div>
 </div>
 <div class="modal-footer modal-pagination">
-<div class="bold-font text-center vertical-middle padding-t5">Jahresurlaub: <?php echo $userData[0]['maxHoliday'] - $userHolidayData[0]['remainingHoliday']; ?> Tage von <?php echo $userData[0]['maxHoliday']; ?> verbleibend</div>
+<div class="bold-font text-center vertical-middle padding-t5">Jahresurlaub: <?php echo $maxHoliday - $userHolidayData[0]['remainingHoliday']; ?> Tage von <?php echo $maxHoliday; ?> verbleibend</div>
 <hr class="hr-reduce-margin">
 <?php 
 $paginationData = $viewModel->get ( 'pagination' );
@@ -186,6 +187,18 @@ $paginationData = $viewModel->get ( 'pagination' );
             </div>
         </div>
     </div>
+<div class="modal fade" id="viewPdf" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-full">
+            <div class="modal-content modal-content-full">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Urlaubsantrag</h4>
+                </div>
+                <div class="modal-body modal-body-full" id="pdfData">
+                </div>
+            </div>
+        </div>
+    </div>
 <script>
 $(document).ready(function(){
 	$("#holidayFilter").keyup(function() {
@@ -236,6 +249,11 @@ $(document).ready(function(){
 				});
 			});
 		});
+
+	$('#viewPdf').on('show.bs.modal', function(e) {
+		$('#viewPdf .modal-body').html('<embed width=100% height=100% type="application/pdf" src="' + $(e.relatedTarget).data('href') + '"></embed>');
+		});
+
     });
 </script>
 <?php include 'views/footer.php'; ?>
