@@ -72,7 +72,7 @@ $(document).ready(function(){
 	        "firstDay": 1
 	    },
 	    "minDate": "<?php echo date("d.m.Y", time()) ?>",
-        "maxDate": "<?php echo date("d.m.Y", strtotime("Dec 31")); ?>"
+        "maxDate": "<?php echo date("d.m.Y", strtotime("Dec 31", strtotime("+1 year"))); ?>"
 	}, function(start, end, label) {
 	  //console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
 	});
