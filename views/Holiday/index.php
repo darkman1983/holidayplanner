@@ -128,7 +128,7 @@
   </div>
 </div>
 <div class="modal-footer modal-pagination">
-<div class="bold-font text-center vertical-middle padding-t5">Jahresurlaub: <?php echo $maxHoliday - $userHolidayData[0]['remainingHoliday']; ?> Tage von <?php echo $maxHoliday; ?> verbleibend</div>
+<div class="bold-font text-center vertical-middle padding-t5">Jahresurlaub <?php echo date("Y"); ?>: <?php echo $maxHoliday - @$userHolidayData[0]['remainingHoliday']; ?> Tage von <?php echo $maxHoliday; ?> verbleibend</div>
 <hr class="hr-reduce-margin">
 <?php 
 $paginationData = $viewModel->get ( 'pagination' );
@@ -237,8 +237,8 @@ $(document).ready(function(){
 		$("#deleteConfirmed").click(function() {
 			$.get( $(e.relatedTarget).data('href'), function( data ) {
 				$('#confirm-delete .modal-header button').remove();
-				$('#confirm-delete .modal-title').text('Feiertag gelöscht!');
-				$('#confirm-delete .modal-body').html('Der Feiertag wurde erfolgreich gelöscht!');
+				$('#confirm-delete .modal-title').text('Urlaubsantrag gelöscht!');
+				$('#confirm-delete .modal-body').html('Der Urlaubsantrag wurde erfolgreich gelöscht!');
 				$('#confirm-delete .modal-footer').html('');
 				$(window).wait(2000).attr("location","<?php echo $viewModel->get ( 'BaseUrl' ); ?>holiday");
 				}).fail(function() {

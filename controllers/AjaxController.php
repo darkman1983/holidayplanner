@@ -8,7 +8,7 @@ class AjaxController extends BaseController {
   public function __construct( $action, $urlValues ) {
     parent::__construct ( $action, $urlValues );
     
-    $this->levels = array ("validateuser" => 1, "getlogouttime" => 1, "filterusers" => 2,"deleteuser" => 3,"filterfeastdays" => 3, "filterholidays" => 1 );
+    $this->levels = array ("validateuser" => 1, "getlogouttime" => 1, "filterusers" => 2,"deleteuser" => 3,"filterfeastdays" => 3, "filterholidays" => 1, "deleteholiday" => 1 );
     
     $this->db = Database::getInstance()->getCon();
     
@@ -84,6 +84,18 @@ class AjaxController extends BaseController {
     $result = $this->db->query ( $deleteFeastDaysSql );
   
     $this->view->output ( $this->model->deleteFeastDays ( ), 'Ajax/deletefeastdays' );
+  }
+  
+  protected function deleteHoliday() {
+    if ( ! $this->checkAccess ( $this->levels ) ) {
+      $this->view->output ( $this->model->badsession ( array("ajax" => true) ), 'Error/notallowed' );
+      return;
+    }
+    
+    $deleteHolidaySql = sprintf ( "DELETE FROM holiday WHERE id = '%s' AND employeeID = '%s'", $this->urlValues ['holidayDeleteID'], $this->session->get('userID') );
+    $result = $this->db->query ( $deleteHolidaySql );
+    
+    $this->view->output ( $this->model->deleteHoliday ( ), 'Ajax/deleteholiday' );
   }
 }
 

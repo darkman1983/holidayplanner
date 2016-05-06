@@ -12,7 +12,7 @@
           <form name="loginFrm" role="form" action="<?php echo $viewModel->get('BaseUrl'); ?>login/login" method="post">
             <div class="form-group">
               <label for="usrname"><span class="glyphicon glyphicon-user"></span> Benutzername</label>
-              <input type="text" class="form-control" name="usrname" id="usrname" placeholder="Benutzername Eingeben">
+              <input type="text" class="form-control" name="usrname" id="usrname" autocomplete="off" placeholder="Benutzername Eingeben">
             </div>
             <div class="form-group">
               <label for="psw"><span class="glyphicon glyphicon-eye-open"></span> Passwort</label>

@@ -200,6 +200,10 @@ class AjaxModel extends BaseModel {
   public function deleteFeastDays( ) {
     return $this->viewModel;
   }
+  
+  public function deleteHoliday( ) {
+    return $this->viewModel;
+  }
 }
 
 ?>

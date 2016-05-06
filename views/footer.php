@@ -1,3 +1,4 @@
+<br>
 <hr>
 <?php include 'views/login.php'; ?>
 <footer>
