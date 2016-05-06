@@ -1,10 +1,21 @@
 <?php
 
+/**
+ * The AjaxController has several functions for ajax based data requests
+ * @author Timo Stepputtis
+ *
+ */
 class AjaxController extends BaseController {
+  /**
+   * @var array $levels
+   */
   private $levels;
+  /**
+   * @var resource $db
+   */
   private $db = NULL;
   
-  // add to the parent constructor
+  
   public function __construct( $action, $urlValues ) {
     parent::__construct ( $action, $urlValues );
     

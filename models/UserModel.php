@@ -1,20 +1,33 @@
 <?php
-
 /**
- * @author tstepputtis
+ * The UserModel class can do all related to user actions
+ * 
+ * @author Timo Stepputtis
  *
  */
 class UserModel extends BaseModel {
 
+  /**
+   * Hold the database connection resource
+   * @var resource
+   */
   private $db = NULL;
 
+  /**
+   * The constructor will get current database connection and assign it to the $db variable
+   */
   public function __construct( ) {
     parent::__construct ( );
     
     $this->db = Database::getInstance ( )->getCon ( );
   }
   
-  // data passed to the home index view
+  /**
+   * The default function for the UserModel, will display the index/overview page
+   * 
+   * @param array $urlValues
+   * @return ViewModel
+   */
   public function index( $urlValues ) {
     $getTotalUsersSql = "SELECT COUNT(*) FROM users";
     $totalResult = $this->db->query ( $getTotalUsersSql );

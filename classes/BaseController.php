@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * @author Timo Stepputtis
+ *
+ */
 abstract class BaseController {
     
     protected $urlValues;
@@ -8,6 +11,10 @@ abstract class BaseController {
     protected $view;
     protected $session;
     
+    /**
+     * @param string $action <p>A action string, which represents the requested function from controller</p>
+     * @param array $urlValues <p>An mixed array of $_GET and $_POST</p>
+     */
     public function __construct($action, $urlValues) {
         $this->action = $action;
         $this->urlValues = $urlValues;
@@ -18,6 +25,12 @@ abstract class BaseController {
         $this->session = Session::getInstance();
     }
     
+    /**
+     * Checks wherever a user has access to the current requested action
+     * 
+     * @param array $levels <p>An associative array of levels for actions</p>
+     * @return boolean
+     */
     protected function checkAccess( $levels = '' ) {
       if(empty($levels))
       {
@@ -35,7 +48,9 @@ abstract class BaseController {
       return true;
     }
         
-    //executes the requested method
+    /**
+     * Executes the requested action
+     */
     public function executeAction() {
         return $this->{$this->action}();
     }

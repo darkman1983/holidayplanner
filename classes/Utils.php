@@ -1,7 +1,7 @@
 <?php
 
 /** 
- * @author tstepputtis
+ * @author Timo Stepputtis
  * 
  */
 class Utils {
@@ -59,6 +59,11 @@ class Utils {
     return $woweekends;
   }
 
+  /**
+   * Check wherever a Integer is a valid unixtime
+   * @param integer $timestamp
+   * @return boolean
+   */
   public static function is_timestamp( $timestamp ) {
     if ( strtotime ( date ( 'd-m-Y H:i:s', $timestamp ) ) === ( int ) $timestamp ) {
       return true;
@@ -67,6 +72,11 @@ class Utils {
     return false;
   }
 
+  /**
+   * Generates a PDF string from array data and returns it
+   * @param array $pdfData
+   * @return string
+   */
   public static function generatePdf( $pdfData ) {
     require_once 'views/Pdf/holidaytemplate.php';
     
@@ -113,9 +123,9 @@ class Utils {
     
     return $mpdf->Output ( $savePath, "S" );
   }
-
-  public static function getPdfSavePath( $pdfData ) {
-    return sprintf ( "views/Pdf/generated/Urlaubsantrag%s%s%s.pdf", $pdfData ['id'], $pdfData ['employeeID'], date ( "dmY", $pdfData ['startdate'] ) );
+  
+  public static function generatePdfFileName( $pdfData ) {
+    return sprintf ( "Urlaubsantrag%s%s%s.pdf", $pdfData ['id'], $pdfData ['employeeID'], date ( "dmY", $pdfData ['startdate'] ) );
   }
 }
 

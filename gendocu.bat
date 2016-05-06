@@ -1,0 +1,2 @@
+cd c:\xampp\htdocs\aufgaben\phpDocumentor-2.8.5\bin
+c:\xamppPHP5\php\php -c c:\xamppPHP5\php phpdoc -d c:\xampp\htdocs\aufgaben\holidayplanner -t c:\xampp\htdocs\aufgaben\holidayplanner\docs -i "*/pdf/*" --cache-folder c:\xampp\htdocs\aufgaben\ht\cache --title Holidaymanager

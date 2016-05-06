@@ -75,7 +75,7 @@ class MySqlSessionHandler{
     }
     /**
      * Read the session
-     * @param int session id
+     * @param int $id session id
      * @return string string of the sessoin
      */
     public function read($id)
@@ -96,8 +96,8 @@ class MySqlSessionHandler{
     }
     /**
      * Write the session
-     * @param int session id
-     * @param string data of the session
+     * @param int $id session id
+     * @param string $data of the session
      */
     public function write($id, $data)
     {
@@ -111,7 +111,7 @@ class MySqlSessionHandler{
     }
     /**
      * Destroy the session
-     * @param int session id
+     * @param int $id session id
      * @return bool
      */
     public function destroy($id)
@@ -121,7 +121,7 @@ class MySqlSessionHandler{
     }
     /**
      * Garbage Collector
-     * @param int life time (sec.)
+     * @param int $max life time (sec.)
      * @return bool
      * @see session.gc_divisor      100
      * @see session.gc_maxlifetime 1440

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @author tstepputtis
+ * @author Timo Stepputtis
  *
  */
 class Session {

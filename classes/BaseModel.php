@@ -1,11 +1,23 @@
 <?php
 
+/**
+ * @author Timo Stepputtis
+ *
+ */
 class BaseModel {
     
+    /**
+     * @var ViewModel <p>An instance of the ViewModel class</p>
+     */
     protected $viewModel;
+    /**
+     * @var Session <p>An instance of the Session class</p>
+     */
     protected $session = NULL;
 
-    //create the base and utility objects available to all models on model creation
+    /**
+     * Create the base and utility objects available to all models on model creation
+     */
     public function __construct()
     {
         $this->viewModel = new ViewModel();
@@ -17,7 +29,9 @@ class BaseModel {
         $this->commonViewData();
     }
 
-    //establish viewModel data that is required for all views in this method (i.e. the main template)
+    /**
+     * Set common data that is required by all models
+     */
     protected function commonViewData() {
       $this->viewModel->set ( "logouttime", strtotime("+20 minutes", $this->session->get('timestamp')));
       $this->viewModel->set ( "pageTitle", "It-Solutions Urlaubsplaner" );

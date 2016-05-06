@@ -38,8 +38,13 @@ a {
 }
 
 .modal-header {
+	border-radius: 5px 5px 0 0 !important;
 	padding-bottom: 5px;
 	background: #E87B40 !important;
+}
+
+.modal-footer {
+	border-radius: 0 0 5px 5px !important;
 }
 
 .modal-title {
@@ -64,6 +69,10 @@ a {
   height: 90%;
   min-height: 90%;
   border-radius: 0;
+}
+
+.modal-content {
+	border-radius: 6px !important;
 }
 
 .pagination-nomargintop {
@@ -190,6 +199,7 @@ nav span.input-group-btn button.btn {
 }
 
 .logouttime {
+	border-radius: 0 0 5px 5px;
 	right: 0px;
 	width: 250px;
 	position: fixed;

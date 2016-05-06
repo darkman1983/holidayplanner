@@ -21,7 +21,7 @@ class PdfModel extends BaseModel {
     $result = $resultQuery->fetch_all ( MYSQLI_ASSOC );
     
     $this->viewModel->set ( "pdfData", Utils::generatePdf ( $result [0] ) );
-    $this->viewModel->set ( "savePath", Utils::getPdfSavePath ( $result [0] ) );
+    $this->viewModel->set ( "savePath", Utils::generatePdfFileName( $result [0] ) );
     
     return $this->viewModel;
   }
