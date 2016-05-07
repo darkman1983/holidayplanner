@@ -28,10 +28,25 @@
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/jquery.urlparam.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/jquery.periodic.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/jquery.inputlimiter.js"></script>
+<script src="<?php echo $viewModel->get('AssetPath'); ?>js/soundmanager2.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/bootstrap.min.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/moment.min.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/daterangepicker.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/validator.min.js"></script>
+<script>
+soundManager.setup({
+    onready: function() {
+    	soundManager.createSound({
+        	  id: 'notify',
+        	  url: '<?php echo $viewModel->get('AssetPath'); ?>sounds/notify1.mp3',
+        	  autoLoad: true,
+        	  autoPlay: false,
+        	  debugMode: true,
+        	  volume: 50
+        	});
+    }
+});
+</script>
 </head>
 <body>

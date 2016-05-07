@@ -29,6 +29,9 @@ $(document).ready(function(){
               }
             });
         }
+    soundManager.onready(function() {
+    	//soundManager.play('notify');
+    	});
     });
 </script>
 </body>

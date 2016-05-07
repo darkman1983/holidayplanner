@@ -33,7 +33,7 @@
         }
         
         if ( $loggedIN && $level > 1 ) {
-          $holiday_menu = array("**Allgemein" => array(3, ""), "Benutzer" => array(3, "user"), "Urlaubs- & Feiertage" => array (3,"feastdays" ), "**Urlaub" => array(2, ""),"Übersicht" => array (2,"holidaymanager" ),"Anträge" => array (2,"holidaymanager/manage" ) );
+          $holiday_menu = array("**Allgemein" => array(3, ""), "Benutzer" => array(3, "user"), "Urlaubs- & Feiertage" => array (3,"feastdays" ), "**Urlaub" => array(2, ""),"Übersicht Anträge" => array (2,"manager" ) );
         
         ?>
         <li class="dropdown">
