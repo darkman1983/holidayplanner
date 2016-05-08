@@ -1,6 +1,5 @@
 <?php include 'views/header.php'; ?>
 <?php include 'views/navbar.php'; ?>
-
     <div class="modal-content modal-space">
     <div class="modal-header">
     <h2>Urlaubsübersicht</h2>
@@ -28,8 +27,7 @@
         <th>#</th>
         <th>Name</th>
         <th>Einreichdatum</th>
-        <th>Startdatum</th>
-        <th>Enddatum</th>
+        <th>Von - Bis</th>
         <th>Tage</th>
         <th>Anmerkung</th>
         <th>Rückmeldung</th>
@@ -59,10 +57,7 @@
           <span><?php echo date("d.m.Y", $data['submitdate']); ?></span>
         </td>
         <td class="vertical-center">
-          <span><?php echo date("d.m.Y", $data['startdate']); ?></span>
-        </td>
-        <td class="vertical-center">
-          <span><?php echo date("d.m.Y", $data['enddate']); ?></span>
+          <span><?php echo date("d.m.Y", $data['startdate']); ?> - <?php echo date("d.m.Y", $data['enddate']); ?></span>
         </td>
         <td class="vertical-center">
           <span><?php echo $data['days']; ?></span>

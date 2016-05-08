@@ -110,13 +110,28 @@ a {
 .a-spacing-4 a {
 	margin-right: 4px;
 }
-ul.nav li.dropdown:hover ul.dropdown-menu {
-	display: block;
-	margin-top:0px
+
+@media (min-width: 979px) {
+  ul.nav li.dropdown:hover > ul.dropdown-menu {
+    display: block;
+  }
+}
+
+.dropdown-header {
+	color: #000;
+}
+
+.navbar-default .navbar-nav .open .dropdown-menu>li>a {
+    color: #000;
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+    background-color: #000;
 }
 
 .navbar-default {
 	background: #E87B40;
+	border-color: transparent;
 }
 
 .navbar-brand {
@@ -124,8 +139,6 @@ ul.nav li.dropdown:hover ul.dropdown-menu {
 }
 
 .navbar-nav > li > a {
-	/*margin-top: 5px; 
-	line-height: 5px;*/
 	color: #000 !important;
 }
 
@@ -144,48 +157,13 @@ nav span.input-group-btn button.btn {
 	margin-top: -1px;
 }
 
-.container-maxWidth-720 {
-	max-width: 720px;
+.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
+    color: #555;
+    background-color: transparent;
 }
 
-.form-signin {
-  max-width: 420px;
-  padding: 15px;
-  margin: 0 auto;
-}
-.form-signin .form-signin-heading,
-.form-signin .checkbox {
-  margin-bottom: 10px;
-}
-.form-signin .checkbox {
-  font-weight: normal;
-}
-.form-signin .form-control {
-  position: relative;
-  height: auto;
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
-  padding: 10px;
-  font-size: 16px;
-}
-.form-signin .form-control:focus {
-  z-index: 2;
-}
-.form-signin input[type="text"] {
-  margin-bottom: -1px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-}
-.form-signin input[type="password"] {
-  margin-bottom: -1px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
-.form-signin input[type="email"] {
-  margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+.container-maxWidth-720 {
+	max-width: 720px;
 }
 
 .modal-header, h4, .close {
@@ -211,7 +189,7 @@ nav span.input-group-btn button.btn {
 	background: #E87B40;
 	text-align: center;
 	z-index: 1020;
-	border: 1px solid #FFF;
+	/*border: 1px solid #FFF;*/
 }
 
 .dropdown-menu {
