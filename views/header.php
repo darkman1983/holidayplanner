@@ -15,7 +15,9 @@
 <!-- InputLimiter -->
 <link href="<?php echo $viewModel->get('AssetPath'); ?>css/inputlimiter.css" rel="stylesheet">
 <!-- Custom CSS -->
-<link href="<?php echo $viewModel->get('AssetPath'); ?>css/default.min.css" rel="stylesheet">
+<link href="<?php echo $viewModel->get('AssetPath'); ?>css/default.css" rel="stylesheet">
+<!-- PNotify -->
+<link href="<?php echo $viewModel->get('AssetPath'); ?>css/pnotify.custom.css" rel="stylesheet">
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
@@ -29,12 +31,16 @@
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/jquery.periodic.min.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/jquery.inputlimiter.min.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/soundmanager2-nodebug-jsmin.js"></script>
+<script src="<?php echo $viewModel->get('AssetPath'); ?>js/pnotify.custom.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/bootstrap.min.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/moment.min.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/daterangepicker.min.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/validator.min.js"></script>
 <script>
+PNotify.prototype.options.styling = "bootstrap3";
+PNotify.prototype.options.styling = "fontawesome";
+
 soundManager.setup({
     onready: function() {
     	soundManager.createSound({

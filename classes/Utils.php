@@ -81,7 +81,7 @@ class Utils {
     require_once 'views/Pdf/holidaytemplate.php';
     
     $currentYear = date ( "Y", $pdfData ['startdate'] );
-    $lastYear = ($pdfData ['lastYearHoliday'] > 0) ? $pdfData ['maxHoliday'] + ($pdfData ['lastYearHoliday'] - $pdfData ['maxHoliday']) : 0;
+    $lastYear = ($pdfData ['lastYearHoliday'] > 0) ? $pdfData ['maxHoliday'] + ($pdfData ['lastYearHoliday'] - $pdfData ['maxHoliday']) : $pdfData ['maxHolidayLast'];
     $html = sprintf ( $tpl,
         $currentYear,
         $pdfData ['firstname'],
@@ -92,12 +92,12 @@ class Utils {
         $currentYear,
         $pdfData ['maxHoliday'] + $lastYear,
         $currentYear,
-        ($pdfData ['remainingHoliday'] > $pdfData ['maxHoliday']) ? $pdfData ['maxHoliday'] : ($pdfData ['maxHoliday'] - $pdfData ['remainingHoliday']) + $pdfData['days'] + $lastYear,
+        ($pdfData ['remainingHoliday'] > $pdfData ['maxHoliday']) ? $pdfData ['maxHoliday'] : ($pdfData ['maxHoliday'] - $pdfData ['remainingHoliday']) + $lastYear,
         date ( "d.m.Y", $pdfData ['startdate'] ),
         date ( "d.m.Y", $pdfData ['enddate'] ),
         $pdfData ['days'],
         $currentYear,
-        $pdfData ['maxHoliday'] - $pdfData ['remainingHoliday'] + $lastYear );
+        $pdfData ['maxHoliday'] - $pdfData ['remainingHoliday'] + $lastYear -  $pdfData ['days']);
     
     require_once 'classes/pdf/mpdf.php';
     

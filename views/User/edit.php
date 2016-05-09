@@ -40,6 +40,31 @@ $userHolidayData = $viewModel->get('userData');
   								    ?>
   								  </select>
                               </div>
+                              <div class="form-group has-feedback">
+  								  <label>Jahresurlaubstage pro Jahr</label><br>
+  								  <a href="#" id="mhyAdd" class="glyphicon glyphicon-plus nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Eintrag hinzufügen" data-toggle="modal" data-target="#addMhy" aria-hidden="true"></a>
+  								  <a href="#" id="mhyDel" class="glyphicon glyphicon-remove nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Markierte löschen" aria-hidden="true"></a>
+  								  <div class="table-responsive mhy-div">
+  								  <table class="table table-striped" id="mhy">
+  								  <thead>
+  								  <tr>
+  								  <th>Jahr</th>
+  								  <th>Urlaubstage</th>
+  								  </tr>
+  								  </thead>
+  								  <tbody>
+  								  <?php 
+  								  $maxHolidayDataYear = $viewModel->get('maxHolidayDataYear');
+  								  foreach ($maxHolidayDataYear as $mhyData) { ?>
+  								  <tr>
+  								    <td><input type="hidden" name="years[]" id="years" value="<?php echo $mhyData['year']; ?>"><?php echo $mhyData['year']; ?></td>
+  								    <td><input type="hidden" name="maxHolidays[]" id="maxHolidays" value="<?php echo $mhyData['maxHoliday']; ?>"><?php echo $mhyData['maxHoliday']; ?></td>
+  								    </tr>
+  								    <?php } ?>
+  								  </tbody>
+  								  </table>
+  								  </div>
+                              </div>
                               <hr>
                               <div class="form-group has-feedback">
                                   <label for="frm_email" class="control-label">Email Adresse</label>
@@ -66,8 +91,61 @@ $userHolidayData = $viewModel->get('userData');
       </div>
   </div>
       </div>
+      <div class="modal fade" id="addMhy" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Jahresurlaubstage hinzufügen</h4>
+                </div>
+                <div class="modal-body">
+                <div class="form-group">
+                                  <label for="frm_mhyyear" class="control-label">Jahr</label>
+                                  <input type="text" class="form-control" id="frm_mhyyear" name="frm_mhyyear" placeholder="Jahr Eingeben">
+                              </div>
+                <div class="form-group">
+                                  <label for="frm_mhydays" class="control-label">Tage</label>
+                                  <input type="text" class="form-control" id="frm_mhydays" name="frm_mhydays" placeholder="Anzahl der maximalen Tage Eingeben">
+                              </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-ok btn-success" id="mhyAddButton" data-dismiss="modal">Hinzufügen</a>
+                </div>
+            </div>
+        </div>
+    </div>
 <script>
 $(document).ready(function(){
+	function selectedRows()
+	{
+		alert( $('.highlight').length +' row(s) selected');
+	}
+	$('#mhy tbody').on( 'click', 'tr', function () {
+	    $(this).toggleClass('highlight');
+	} );
+
+	$("#mhyDel").click(function() {
+		$('.highlight').remove();
+		});
+
+	$("#mhyAddButton").click(function() {
+		var isContained = false;
+		$.each($("#mhy tbody").find("tr"), function() {
+	        if($(this).text().indexOf($('#frm_mhyyear').val()) !== -1) {
+	        	isContained = true;
+    	        }
+	    });
+
+	    if(isContained) {
+	    	new PNotify({
+        	    title: 'Oh Nein!',
+        	    text: 'Dieser Eintrag existiert schon.',
+        	    type: 'error'
+        	});
+	    } else {
+	    	$('#mhy > tbody').append('<tr><td><input type="hidden" name="years[]" id="years" value="' + $('#frm_mhyyear').val() + '">' + $('#frm_mhyyear').val() +'</td><td><input type="hidden" name="maxHolidays[]" id="maxHolidays" value="' + $('#frm_mhydays').val() +'">' + $('#frm_mhydays').val() +'</td></tr>');
+	    }
+		});
 	/*$("#usernameGroup").hide();
 	$("#lastname").keyup(function() {
         var firstname = $("#firstname");

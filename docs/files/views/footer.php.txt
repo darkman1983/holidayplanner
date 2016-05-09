@@ -1,3 +1,8 @@
+<?php 
+/*
+ * The page footer template
+ */
+?>
 <br>
 <hr>
 <?php include 'views/login.php'; ?>
@@ -29,6 +34,9 @@ $(document).ready(function(){
               }
             });
         }
+    soundManager.onready(function() {
+    	//soundManager.play('notify');
+    	});
     });
 </script>
 </body>

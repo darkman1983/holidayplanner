@@ -34,7 +34,7 @@ class HolidayModel extends BaseModel {
     $result = $this->db->query ( $getMaxHolidaySql );
     $resultsets = $result->fetch_all ( MYSQLI_ASSOC );
     
-    $this->viewModel->set ( "maxHoliday", $resultsets[0]['maxHoliday'] );
+    $this->viewModel->set ( "maxHoliday", @$resultsets[0]['maxHoliday'] );
     
     return $this->viewModel;
   }

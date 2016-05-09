@@ -58,6 +58,12 @@ class UserModel extends BaseModel {
     $this->viewModel->set ( "userData", $resultsets );
     $this->viewModel->set ( "userEditID", $urlValues ['userEditID'] );
     
+    $getMaxHolidayYearSql = sprintf ( "SELECT * FROM mhy WHERE employeeID = '%s'", $urlValues ['userEditID'] );
+    $result = $this->db->query ( $getMaxHolidayYearSql );
+    $resultsets = $result->fetch_all ( MYSQLI_ASSOC );
+    
+    $this->viewModel->set ( "maxHolidayDataYear", $resultsets );
+    
     return $this->viewModel;
   }
 

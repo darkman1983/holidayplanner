@@ -2,7 +2,7 @@
 <?php include 'views/navbar.php'; ?>
     <div class="modal-content modal-space">
     <div class="modal-header">
-    <h2>Urlaubsübersicht</h2>
+    <h2>Antragsübersicht</h2>
     <div id="loadingIndicator" class="navbar-header navbar-left hidden">
       <i class="fa fa-cog fa-spin fa-1x margin-bottom link-color-black" aria-hidden="true" title="Lade Inhalte..."></i>
     </div>
@@ -84,7 +84,7 @@
         </td>
         <td class="vertical-center">
           <span><?php 
-          switch(($data['type'] == 'I') ? 3 : $data['approved'])
+          switch(($data['type'] == 'I') ? 3 : $data['status'])
           {
             case 0:
               $txt = "Unbearbeitet";
@@ -104,7 +104,7 @@
           ?></span>
         </td>
         <td class="vertical-center center-text a-spacing-4">
-        <?php if($data['approved'] == 0 && $data['type'] != 'I') { ?>
+        <?php if($data['status'] == 0 && $data['type'] != 'I') { ?>
         <a href="#" class="glyphicon glyphicon-remove nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Löschen" data-href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/deleteHoliday?holidayFilter=&holidayDeleteID=<?php echo $data['id']; ?>" data-toggle="modal" data-target="#confirm-delete" aria-hidden="true"></a>
         <a href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>holiday/edit?holidayEditID=<?php echo $data['id']; ?>" class="glyphicon glyphicon-edit nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Bearbeiten" aria-hidden="true"></a>
         <?php } else { ?>

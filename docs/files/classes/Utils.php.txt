@@ -123,6 +123,10 @@ class Utils {
     
     return $mpdf->Output ( $savePath, "S" );
   }
+  
+  public static function generatePdfFileName( $pdfData ) {
+    return sprintf ( "Urlaubsantrag%s%s%s.pdf", $pdfData ['id'], $pdfData ['employeeID'], date ( "dmY", $pdfData ['startdate'] ) );
+  }
 }
 
 ?>

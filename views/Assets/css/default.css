@@ -84,9 +84,11 @@ a {
 	color: #000 !important;
 }
 
+@media (min-width: 1200px) {
 .modal-space {
 	margin-left: 15%;
 	margin-right: 15%;
+}
 }
 
 .padding-right-5 {
@@ -166,7 +168,7 @@ nav span.input-group-btn button.btn {
 	max-width: 720px;
 }
 
-.modal-header, h4, .close {
+.modal-header, .modal-header h4, .close {
 	background-color: #5cb85c;
 	color:white !important;
 	text-align: center;
@@ -240,4 +242,14 @@ footer {
 .hr-reduce-margin {
 	margin-top: 5px !important;
 	margin-bottom: 5px !important;
+}
+
+.highlight {
+    background-color: #fbc97f !important;
+}
+
+.mhy-div {
+	overflow-y:scroll;
+	min-height: 150px;
+	max-height: 150px;
 }

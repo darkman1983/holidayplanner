@@ -145,16 +145,16 @@ class AjaxModel extends BaseModel {
     
     switch(strtolower(trim($this->urlValues ['holidayFilter']))) {
       case 'unbearbeitet':
-        $sqlPart = "OR approved = 0";
+        $sqlPart = "OR status = 0";
         break;
       case 'nicht genehmigt':
-        $sqlPart = "OR approved = 1";
+        $sqlPart = "OR status = 1";
         break;
       case 'genehmigt':
-        $sqlPart = "OR approved = 2";
+        $sqlPart = "OR status = 2";
         break;
       case 'eingetragen':
-        $sqlPart = "OR approved = 3";
+        $sqlPart = "OR status = 3";
         break;
       default:
         $sqlPart = "";
