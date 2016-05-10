@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 09. Mai 2016 um 14:10
+-- Erstellungszeit: 10. Mai 2016 um 12:17
 -- Server-Version: 10.1.9-MariaDB
 -- PHP-Version: 5.6.15
 
@@ -135,10 +135,8 @@ CREATE TABLE `holiday` (
 --
 
 INSERT INTO `holiday` (`id`, `employeeID`, `startdate`, `enddate`, `submitdate`, `processeddate`, `note`, `response_note`, `type`, `status`) VALUES
-(9, 1, 1491948000, 1492380000, 1461835864, NULL, 'Testurlaub', NULL, 'H', 0),
-(13, 1, 1466373600, 1466892000, 1462281339, NULL, 'Messe', NULL, 'H', 2),
-(28, 1, 1465768800, 1466028000, 1462283297, NULL, 'test', NULL, 'H', 0),
-(29, 2, 1465768800, 1466287200, 1462782105, NULL, 'Kreata', NULL, 'H', 0);
+(30, 1, 1466373600, 1466892000, 1462875045, NULL, 'Kreta', NULL, 'H', 0),
+(31, 1, 1471816800, 1472335200, 1462875360, NULL, 'Nordsee mit den Kindern', NULL, 'H', 0);
 
 -- --------------------------------------------------------
 
@@ -161,7 +159,8 @@ INSERT INTO `mhy` (`employeeID`, `maxHoliday`, `year`) VALUES
 (1, 30, 2016),
 (1, 30, 2017),
 (2, 30, 2015),
-(2, 30, 2016);
+(2, 30, 2016),
+(16, 30, 2016);
 
 -- --------------------------------------------------------
 
@@ -181,7 +180,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `data`, `timestamp`) VALUES
-('k8t7jmjk9k6hd372tblhrr27v2', 'timestamp|s:10:"1462795527";id|s:1:"1";firstname|s:4:"Timo";lastname|s:10:"Stepputtis";email|s:22:"Timo.Stepputtis@gmx.de";level|s:1:"3";loggedIN|b:1;', 1462795590);
+('k8t7jmjk9k6hd372tblhrr27v2', 'id|s:1:"1";firstname|s:4:"Timo";lastname|s:10:"Stepputtis";email|s:22:"Timo.Stepputtis@gmx.de";level|s:1:"3";loggedIN|b:1;timestamp|s:10:"1462875362";', 1462875391);
 
 -- --------------------------------------------------------
 
@@ -216,7 +215,25 @@ INSERT INTO `users` (`id`, `firstname`, `lastname`, `username`, `password`, `ema
 (9, 'Gisela', 'Geier', 'gisela', '4f09c93b28559bdbbe59cc30777ce82e0915f716', 'gisela@gmail.com', 1),
 (10, 'Alexandra', 'Kraft', 'alexandra', 'd11b93c86b976997fec1026436201d32b5d0efa6', 'alex.andra@yahoo.com', 1),
 (11, 'Olliver', 'Gunst', 'olli', 'b04225b21bdde516eb1b7d30fc28e9cd6a44b8af', 'olli.p@t-online.de', 1),
-(12, 'Ralf', 'Zacherl', 'ralf', 'e72f4fe7d3f27849dc7d171935ec6db7541dc211', 'ralfz@rtl2.de', 1);
+(12, 'Ralf', 'Zacherl', 'ralf', 'e72f4fe7d3f27849dc7d171935ec6db7541dc211', 'ralfz@rtl2.de', 1),
+(16, 'Bobby', 'Brown', 'bobby', '6b81eda5198ddc08891a5d434616aa4afb2c02b2', 'bobby@bobtail.com', 1);
+
+--
+-- Trigger `users`
+--
+DROP TRIGGER IF EXISTS `clear_data`;
+DELIMITER $$
+CREATE TRIGGER `clear_data` AFTER DELETE ON `users` FOR EACH ROW BEGIN
+DELETE FROM mhy WHERE employeeID = OLD.id;
+DELETE FROM holiday WHERE employeeID = OLD.id;
+END
+$$
+DELIMITER ;
+DROP TRIGGER IF EXISTS `create_mhy_after_insert`;
+DELIMITER $$
+CREATE TRIGGER `create_mhy_after_insert` AFTER INSERT ON `users` FOR EACH ROW INSERT INTO mhy VALUES (NEW.id, 30, YEAR(CURDATE()))
+$$
+DELIMITER ;
 
 --
 -- Indizes der exportierten Tabellen
@@ -233,7 +250,8 @@ ALTER TABLE `feastdays`
 -- Indizes für die Tabelle `holiday`
 --
 ALTER TABLE `holiday`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `employeeID` (`employeeID`,`startdate`);
 
 --
 -- Indizes für die Tabelle `mhy`
@@ -267,12 +285,12 @@ ALTER TABLE `feastdays`
 -- AUTO_INCREMENT für Tabelle `holiday`
 --
 ALTER TABLE `holiday`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 --
 -- AUTO_INCREMENT für Tabelle `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
