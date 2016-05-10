@@ -15,6 +15,48 @@ $(document).ready(function(){
     $('#loginModal').on('shown.bs.modal', function () {
         $('#usrname').focus();
     });
+
+    $('#loginFrm').on('submit', function(e) {
+    	$.ajax({
+            type: "POST",
+            url: '<?php echo $viewModel->get('BaseUrl'); ?>login/login',
+            data: $("#loginFrm").serialize(), // serializes the form's elements.
+            dataType: 'json',
+            beforeSend: function(){
+            	$("#loadingIndicator").toggleClass('loading-indicator-hidden');
+            },
+            success: function(data)
+            {
+                switch(data.status)
+                {
+                case 0:
+                	new PNotify({
+                	    title: 'Oh Nein!',
+                	    text: data.text,
+                	    type: 'error'
+                	});
+                	break;
+                case 1:
+                	new PNotify({
+                	    title: 'Super!',
+                	    text: data.text,
+                	    type: 'success'
+                	});
+                	$(location).wait(2500).attr('href', '<?php echo $viewModel->get('BaseUrl'); ?>');
+                    break;
+                }
+                $("#loadingIndicator").toggleClass('loading-indicator-hidden');
+            },
+            fail: function() {
+            	new PNotify({
+            	    title: 'Oh Nein!',
+            	    text: 'Es kann keine Verbindung zum Server hergestellt werden.',
+            	    type: 'error'
+            	});
+            }
+          });
+    	e.preventDefault(); // avoid to execute the actual submit of the form.
+    });
     
     if(loggedIN)
     {

@@ -22,11 +22,11 @@ class FeastDaysModel extends BaseModel {
     $totalResult = $this->db->query ( $getFeastDaysCountSql );
     $totalFeastDaysCustom = $totalResult->fetch_row ( );
     
-    $pagination = Utils::generatePagination($urlValues, $totalFeastDaysCustom[0]);
+    $pagination = Utils::generatePagination ( $urlValues, $totalFeastDaysCustom [0] );
     
     $this->viewModel->set ( "pagination", $pagination );
     
-    $getFeastDaysSql = sprintf ( "SELECT f.*, u.username FROM feastdays f LEFT JOIN users u ON f.userID = u.id LIMIT %s OFFSET %s", $pagination['limit'], $pagination['offset'] );
+    $getFeastDaysSql = sprintf ( "SELECT f.*, u.username FROM feastdays f LEFT JOIN users u ON f.userID = u.id LIMIT %s OFFSET %s", $pagination ['limit'], $pagination ['offset'] );
     $result = $this->db->query ( $getFeastDaysSql );
     $resultsets = $result->fetch_all ( MYSQLI_ASSOC );
     
@@ -38,20 +38,19 @@ class FeastDaysModel extends BaseModel {
   public function create( ) {
     return $this->viewModel;
   }
-  
+
   public function edit( $urlValues ) {
     $getFeastDaysSql = sprintf ( "SELECT * FROM feastdays WHERE id = '%s'", $urlValues ['feastDaysEditID'] );
     $result = $this->db->query ( $getFeastDaysSql );
     $resultsets = $result->fetch_all ( MYSQLI_ASSOC );
     
-    $this->viewModel->set ( "feastDaysData", $resultsets[0] );
+    $this->viewModel->set ( "feastDaysData", $resultsets [0] );
     $this->viewModel->set ( "feastDaysEditID", $urlValues ['feastDaysEditID'] );
     
     return $this->viewModel;
   }
 
-  public function badFeastDaysCreate( $urlValues, $dbError ) {
-    $this->viewModel->set ( "urlValues", $urlValues );
+  public function databaseError( $dbError ) {
     $this->viewModel->set ( "dbError", $dbError );
     
     return $this->viewModel;

@@ -1,0 +1,8 @@
+<?php
+switch ($viewModel->get('dbError')) {
+  case 1062:
+    echo json_encode(array('status' => 1062, 'text' => 'Dieser Urlaubsantrag kann nicht angelegt werden, da in diesem Zeitraum schon ein anderer Antrag existiert!'));
+    break;
+}
+
+?>

@@ -43,8 +43,7 @@ class HolidayModel extends BaseModel {
     return $this->viewModel;
   }
 
-  public function badUserCreate( $urlValues, $dbError ) {
-    $this->viewModel->set ( "urlValues", $urlValues );
+  public function databaseError( $dbError ) {
     $this->viewModel->set ( "dbError", $dbError );
     
     return $this->viewModel;

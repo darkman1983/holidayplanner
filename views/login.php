@@ -9,7 +9,7 @@
           <h4 class="modal-title"><span class="glyphicon glyphicon-lock"></span> Login</h4>
         </div>
         <div class="modal-body" style="padding:40px 50px;">
-          <form name="loginFrm" role="form" action="<?php echo $viewModel->get('BaseUrl'); ?>login/login" method="post">
+          <form name="loginFrm" id="loginFrm" role="form" action="<?php echo $viewModel->get('BaseUrl'); ?>login/login" method="post">
             <div class="form-group">
               <label for="usrname"><span class="glyphicon glyphicon-user"></span> Benutzername</label>
               <input type="text" class="form-control" name="usrname" id="usrname" autocomplete="off" placeholder="Benutzername Eingeben">
@@ -18,7 +18,7 @@
               <label for="psw"><span class="glyphicon glyphicon-eye-open"></span> Passwort</label>
               <input type="password" class="form-control" name="psw" id="psw" placeholder="Passwort Eingeben">
             </div>
-              <button type="submit" class="btn btn-success btn-block"><span class="glyphicon glyphicon-off"></span> Login</button>
+              <button type="submit" class="btn btn-success btn-block"><span id="loadingIndicator" class="fa fa-cog fa-spin fa-med link-color-black navbar-left loading-indicator-hidden" aria-hidden="true"></span><span class="glyphicon glyphicon-off"></span> Login</button>
           </form>
         </div>
         <div class="modal-footer">
