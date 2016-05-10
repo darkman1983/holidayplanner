@@ -30,22 +30,33 @@ $userHolidayData = $viewModel->get('userData');
                               </div>
                               <div class="form-group has-feedback">
   								  <label for="frm_userlevel">Benutzerlevel Wählen</label>
+  								  <?php
+  								  $levels = array(1 => "Normal", 2 => "Anträge Freigeben", 3 => "Administrator");
+  								  $userID = $viewModel->get ( 'userID' );
+  								  
+  								  if($userID != $userHolidayData[0]['id'])
+  								  {
+  								  ?>
   								  <select class="form-control" id="frm_userlevel" name="frm_userlevel">
-  								    <?php
-  								    $userID = $viewModel->get ( 'userID' );
-  								    $levels = array(1 => "Normal", 2 => "Anträge Freigeben", 3 => "Administrator");
+  								    <?php  								    
   								    foreach ($levels as $level => &$entry) {
   								      printf( '<option value="%s"%s>%s - %s</option>', $level, ($level == $userHolidayData[0]['level']) ? ' selected' : '', $level, $entry);
   								    }
   								    ?>
   								  </select>
+  								  <?php
+  								  } else {
+  								    printf('<br><input type="hidden" name="frm_userlevel" value="%s"><span>%s</span>', $viewModel->get('level'), $levels[$viewModel->get('level')]);
+  								  }
+  								  ?>
                               </div>
                               <div class="form-group has-feedback">
   								  <label>Jahresurlaubstage pro Jahr</label><br>
   								  <a href="#" id="mhyAdd" class="glyphicon glyphicon-plus nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Eintrag hinzufügen" data-toggle="modal" data-target="#addMhy" aria-hidden="true"></a>
   								  <a href="#" id="mhyDel" class="glyphicon glyphicon-remove nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Markierte löschen" aria-hidden="true"></a>
+  								  <a href="#" id="mhyInfo" class="glyphicon glyphicon-question-sign nounderline link-color-black link-color-lightgrey glyphicon-medium" aria-hidden="true"></a>
   								  <div class="table-responsive mhy-div">
-  								  <table class="table table-striped" id="mhy">
+  								  <table class="table table-striped mhy" id="mhy">
   								  <thead>
   								  <tr>
   								  <th>Jahr</th>
@@ -57,8 +68,8 @@ $userHolidayData = $viewModel->get('userData');
   								  $maxHolidayDataYear = $viewModel->get('maxHolidayDataYear');
   								  foreach ($maxHolidayDataYear as $mhyData) { ?>
   								  <tr>
-  								    <td><input type="hidden" name="years[]" id="years" value="<?php echo $mhyData['year']; ?>"><?php echo $mhyData['year']; ?></td>
-  								    <td><input type="hidden" name="maxHolidays[]" id="maxHolidays" value="<?php echo $mhyData['maxHoliday']; ?>"><?php echo $mhyData['maxHoliday']; ?></td>
+  								    <td><input type="hidden" name="frm_years[]" id="years" value="<?php echo $mhyData['year']; ?>"><?php echo $mhyData['year']; ?></td>
+  								    <td><input type="hidden" name="frm_maxHolidays[]" id="maxHolidays" value="<?php echo $mhyData['maxHoliday']; ?>"><?php echo $mhyData['maxHoliday']; ?></td>
   								    </tr>
   								    <?php } ?>
   								  </tbody>
@@ -116,10 +127,21 @@ $userHolidayData = $viewModel->get('userData');
     </div>
 <script>
 $(document).ready(function(){
-	function selectedRows()
-	{
-		alert( $('.highlight').length +' row(s) selected');
-	}
+	$('#frm_uPassword').popover({
+		'trigger': 'hover focus',
+		'placement': 'bottom',
+		'title': 'Information',
+		'content': 'Leer lassen um kein neues Passwort zu vergeben!'
+		});
+
+	$('#mhyInfo').popover({
+		'trigger': 'hover click',
+		'placement': 'bottom',
+		'title': 'Hilfe',
+		'html': true,
+		'content': '<p>Zum Hinzufügen neuer Jahresurlaubstage auf Hinzufügen klicken.</p>Einzelne oder mehrere Zeilen mit klicken markieren und dann auf Löschen klicken.'
+		});
+	
 	$('#mhy tbody').on( 'click', 'tr', function () {
 	    $(this).toggleClass('highlight');
 	} );
@@ -127,6 +149,12 @@ $(document).ready(function(){
 	$("#mhyDel").click(function() {
 		$('.highlight').remove();
 		});
+
+	$('#addMhy').on('shown.bs.modal', function () {
+		$('#frm_mhyyear').val('');
+		$('#frm_mhydays').val('');
+        $('#frm_mhyyear').focus();
+    });
 
 	$("#mhyAddButton").click(function() {
 		var isContained = false;
@@ -143,7 +171,7 @@ $(document).ready(function(){
         	    type: 'error'
         	});
 	    } else {
-	    	$('#mhy > tbody').append('<tr><td><input type="hidden" name="years[]" id="years" value="' + $('#frm_mhyyear').val() + '">' + $('#frm_mhyyear').val() +'</td><td><input type="hidden" name="maxHolidays[]" id="maxHolidays" value="' + $('#frm_mhydays').val() +'">' + $('#frm_mhydays').val() +'</td></tr>');
+	    	$('#mhy > tbody').append('<tr><td><input type="hidden" name="frm_years[]" id="years" value="' + $('#frm_mhyyear').val() + '">' + $('#frm_mhyyear').val() +'</td><td><input type="hidden" name="frm_maxHolidays[]" id="maxHolidays" value="' + $('#frm_mhydays').val() +'">' + $('#frm_mhydays').val() +'</td></tr>');
 	    }
 		});
 	/*$("#usernameGroup").hide();

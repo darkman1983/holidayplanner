@@ -61,7 +61,7 @@ class UserController extends BaseController {
       if ( $this->db->affected_rows != 1 ) {
         $this->view->output ( $this->model->badUserCreate ( $this->urlValues, $this->db->error ), 'User/badusercreate' );
         return;
-      } else {
+      } else {        
         $this->view->output ( $this->model->success ( ), 'User/success' );
         return;
       }
@@ -83,8 +83,19 @@ class UserController extends BaseController {
     }
     
     if ( $dataValid ) {
-      $createUserSql = sprintf ( "UPDATE users SET firstname = '%s', lastname = '%s', username = '%s', %semail = '%s', level = '%s' WHERE id = '%s'", $this->urlValues ['frm_firstname'], $this->urlValues ['frm_lastname'], $this->urlValues ['frm_username'], ! empty ( $this->urlValues ['frm_uPassword'] ) ? sprintf ( "password = '%s', ", sha1 ( $this->urlValues ['frm_username'] . ":" . $this->urlValues ['frm_uPassword'] ) ) : '', $this->urlValues ['frm_email'] . "@" . $this->urlValues ['frm_emailDomain'], $this->urlValues ['frm_userlevel'], $this->urlValues ['userEditID'] );
+      $createUserSql = sprintf ( "UPDATE users SET firstname = '%s', lastname = '%s', username = '%s', %semail = '%s', level = '%s' WHERE id = '%s'", $this->urlValues ['frm_firstname'], $this->urlValues ['frm_lastname'], $this->urlValues ['frm_username'], ! empty ( $this->urlValues ['frm_uPassword'] ) ? sprintf ( "password = '%s', ", sha1 ( $this->urlValues ['frm_username'] . ":" . $this->urlValues ['frm_uPassword'] ) ) : '', $this->urlValues ['frm_email'], $this->urlValues ['frm_userlevel'], $this->urlValues ['userEditID'] );
       $result = $this->db->query ( $createUserSql );
+      
+      $mhyParts = '';
+      $years = $this->urlValues['frm_years'];
+      $days = $this->urlValues['frm_maxHolidays'];
+      
+      for ($i=0; $i < count($years);$i++) {
+        $mhyParts .= sprintf("('%s', '%s', '%s'),", $this->urlValues ['userEditID'], $days[$i], $years[$i]);
+      }
+      
+      $mhySql = sprintf("DELETE FROM mhy WHERE employeeID = '%s';INSERT INTO mhy VALUES %s;", $this->urlValues ['userEditID'], substr($mhyParts, 0, -1));
+      $result = $this->db->multi_query ( $mhySql );
       
       $this->view->output ( $this->model->success ( ), 'User/success' );
       return;

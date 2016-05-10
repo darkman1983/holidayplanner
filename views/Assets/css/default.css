@@ -253,3 +253,7 @@ footer {
 	min-height: 150px;
 	max-height: 150px;
 }
+
+.mhy tbody tr:hover {
+	cursor:pointer;
+}

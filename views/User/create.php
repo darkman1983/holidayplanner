@@ -37,17 +37,6 @@
   								    <option value="3">3 - Administrator</option>
   								  </select>
                               </div>
-                              <div class="form-group has-feedback">
-  								  <label for="frm_maxholidayyear">Jahresurlaubstage pro Jahr</label>
-  								  <select class="form-control" id="frm_maxholidayyear" name="frm_maxholidayyear" multiple>
-  								  <option value="30"><?php echo $mhyData['year']; ?> - <?php echo $mhyData['maxHoliday']; ?> Tage</option>
-  								  <?php 
-  								  $maxHolidayDataYear = $viewModel->get('maxHolidayDataYear');
-  								  foreach ($maxHolidayDataYear as $mhyData) { ?>
-  								    <option value="<?php echo $mhyData['maxHoliday']?>"><?php echo $mhyData['year']; ?> - <?php echo $mhyData['maxHoliday']; ?> Tage</option>
-  								    <?php } ?>
-  								  </select>
-                              </div>
                               <hr>
                               <div class="form-group has-feedback">
                                   <label for="frm_email" class="control-label">Email Adresse</label>
