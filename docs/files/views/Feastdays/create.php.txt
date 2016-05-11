@@ -10,7 +10,7 @@
               <div class="row">
                   <div class="col-xs-12">
                       <div class="well">
-                          <form id="loginForm" method="POST" action="<?php echo $viewModel->get('BaseUrl') ?>feastdays/create?do=1" role="form" data-toggle="validator">
+                          <form id="feastDaysForm" name="feastDaysForm" method="POST" action="<?php echo $viewModel->get('BaseUrl') ?>feastdays/create?do=1" role="form" data-toggle="validator">
                               <div class="form-group has-feedback" id="usernameGroup">
                                   <label for="frm_date" class="control-label">Feiertag wählen</label>
                                   <div class='input-group input-daterange'>
@@ -25,7 +25,7 @@
                                   <textarea rows="4" cols="2" class="form-control" id="frm_description" name="frm_description" placeholder="Beschreibung Eingeben" required></textarea>
                                   <div class="help-block with-errors"></div>
                               </div>
-                              <button type="submit" class="btn btn-success btn-default">Erstellen</button>
+                              <span id="loadingIndicator" class="fa fa-cog fa-spin fa-med link-color-black vertical-center loading-indicator-hidden" aria-hidden="true"></span>&nbsp;<button type="submit" class="btn btn-success btn-default"><span class="glyphicon glyphicon-plus"></span> Erstellen</button>
                               <a href="<?php echo $viewModel->get('BaseUrl'); ?>feastdays" class="btn btn-danger btn-default"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
                           </form>
                       </div>
@@ -78,6 +78,48 @@ $(document).ready(function(){
 	});
 
 	$('textarea').inputlimiter();
+
+	$('#feastDaysForm').on('submit', function(e) {
+    	$.ajax({
+            type: "POST",
+            url: '<?php echo $viewModel->get('BaseUrl'); ?>feastdays/create?do=1',
+            data: $("#feastDaysForm").serialize(), // serializes the form's elements.
+            dataType: 'json',
+            beforeSend: function(){
+            	$("#loadingIndicator").toggleClass('loading-indicator-hidden');
+            },
+            success: function(data)
+            {
+                switch(data.status)
+                {
+                case 1062:
+                	new PNotify({
+                	    title: 'Oh Nein!',
+                	    text: data.text,
+                	    type: 'error'
+                	});
+                	break;
+                case '4f4b':
+                	new PNotify({
+                	    title: 'Super!',
+                	    text: data.text,
+                	    type: 'success'
+                	});
+                	$(location).wait(2500).attr('href', '<?php echo $viewModel->get('BaseUrl'); ?>feastdays');
+                    break;
+                }
+                $("#loadingIndicator").toggleClass('loading-indicator-hidden');
+            },
+            fail: function() {
+            	new PNotify({
+            	    title: 'Oh Nein!',
+            	    text: 'Es kann keine Verbindung zum Server hergestellt werden.',
+            	    type: 'error'
+            	});
+            }
+          });
+    	e.preventDefault(); // avoid to execute the actual submit of the form.
+    });
 });
 </script>
 <?php include 'views/footer.php'; ?>

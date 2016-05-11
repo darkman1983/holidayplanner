@@ -20,11 +20,11 @@ class HolidayModel extends BaseModel {
     $totalResult = $this->db->query ( $getTotalHolidaySql );
     $totalHoliday = $totalResult->fetch_row ( );
     
-    $pagination = Utils::generatePagination($urlValues, $totalHoliday[0]);
+    $pagination = Utils::generatePagination(intval(@$urlValues['page']), $totalHoliday[0]);
     
     $this->viewModel->set ( "pagination", $pagination );
     
-    $getHolidaySql = sprintf ( "SELECT h.*, (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.employeeID = h.employeeID AND ho.type = 'H' AND FROM_UNIXTIME(ho.startdate, '%%Y') = FROM_UNIXTIME(%s, '%%Y') AND status = 2) - (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.employeeID = h.employeeID AND ho.type = 'I' AND FROM_UNIXTIME(ho.startdate, '%%Y') = FROM_UNIXTIME(%s, '%%Y')) AS remainingHoliday, (SELECT getNumDays(h.startdate, h.enddate, 3)) AS days FROM holiday h WHERE h.employeeID = '%s' LIMIT %s OFFSET %s", time(), time(), $this->session->get('id'), $pagination['limit'], $pagination['offset'] );
+    $getHolidaySql = sprintf ( "SELECT h.*, (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.employeeID = h.employeeID AND ho.type = 'H' AND FROM_UNIXTIME(ho.startdate, '%%Y') = FROM_UNIXTIME(%s, '%%Y')) - (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.employeeID = h.employeeID AND ho.type = 'I' AND FROM_UNIXTIME(ho.startdate, '%%Y') = FROM_UNIXTIME(%s, '%%Y')) AS remainingHoliday, (SELECT getNumDays(h.startdate, h.enddate, 3)) AS days FROM holiday h WHERE h.employeeID = '%s' LIMIT %s OFFSET %s", time(), time(), $this->session->get('id'), $pagination['limit'], $pagination['offset'] );
     $result = $this->db->query ( $getHolidaySql );
     $resultsets = $result->fetch_all ( MYSQLI_ASSOC );
     

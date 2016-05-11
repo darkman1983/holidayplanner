@@ -18,10 +18,10 @@
               <label for="psw"><span class="glyphicon glyphicon-eye-open"></span> Passwort</label>
               <input type="password" class="form-control" name="psw" id="psw" placeholder="Passwort Eingeben">
             </div>
-              <button type="submit" class="btn btn-success btn-block"><span id="loadingIndicator" class="fa fa-cog fa-spin fa-med link-color-black navbar-left loading-indicator-hidden" aria-hidden="true"></span><span class="glyphicon glyphicon-off"></span> Login</button>
           </form>
         </div>
         <div class="modal-footer">
+          <span id="loadingIndicator" class="fa fa-cog fa-spin fa-med link-color-black pull-left loading-indicator-footer loading-indicator-hidden" aria-hidden="true"></span>&nbsp;<button type="submit" id="loginButton" class="btn btn-default btn-success pull-left"><span class="glyphicon glyphicon-off"></span> Login</button>
           <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Abbrechen</button>
           <p>Passwort <a href="#">Vergessen?</a></p>
         </div>

@@ -38,6 +38,10 @@
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/daterangepicker.min.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/validator.min.js"></script>
 <script>
+$('#noscriptModal').ready(function(){
+	$('#noscriptModal').toggleClass('show');
+});
+
 PNotify.prototype.options.styling = "bootstrap3";
 PNotify.prototype.options.styling = "fontawesome";
 
@@ -56,3 +60,15 @@ soundManager.setup({
 </script>
 </head>
 <body>
+<div class="modal show modal-backdrop" style="background-color: rgba(0,0,0,0.5);" id="noscriptModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Javascript deaktiviert</h4>
+                </div>
+                <div class="modal-body">
+                Leider haben Sie JavaScript deaktiviert. Um die Seite richtig anzeigen zu können, wird JavaScript benötigt.<br><br><span><a href="http://www.enable-javascript.com/de/" target="_blank" style="color: red">Wie man es aktiviert</a></span>
+                </div>
+            </div>
+        </div>
+    </div>

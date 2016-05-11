@@ -16,6 +16,8 @@
 <link href="<?php echo $viewModel->get('AssetPath'); ?>css/inputlimiter.css" rel="stylesheet">
 <!-- Custom CSS -->
 <link href="<?php echo $viewModel->get('AssetPath'); ?>css/default.css" rel="stylesheet">
+<!-- PNotify -->
+<link href="<?php echo $viewModel->get('AssetPath'); ?>css/pnotify.custom.css" rel="stylesheet">
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
@@ -29,12 +31,20 @@
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/jquery.periodic.min.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/jquery.inputlimiter.min.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/soundmanager2-nodebug-jsmin.js"></script>
+<script src="<?php echo $viewModel->get('AssetPath'); ?>js/pnotify.custom.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/bootstrap.min.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/moment.min.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/daterangepicker.min.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/validator.min.js"></script>
 <script>
+$('#noscriptModal').ready(function(){
+	$('#noscriptModal').toggleClass('show');
+});
+
+PNotify.prototype.options.styling = "bootstrap3";
+PNotify.prototype.options.styling = "fontawesome";
+
 soundManager.setup({
     onready: function() {
     	soundManager.createSound({
@@ -50,3 +60,15 @@ soundManager.setup({
 </script>
 </head>
 <body>
+<div class="modal show modal-backdrop" style="background-color: rgba(0,0,0,0.5);" id="noscriptModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Javascript deaktiviert</h4>
+                </div>
+                <div class="modal-body">
+                Leider haben Sie JavaScript deaktiviert. Um die Seite richtig anzeigen zu können, wird JavaScript benötigt.<br><br><span><a href="http://www.enable-javascript.com/de/" target="_blank" style="color: red">Wie man es aktiviert</a></span>
+                </div>
+            </div>
+        </div>
+    </div>

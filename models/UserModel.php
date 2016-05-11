@@ -33,7 +33,7 @@ class UserModel extends BaseModel {
     $totalResult = $this->db->query ( $getTotalUsersSql );
     $totalUsers = $totalResult->fetch_row ( );
     
-    $pagination = Utils::generatePagination($urlValues, $totalUsers[0]);
+    $pagination = Utils::generatePagination(intval(@$urlValues['page']), $totalUsers[0]);
     
     $this->viewModel->set ( "pagination", $pagination );
     

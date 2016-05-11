@@ -42,7 +42,7 @@ class AjaxModel extends BaseModel {
       $totalResult = $this->db->query ( $getTotalUsersSql );
       $totalUsers = $totalResult->fetch_row ( );
       
-      $pagination = Utils::generatePagination ( $this->urlValues, $totalUsers [0] );
+      $pagination = Utils::generatePagination ( intval($this->urlValues['page']), $totalUsers [0] );
     }
     
     $getFilteredUsersSql = sprintf ( "SELECT * FROM users
@@ -70,7 +70,7 @@ class AjaxModel extends BaseModel {
       $totalResult = $this->db->query ( $getFeastDaysTotalSql );
       $totalFeastDays = $totalResult->fetch_row ( );
       
-      $pagination = Utils::generatePagination ( $this->urlValues, $totalFeastDays [0] );
+      $pagination = Utils::generatePagination ( intval($this->urlValues['page']), $totalFeastDays [0] );
     }
     
     if ( strstr ( $this->urlValues ['feastDaysFilter'], "." ) ) {
@@ -122,7 +122,7 @@ class AjaxModel extends BaseModel {
       $totalResult = $this->db->query ( $getHolidayTotalSql );
       $totalHolidayDays = $totalResult->fetch_row ( );
   
-      $pagination = Utils::generatePagination ( $this->urlValues, $totalHolidayDays [0] );
+      $pagination = Utils::generatePagination ( intval($this->urlValues['page']), $totalHolidayDays [0] );
     }
   
     if ( strstr ( $this->urlValues ['holidayFilter'], "." ) ) {
@@ -145,16 +145,16 @@ class AjaxModel extends BaseModel {
     
     switch(strtolower(trim($this->urlValues ['holidayFilter']))) {
       case 'unbearbeitet':
-        $sqlPart = "OR approved = 0";
+        $sqlPart = "OR status = 0";
         break;
       case 'nicht genehmigt':
-        $sqlPart = "OR approved = 1";
+        $sqlPart = "OR status = 1";
         break;
       case 'genehmigt':
-        $sqlPart = "OR approved = 2";
+        $sqlPart = "OR status = 2";
         break;
       case 'eingetragen':
-        $sqlPart = "OR approved = 3";
+        $sqlPart = "OR status = 3";
         break;
       default:
         $sqlPart = "";

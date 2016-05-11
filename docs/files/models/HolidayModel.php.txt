@@ -20,7 +20,7 @@ class HolidayModel extends BaseModel {
     $totalResult = $this->db->query ( $getTotalHolidaySql );
     $totalHoliday = $totalResult->fetch_row ( );
     
-    $pagination = Utils::generatePagination($urlValues, $totalHoliday[0]);
+    $pagination = Utils::generatePagination(intval(@$urlValues['page']), $totalHoliday[0]);
     
     $this->viewModel->set ( "pagination", $pagination );
     
@@ -43,8 +43,7 @@ class HolidayModel extends BaseModel {
     return $this->viewModel;
   }
 
-  public function badUserCreate( $urlValues, $dbError ) {
-    $this->viewModel->set ( "urlValues", $urlValues );
+  public function databaseError( $dbError ) {
     $this->viewModel->set ( "dbError", $dbError );
     
     return $this->viewModel;

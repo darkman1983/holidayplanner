@@ -109,6 +109,10 @@ a {
 	color: #6B6B6B !important;
 }
 
+.spacing-4 {
+	padding-right: 4px;
+}
+
 .a-spacing-4 a {
 	margin-right: 4px;
 }
@@ -263,4 +267,9 @@ footer {
 
 .loading-indicator-hidden {
 	visibility: hidden;
+}
+
+.loading-indicator-footer {
+	vertical-align: middle !important;
+	line-height: 1.5;
 }

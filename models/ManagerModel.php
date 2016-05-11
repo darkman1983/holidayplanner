@@ -14,23 +14,41 @@ class ManagerModel extends BaseModel {
     $this->db = Database::getInstance ( )->getCon ( );
   }
   
-  // data passed to the home index view
   public function index( $urlValues ) {
-    $getTotalHolidaySql = "SELECT COUNT(*) FROM holiday";
-    $totalResult = $this->db->query ( $getTotalHolidaySql );
-    $totalHoliday = $totalResult->fetch_row ( );
+    $getTotalUsersSql = "SELECT COUNT(*) FROM users";
+    $totalResult = $this->db->query ( $getTotalUsersSql );
+    $totalUsers = $totalResult->fetch_row ( );
     
-    $pagination = Utils::generatePagination($urlValues, $totalHoliday[0]);
+    $pagination = Utils::generatePagination(intval(@$urlValues['page']), $totalUsers[0]);
     
     $this->viewModel->set ( "pagination", $pagination );
     
-    $getHolidaySql = sprintf ( "SELECT h.*, u.firstname, u.lastname, (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.employeeID = h.employeeID AND ho.type = 'H' AND FROM_UNIXTIME(ho.startdate, '%%Y') = FROM_UNIXTIME(%s, '%%Y')) - (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.employeeID = h.employeeID AND ho.type = 'I' AND FROM_UNIXTIME(ho.startdate, '%%Y') = FROM_UNIXTIME(%s, '%%Y')) AS remainingHoliday, (SELECT getNumDays(h.startdate, h.enddate, 3)) AS days FROM holiday h JOIN users u ON h.employeeID = u.id LIMIT %s OFFSET %s", time(), time(), $pagination['limit'], $pagination['offset'] );
+    $get_users_sql = sprintf ( "SELECT u.*, (SELECT COUNT(*) FROM holiday WHERE employeeID = u.id AND status = 0) as notProcessed, (SELECT COUNT(*) FROM holiday WHERE employeeID = u.id) as allProposals, (SELECT COALESCE(SUM(maxHoliday), 0) FROM mhy WHERE year = YEAR(CURRENT_DATE) AND employeeID = u.id) as maxHoliday, (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), (SELECT COALESCE(SUM(maxHoliday), 0) FROM mhy WHERE year = YEAR(CURRENT_DATE) AND employeeID = u.id)) FROM holiday ho WHERE ho.employeeID = u.id AND ho.type = 'H' AND FROM_UNIXTIME(ho.startdate, '%%Y') = YEAR(CURRENT_DATE)) - (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.employeeID = u.id AND ho.type = 'I' AND FROM_UNIXTIME(ho.startdate, '%%Y') = YEAR(CURRENT_DATE)) AS remainingHoliday FROM users u LIMIT %s OFFSET %s", $pagination['limit'], $pagination['offset'] );
+    $result = $this->db->query ( $get_users_sql );
+    $resultsets = $result->fetch_all ( MYSQLI_ASSOC );
+    
+    $this->viewModel->set ( "userData", $resultsets );
+  
+    return $this->viewModel;
+  }
+  
+  // data passed to the home index view
+  public function userDetails( $urlValues ) {
+    $getTotalHolidaySql = sprintf("SELECT COUNT(*) FROM holiday WHERE employeeID = '%s'", $urlValues['userID']);
+    $totalResult = $this->db->query ( $getTotalHolidaySql );
+    $totalHoliday = $totalResult->fetch_row ( );
+    
+    $pagination = Utils::generatePagination(intval(@$urlValues['page']), $totalHoliday[0]);
+    
+    $this->viewModel->set ( "pagination", $pagination );
+    
+    $getHolidaySql = sprintf ( "SELECT h.*, u.firstname, u.lastname, (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.employeeID = h.employeeID AND ho.type = 'H' AND FROM_UNIXTIME(ho.startdate, '%%Y') = FROM_UNIXTIME(%s, '%%Y')) - (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.employeeID = h.employeeID AND ho.type = 'I' AND FROM_UNIXTIME(ho.startdate, '%%Y') = FROM_UNIXTIME(%s, '%%Y')) AS remainingHoliday, (SELECT getNumDays(h.startdate, h.enddate, 3)) AS days FROM holiday h JOIN users u ON h.employeeID = u.id WHERE h.employeeID = '%s' LIMIT %s OFFSET %s", time(), time(), $urlValues['userID'], $pagination['limit'], $pagination['offset'] );
     $result = $this->db->query ( $getHolidaySql );
     $resultsets = $result->fetch_all ( MYSQLI_ASSOC );
     
     $this->viewModel->set ( "userHolidayData", $resultsets );
     
-    $getMaxHolidaySql = sprintf ( "SELECT maxHoliday FROM mhy WHERE year = FROM_UNIXTIME(%s, '%%Y') AND employeeID = '%s'", time(), $this->session->get('id') );
+    $getMaxHolidaySql = sprintf ( "SELECT maxHoliday FROM mhy WHERE year = FROM_UNIXTIME(%s, '%%Y') AND employeeID = '%s'", time(), $urlValues['userID'] );
     $result = $this->db->query ( $getMaxHolidaySql );
     $resultsets = $result->fetch_all ( MYSQLI_ASSOC );
     
@@ -39,11 +57,11 @@ class ManagerModel extends BaseModel {
     return $this->viewModel;
   }
 
-  public function propose( ) {
+  public function add( $urlValues ) {
     return $this->viewModel;
   }
 
-  public function badUserCreate( $urlValues, $dbError ) {
+  public function edit( $urlValues ) {
     $this->viewModel->set ( "urlValues", $urlValues );
     $this->viewModel->set ( "dbError", $dbError );
     

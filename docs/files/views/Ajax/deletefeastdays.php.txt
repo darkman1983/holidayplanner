@@ -1,7 +1,7 @@
 <?php
 
 $httpStatusCode = 200;
-$httpStatusMsg  = OK;
+$httpStatusMsg  = 'OK';
 $phpSapiName    = substr(php_sapi_name(), 0, 3);
 if ($phpSapiName == 'cgi' || $phpSapiName == 'fpm') {
   header('Status: '.$httpStatusCode.' '.$httpStatusMsg);

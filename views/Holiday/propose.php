@@ -25,7 +25,7 @@
                                   <textarea rows="4" cols="2" class="form-control" id="frm_note" name="frm_note" placeholder="Anmerkung Eingeben"></textarea>
                                   <div class="help-block with-errors"></div>
                               </div>
-                              <button type="submit" class="btn btn-success btn-default"><span id="loadingIndicator" class="fa fa-cog fa-spin fa-med link-color-black navbar-left loading-indicator-hidden" aria-hidden="true"></span>Erstellen</button>
+                              <span id="loadingIndicator" class="fa fa-cog fa-spin fa-med link-color-black vertical-center loading-indicator-hidden" aria-hidden="true"></span>&nbsp;<button type="submit" class="btn btn-success btn-default"><span class="glyphicon glyphicon-plus"></span> Erstellen</button>
                               <a href="<?php echo $viewModel->get('BaseUrl'); ?>holiday" class="btn btn-danger btn-default"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
                           </form>
                       </div>

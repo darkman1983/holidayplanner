@@ -37,11 +37,11 @@
     </thead>
     <tbody>
     <?php 
-    $userHolidayData = $viewModel->get ( 'feastDaysData' );
-    if(!empty($userHolidayData))
+    $userData = $viewModel->get ( 'feastDaysData' );
+    if(!empty($userData))
     {
-      $maxNum = strlen(max($userHolidayData)['id']);
-      foreach($userHolidayData as &$data) {
+      $maxNum = strlen(max($userData)['id']);
+      foreach($userData as &$data) {
     ?>
       <tr>
         <td class="col-xs-1 vertical-center">

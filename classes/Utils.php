@@ -9,12 +9,12 @@ class Utils {
   /**
    * This function generates the pagination with the given parameters and returns an array for generating the pagination template
    *
-   * @param array $urlValues          
+   * @param integer $page          
    * @param integer $total          
    * @param integer $limit          
    * @return array pagination
    */
-  public static function generatePagination( $urlValues, $total, $limit = 10 ) {
+  public static function generatePagination( $page, $total, $limit = 10 ) {
     
     // How many pages will there be
     $pages = ceil ( $total / $limit );

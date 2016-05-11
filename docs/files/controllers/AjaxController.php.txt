@@ -103,7 +103,8 @@ class AjaxController extends BaseController {
       return;
     }
     
-    $deleteHolidaySql = sprintf ( "DELETE FROM holiday WHERE id = '%s' AND employeeID = '%s'", $this->urlValues ['holidayDeleteID'], $this->session->get('userID') );
+    $deleteHolidaySql = sprintf ( "DELETE FROM holiday WHERE id = '%s' AND employeeID = '%s'", $this->urlValues ['holidayDeleteID'], $this->session->get('id') );
+    print $deleteHolidaySql;
     $result = $this->db->query ( $deleteHolidaySql );
     
     $this->view->output ( $this->model->deleteHoliday ( ), 'Ajax/deleteholiday' );

@@ -52,11 +52,20 @@ class FeastdaysController extends BaseController {
     }
     
     if ( $dataValid ) {
+      $checkDateRangeSql = sprintf("SELECT COUNT(*) FROM feastdays f WHERE FROM_UNIXTIME(f.date, '%%Y-%%m-%%d') = FROM_UNIXTIME(%s, '%%Y-%%m-%%d')", strtotime ( $this->urlValues ['frm_date'] ));
+      $result = $this->db->query ( $checkDateRangeSql );
+      $resultsets = $result->fetch_all ( MYSQLI_NUM );
+      
+      if($resultsets[0][0] > 0) {
+        $this->view->output ( $this->model->databaseError ( 1062 ), 'Feastdays/databaseerror' );
+        return;
+      }
+      
       $createFeastDaysSql = sprintf ( "INSERT INTO feastdays SET userID = '%s', date = '%s', description = '%s'", $this->session->get ( 'id' ), strtotime ( $this->urlValues ['frm_date'] ), $this->urlValues ['frm_description'] );
       $result = $this->db->query ( $createFeastDaysSql );
       
       if ( $this->db->affected_rows != 1 ) {
-        $this->view->output ( $this->model->badFeastDaysCreate ( $this->urlValues, $this->db->error ), 'Feastdays/badfeastdayscreate' );
+        $this->view->output ( $this->model->databaseError ( $this->db->error ), 'Feastdays/databaseerror' );
         return;
       } else {
         $this->view->output ( $this->model->success ( ), 'Feastdays/success' );

@@ -19,13 +19,13 @@ class LoginModel extends BaseModel {
     $this->viewModel->set ( "pageTitle", "It-Solutions Urlaubsplaner :: Login" );
   }
   // data passed to the home index view
-  public function index( ) {    
+  public function index( ) {
     return $this->viewModel;
   }
 
-  public function login( ) {    
+  public function login( ) {
     if ( isset ( $this->urlValues ['usrname'] ) && isset ( $this->urlValues ['psw'] ) ) {
-      $loginCheck_SQL = sprintf ( "SELECT * FROM users WHERE username = '%s' AND password = '%s'", strtolower($this->urlValues ['usrname']), sha1 ( strtolower($this->urlValues ['usrname']) . ':' . $this->urlValues ['psw'] ) );
+      $loginCheck_SQL = sprintf ( "SELECT * FROM users WHERE username = '%s' AND password = '%s'", strtolower ( $this->urlValues ['usrname'] ), sha1 ( strtolower ( $this->urlValues ['usrname'] ) . ':' . $this->urlValues ['psw'] ) );
       $resultset = $this->db->query ( $loginCheck_SQL );
       
       if ( $resultset->num_rows > 0 ) {
@@ -39,19 +39,19 @@ class LoginModel extends BaseModel {
         $this->session->set ( 'loggedIN', true );
         
         $this->viewModel->set ( "loggedIN", $this->session->get ( 'loggedIN' ) );
+        $this->viewModel->set ( "status", 1 );
       } else {
-        $this->viewModel->set ( "showError", "Leider gab es ein Problem beim Login!" );
-        $this->session->set ( 'loggedIN', false );
-        $this->session->destroy();
+        $this->viewModel->set ( "status", 0 );
+        $this->session->destroy ( );
         $this->session = Session::getInstance ( );
       }
     }
     
     return $this->viewModel;
   }
-  
-  public function logout() {
-    $this->session->destroy();
+
+  public function logout( ) {
+    $this->session->destroy ( );
     
     return $this->viewModel;
   }

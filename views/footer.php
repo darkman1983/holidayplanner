@@ -16,7 +16,7 @@ $(document).ready(function(){
         $('#usrname').focus();
     });
 
-    $('#loginFrm').on('submit', function(e) {
+    $('#loginButton').on('click', function(e) {
     	$.ajax({
             type: "POST",
             url: '<?php echo $viewModel->get('BaseUrl'); ?>login/login',
@@ -55,7 +55,17 @@ $(document).ready(function(){
             	});
             }
           });
+    });
+
+    $('#loginFrm').on('submit', function(e){
     	e.preventDefault(); // avoid to execute the actual submit of the form.
+    });
+
+    $('#loginFrm input').on('keydown', function(e){
+    	if(e.which == 13)
+    	{
+        	$('#loginButton').click();
+    	}
     });
     
     if(loggedIN)

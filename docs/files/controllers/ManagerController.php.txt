@@ -14,7 +14,7 @@ class ManagerController extends BaseController {
   public function __construct( $action, $urlValues ) {
     parent::__construct ( $action, $urlValues );
     
-    $this->levels = array ("index" => 3,"propose" => 1 );
+    $this->levels = array ("index" => 2, "userdetails" => 2, "propose" => 1 );
     
     // create the model object
     if ( ! $this->checkAccess ( $this->levels ) ) {
@@ -33,6 +33,14 @@ class ManagerController extends BaseController {
       return;
     }
     $this->view->output ( $this->model->index ( $this->urlValues ), '' );
+  }
+  
+  protected function userDetails( ) {
+    if ( ! $this->checkAccess ( $this->levels ) ) {
+      $this->view->output ( $this->model->notAllowed ( ), 'Error/notallowed' );
+      return;
+    }
+    $this->view->output ( $this->model->userDetails( $this->urlValues ), '' );
   }
 
   protected function propose( ) {

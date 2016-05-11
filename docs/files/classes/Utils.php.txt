@@ -9,12 +9,12 @@ class Utils {
   /**
    * This function generates the pagination with the given parameters and returns an array for generating the pagination template
    *
-   * @param array $urlValues          
+   * @param integer $page          
    * @param integer $total          
    * @param integer $limit          
    * @return array pagination
    */
-  public static function generatePagination( $urlValues, $total, $limit = 10 ) {
+  public static function generatePagination( $page, $total, $limit = 10 ) {
     
     // How many pages will there be
     $pages = ceil ( $total / $limit );
@@ -81,7 +81,7 @@ class Utils {
     require_once 'views/Pdf/holidaytemplate.php';
     
     $currentYear = date ( "Y", $pdfData ['startdate'] );
-    $lastYear = ($pdfData ['lastYearHoliday'] > 0) ? $pdfData ['maxHoliday'] + ($pdfData ['lastYearHoliday'] - $pdfData ['maxHoliday']) : 0;
+    $lastYear = ($pdfData ['lastYearHoliday'] > 0) ? $pdfData ['maxHoliday'] + ($pdfData ['lastYearHoliday'] - $pdfData ['maxHoliday']) : $pdfData ['maxHolidayLast'];
     $html = sprintf ( $tpl,
         $currentYear,
         $pdfData ['firstname'],
@@ -92,12 +92,12 @@ class Utils {
         $currentYear,
         $pdfData ['maxHoliday'] + $lastYear,
         $currentYear,
-        ($pdfData ['remainingHoliday'] > $pdfData ['maxHoliday']) ? $pdfData ['maxHoliday'] : ($pdfData ['maxHoliday'] - $pdfData ['remainingHoliday']) + $pdfData['days'] + $lastYear,
+        ($pdfData ['remainingHoliday'] > $pdfData ['maxHoliday']) ? $pdfData ['maxHoliday'] : ($pdfData ['maxHoliday'] - $pdfData ['remainingHoliday']) + $lastYear,
         date ( "d.m.Y", $pdfData ['startdate'] ),
         date ( "d.m.Y", $pdfData ['enddate'] ),
         $pdfData ['days'],
         $currentYear,
-        $pdfData ['maxHoliday'] - $pdfData ['remainingHoliday'] + $lastYear );
+        $pdfData ['maxHoliday'] - $pdfData ['remainingHoliday'] + $lastYear -  $pdfData ['days']);
     
     require_once 'classes/pdf/mpdf.php';
     

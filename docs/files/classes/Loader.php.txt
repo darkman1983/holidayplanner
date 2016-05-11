@@ -50,6 +50,13 @@ class Loader {
   public function __construct( ) {
     $this->request = array_merge ( $_GET, $_POST );
     
+    $db = Database::getInstance()->getCon();
+    
+    foreach ($this->request as &$data)
+    {
+      $data = $db->escape_string($data);
+    }
+    
     if ( $this->request ['controller'] == "" ) {
       $this->controllerName = "IndexController";
       $this->controllerClass = $this->controllerName;

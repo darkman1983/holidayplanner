@@ -36,10 +36,10 @@
     </thead>
     <tbody>
     <?php 
-    $userHolidayData = $viewModel->get ( 'userData' );
-    if(!empty($userHolidayData)) {
-      $maxNum = strlen(max($userHolidayData)['id']);
-      foreach($userHolidayData as &$data) {
+    $userData = $viewModel->get ( 'userData' );
+    if(!empty($userData)) {
+      $maxNum = strlen(max($userData)['id']);
+      foreach($userData as &$data) {
     ?>
       <tr>
         <td class="vertical-center">

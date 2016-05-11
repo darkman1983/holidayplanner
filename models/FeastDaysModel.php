@@ -22,7 +22,7 @@ class FeastDaysModel extends BaseModel {
     $totalResult = $this->db->query ( $getFeastDaysCountSql );
     $totalFeastDaysCustom = $totalResult->fetch_row ( );
     
-    $pagination = Utils::generatePagination ( $urlValues, $totalFeastDaysCustom [0] );
+    $pagination = Utils::generatePagination ( intval(@$urlValues['page']), $totalFeastDaysCustom [0] );
     
     $this->viewModel->set ( "pagination", $pagination );
     

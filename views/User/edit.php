@@ -1,6 +1,6 @@
 <?php include 'views/header.php'; ?>
 <?php include 'views/navbar.php';
-$userHolidayData = $viewModel->get('userData');
+$userData = $viewModel->get('userData');
 ?>
     <div class="container">
       <div id="login-overlay" class="modal-dialog">
@@ -15,7 +15,7 @@ $userHolidayData = $viewModel->get('userData');
                           <form id="loginForm" method="POST" action="<?php echo $viewModel->get('BaseUrl') ?>user/edit?do=1&userEditID=<?php echo $viewModel->get('userEditID'); ?>" role="form" data-toggle="validator">
                               <div class="form-group has-feedback" id="usernameGroup">
                                   <label for="frm_username" class="control-label">Benutzername</label>
-                                  <input type="text" class="form-control" id="frm_username" name="frm_username" placeholder="Benutzernamen Eingeben" data-remote="<?php echo $viewModel->get('BaseUrl'); ?>ajax/validateuser?userEditID=<?php echo $userHolidayData[0]['id'] ?>" data-error="Oops! Dieser Benutzer existiert schon!" value="<?php echo $userHolidayData[0]['username'] ?>" required>
+                                  <input type="text" class="form-control" id="frm_username" name="frm_username" placeholder="Benutzernamen Eingeben" data-remote="<?php echo $viewModel->get('BaseUrl'); ?>ajax/validateuser?userEditID=<?php echo $userData[0]['id'] ?>" data-error="Oops! Dieser Benutzer existiert schon!" value="<?php echo $userData[0]['username'] ?>" required>
                                   <div class="help-block with-errors"></div>
                               </div>
                               <div class="form-group has-feedback">
@@ -34,13 +34,13 @@ $userHolidayData = $viewModel->get('userData');
   								  $levels = array(1 => "Normal", 2 => "Anträge Freigeben", 3 => "Administrator");
   								  $userID = $viewModel->get ( 'userID' );
   								  
-  								  if($userID != $userHolidayData[0]['id'])
+  								  if($userID != $userData[0]['id'])
   								  {
   								  ?>
   								  <select class="form-control" id="frm_userlevel" name="frm_userlevel">
   								    <?php  								    
   								    foreach ($levels as $level => &$entry) {
-  								      printf( '<option value="%s"%s>%s - %s</option>', $level, ($level == $userHolidayData[0]['level']) ? ' selected' : '', $level, $entry);
+  								      printf( '<option value="%s"%s>%s - %s</option>', $level, ($level == $userData[0]['level']) ? ' selected' : '', $level, $entry);
   								    }
   								    ?>
   								  </select>
@@ -79,17 +79,17 @@ $userHolidayData = $viewModel->get('userData');
                               <hr>
                               <div class="form-group has-feedback">
                                   <label for="frm_email" class="control-label">Email Adresse</label>
-                                  <input type="email" class="form-control" id="frm_email" name="frm_email" placeholder="Email Eingeben" value="<?php echo $userHolidayData[0]['email']; ?>" required>
+                                  <input type="email" class="form-control" id="frm_email" name="frm_email" placeholder="Email Eingeben" value="<?php echo $userData[0]['email']; ?>" required>
                                   <div class="help-block with-errors"></div>
                               </div>
                               <div class="form-group has-feedback">
                                   <label for="frm_firstname" class="control-label">Vorname</label>
-                                  <input type="text" class="form-control" id="frm_firstname" name="frm_firstname" placeholder="Vorname Eingeben" value="<?php echo $userHolidayData[0]['firstname'] ?>" required>
+                                  <input type="text" class="form-control" id="frm_firstname" name="frm_firstname" placeholder="Vorname Eingeben" value="<?php echo $userData[0]['firstname'] ?>" required>
                                   <div class="help-block with-errors"></div>
                               </div>
                               <div class="form-group has-feedback">
                                   <label for="frm_lastname" class="control-label">Nachname</label>
-                                  <input type="text" class="form-control" id="frm_lastname" name="frm_lastname" placeholder="Nachname Eingeben" value="<?php echo $userHolidayData[0]['lastname'] ?>" required>
+                                  <input type="text" class="form-control" id="frm_lastname" name="frm_lastname" placeholder="Nachname Eingeben" value="<?php echo $userData[0]['lastname'] ?>" required>
                                   <div class="help-block with-errors"></div>
                               </div>
                               <button type="submit" class="btn btn-success btn-default">Ändern</button>
