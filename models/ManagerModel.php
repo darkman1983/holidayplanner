@@ -53,11 +53,14 @@ class ManagerModel extends BaseModel {
     $resultsets = $result->fetch_all ( MYSQLI_ASSOC );
     
     $this->viewModel->set ( "maxHolidays", $resultsets[0]['maxHoliday'] );
+    $this->viewModel->set('uid', $urlValues['userID']);
     
     return $this->viewModel;
   }
 
   public function add( $urlValues ) {
+    $this->viewModel->set('uid', $urlValues['userID']);
+    
     return $this->viewModel;
   }
 

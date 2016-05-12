@@ -5,7 +5,7 @@ class PdfController extends BaseController {
   public function __construct( $action, $urlValues ) {
     parent::__construct ( $action, $urlValues );
     
-    $this->levels = array ("showPdf" => 1 );
+    $this->levels = array ("showPdf" => 1, "managerShowPdf" => 2 );
     
     // create the model object
     if ( ! $this->checkAccess ( $this->levels ) ) {
@@ -25,6 +25,15 @@ class PdfController extends BaseController {
     }
     
     $this->view->output ( $this->model->showPdf ( $this->urlValues ), '' );
+  }
+  
+  protected function managerShowPdf( ) {
+    if ( ! $this->checkAccess ( $this->levels ) ) {
+      $this->view->output ( $this->model->notAllowed ( ), 'Error/notallowed' );
+      return;
+    }
+  
+    $this->view->output ( $this->model->managerShowPdf ( $this->urlValues ), '' );
   }
 }
 

@@ -37,7 +37,7 @@ class AjaxModel extends BaseModel {
   public function validateStaffId( ) {
     $checkUserSql = sprintf ( "SELECT username FROM users WHERE staffid = '%s'", $this->urlValues ['frm_staffid'] );
     $result = $this->db->query ( $checkUserSql );
-    if ( $result->num_rows > 0 ) {
+    if ( $result->num_rows > 0 || !is_numeric($this->urlValues ['frm_staffid']) ) {
       $this->viewModel->set ( "statusCode", 418 );
       $this->viewModel->set ( "statusText", 'Personalnummer existiert schon!' );
     } else {

@@ -4,15 +4,15 @@
       <div id="login-overlay" class="modal-dialog">
       <div class="modal-content">
           <div class="modal-header">
-              <h4 class="modal-title" id="myModalLabel">Urlaubsantrag stellen</h4>
+              <h4 class="modal-title" id="myModalLabel">Urlaub oder Krankheit Hinzufügen</h4>
           </div>
           <div class="modal-body">
               <div class="row">
                   <div class="col-xs-12">
                       <div class="well">
-                          <form id="proposeForm" name="proposeForm" method="POST" action="<?php echo $viewModel->get('BaseUrl') ?>holiday/propose?do=1" role="form" data-toggle="validator">
+                          <form id="addForm" name="addForm" method="POST" action="<?php echo $viewModel->get('BaseUrl') ?>manager/add?do=1" role="form" data-toggle="validator">
                               <div class="form-group has-feedback has-feedback-left" id="usernameGroup">
-                                  <label for="frm_daterange" class="control-label">Urlaubstage wählen</label>
+                                  <label for="frm_daterange" class="control-label">Urlaubs- / Krankheitstage wählen</label>
                                   <div class='input-group input-daterange'>
                                     <span class="input-group-addon" id="sizing-addon1">Format: TT.MM.JJJJ - TT.MM.JJJJ</span>
                                     <input type="text" class="form-control" id="frm_daterange" name="frm_daterange" placeholder="Bitte Datum Wählen oder Eingeben" required>
@@ -20,13 +20,33 @@
                                   </div>
                                   <div class="help-block with-errors"></div>
                               </div>
+                              <div class="form-group has-feedback">
+  								  <label for="frm_type">Typ Wählen</label>
+  								  <select class="form-control" id="frm_type" name="frm_type">
+  								    <option value="H">Urlaub</option>
+  								    <option value="I">Krankheit</option>
+  								  </select>
+                              </div>
+                              <div class="form-group has-feedback">
+  								  <label for="frm_status">Status Wählen</label>
+  								  <select class="form-control" id="frm_status" name="frm_status">
+  								    <option value="1">Nicht genehmigt</option>
+  								    <option value="2">Genehmigt</option>
+  								    <option value="3">Eingetragen</option>
+  								  </select>
+                              </div>
                               <div class="form-group">
                                   <label for="frm_note" class="control-label">Anmerkungen</label>
-                                  <textarea rows="4" cols="2" class="form-control" id="frm_note" name="frm_note" placeholder="Anmerkung Eingeben"></textarea>
+                                  <textarea rows="4" cols="2" class="form-control" id="frm_note" name="frm_note" placeholder="Anmerkungen Eingeben"></textarea>
                                   <div class="help-block with-errors"></div>
                               </div>
-                              <span id="loadingIndicator" class="fa fa-cog fa-spin fa-med link-color-black vertical-center loading-indicator-hidden" aria-hidden="true"></span>&nbsp;<button type="submit" id="proposeButton" class="btn btn-success btn-default"><span class="glyphicon glyphicon-plus"></span> Erstellen</button>
-                              <a href="<?php echo $viewModel->get('BaseUrl'); ?>holiday" class="btn btn-danger btn-default"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
+                              <div class="form-group">
+                                  <label for="frm_response_note" class="control-label">Rückmeldung</label>
+                                  <textarea rows="4" cols="2" class="form-control" id="frm_response_note" name="frm_response_note" placeholder="Rückmeldung Eingeben"></textarea>
+                                  <div class="help-block with-errors"></div>
+                              </div>
+                              <span id="loadingIndicator" class="fa fa-cog fa-spin fa-med link-color-black vertical-center loading-indicator-hidden" aria-hidden="true"></span>&nbsp;<button type="submit" id="addButton" class="btn btn-success btn-default"><span class="glyphicon glyphicon-plus"></span> Erstellen</button>
+                              <a href="<?php echo $viewModel->get('BaseUrl'); ?>manager/userdetails?userID=<?php echo $viewModel->get('uid'); ?>" class="btn btn-danger btn-default"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
                           </form>
                       </div>
                   </div>
@@ -79,15 +99,15 @@ $(document).ready(function(){
 
 	$('textarea').inputlimiter();
 
-	$('#proposeForm').on('submit', function(e) {
+	$('#addForm').on('submit', function(e) {
     	$.ajax({
             type: "POST",
-            url: '<?php echo $viewModel->get('BaseUrl'); ?>holiday/propose?do=1',
-            data: $("#proposeForm").serialize(), // serializes the form's elements.
+            url: '<?php echo $viewModel->get('BaseUrl') ?>manager/add?do=1',
+            data: $("#addForm").serialize(), // serializes the form's elements.
             dataType: 'json',
             beforeSend: function(){
             	$("#loadingIndicator").toggleClass('loading-indicator-hidden');
-            	$('#proposeButton').attr('disabled','disabled');
+            	$('#addButton').attr('disabled','disabled');
             },
             success: function(data)
             {
@@ -99,7 +119,7 @@ $(document).ready(function(){
                 	    text: data.text,
                 	    type: 'error'
                 	});
-                	$('#proposeButton').removeAttr('disabled');
+                	$('#addButton').removeAttr('disabled');
                 	break;
                 case '4f4b':
                 	new PNotify({
@@ -115,22 +135,32 @@ $(document).ready(function(){
                 	    text: data.text,
                 	    type: 'error'
                 	});
-                	$('#proposeButton').removeAttr('disabled');
+                	$('#addButton').removeAttr('disabled');
                     break;
                 }
                 $("#loadingIndicator").toggleClass('loading-indicator-hidden');
             },
             fail: function() {
+            	$("#loadingIndicator").toggleClass('loading-indicator-hidden');
             	new PNotify({
             	    title: 'Oh Nein!',
             	    text: 'Es kann keine Verbindung zum Server hergestellt werden.',
             	    type: 'error'
             	});
-            	$('#proposeButton').removeAttr('disabled');
+            	$('#addButton').removeAttr('disabled');
             }
           });
     	e.preventDefault(); // avoid to execute the actual submit of the form.
     });
+
+    $('#frm_type').on('change', function(e){
+        if($(this).val() == 'I')
+        {
+        	$('#frm_status option:eq(2)').prop('selected', true);
+        }else {
+        	$('#frm_status option:eq(0)').prop('selected', true);
+        }
+        });
 });
 </script>
 <?php include 'views/footer.php'; ?>

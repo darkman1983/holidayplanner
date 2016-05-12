@@ -24,6 +24,7 @@ $(document).ready(function(){
             dataType: 'json',
             beforeSend: function(){
             	$("#loadingIndicator").toggleClass('loading-indicator-hidden');
+            	$('#loginButton').attr('disabled','disabled');
             },
             success: function(data)
             {
@@ -35,6 +36,7 @@ $(document).ready(function(){
                 	    text: data.text,
                 	    type: 'error'
                 	});
+                	$('#loginButton').removeAttr('disabled');
                 	break;
                 case 1:
                 	new PNotify({
@@ -53,6 +55,7 @@ $(document).ready(function(){
             	    text: 'Es kann keine Verbindung zum Server hergestellt werden.',
             	    type: 'error'
             	});
+            	$('#loginButton').removeAttr('disabled');
             }
           });
     });

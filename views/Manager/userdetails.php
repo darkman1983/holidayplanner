@@ -17,7 +17,7 @@
 			</div>
 	</div>
 	<a href="#" class="glyphicon glyphicon-refresh nounderline navbar-right padding-right-5 link-color-black link-color-lightgrey spacing-4" id="reloadFeastDays" title="Urlaubsanträge neu laden"></a>
-	<a href="<?php echo $viewModel->get ( 'BaseUrl' )?>manager/add" class="glyphicon glyphicon-plus nounderline navbar-right link-color-black link-color-lightgrey spacing-4" title="Urlaub oder Krankheit Hinzufügen"></a>
+	<a href="<?php echo $viewModel->get ( 'BaseUrl' )?>manager/add?userID=<?php echo $viewModel->get ( 'uid' )?>" class="glyphicon glyphicon-plus nounderline navbar-right link-color-black link-color-lightgrey spacing-4" title="Urlaub oder Krankheit Hinzufügen"></a>
 	<a href="<?php echo $viewModel->get ( 'BaseUrl' )?>manager" class="glyphicon glyphicon-arrow-left nounderline navbar-right link-color-black link-color-lightgrey spacing-4" title="Zurück zur Übersicht"></a>
 	</div>
 	<div class="modal-body">
@@ -106,13 +106,13 @@
         </td>
         <td class="vertical-center center-text a-spacing-4">
         <?php if($data['status'] == 0 && $data['type'] != 'I') { ?>
-        <a href="#" class="glyphicon glyphicon-remove nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Löschen" data-href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/deleteHoliday?holidayFilter=&holidayDeleteID=<?php echo $data['id']; ?>" data-toggle="modal" data-target="#confirm-delete" aria-hidden="true"></a>
+        <a href="#" class="glyphicon glyphicon-remove nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Löschen" data-href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/managerDeleteHoliday?holidayFilter=&holidayDeleteID=<?php echo $data['id']; ?>" data-toggle="modal" data-target="#confirm-delete" aria-hidden="true"></a>
         <a href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>holiday/edit?holidayEditID=<?php echo $data['id']; ?>" class="glyphicon glyphicon-edit nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Bearbeiten" aria-hidden="true"></a>
         <?php } else { ?>
         <a href="#" class="glyphicon glyphicon-remove glyphicon-medium nounderline link-disabled"></a>
         <a href="#" class="glyphicon glyphicon-edit glyphicon-medium nounderline link-disabled"></a>
         <?php } ?>
-        <a href="#" class="fa fa-file-pdf-o nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Als PDF anzeigen" data-href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>pdf/showPdf?pdfID=<?php echo $data['id']; ?>" data-toggle="modal" data-target="#viewPdf" aria-hidden="true"></a>
+        <a href="#" class="fa fa-file-pdf-o nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Als PDF anzeigen" data-href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>pdf/managerShowPdf?pdfID=<?php echo $data['id']; ?>" data-toggle="modal" data-target="#viewPdf" aria-hidden="true"></a>
         </td>
       </tr>
       <?php
@@ -128,7 +128,7 @@
 $paginationData = $viewModel->get ( 'pagination' );
 ?>
   <nav>
-    <ul class="pagination pagination-nomargintop">
+    <ul class="pagination">
       <li>
       <?php
       echo ($paginationData['page'] > 1) ? '<a href="'.$viewModel->get ( 'BaseUrl' ).'user?page=1" aria-label="Erste Seite">&laquo;</a> <a href="'.$viewModel->get ( 'BaseUrl' ).'user?page=' . ($paginationData['page'] - 1) . '" aria-label="Zurück">&lsaquo;</a>' : '<span class="disabled" aria-hidden="true">&laquo;</span><span class="disabled" aria-hidden="true">&lsaquo;</span>';
@@ -152,8 +152,8 @@ $paginationData = $viewModel->get ( 'pagination' );
                     <h4 class="modal-title" id="myModalLabel">Löschen bestätigen</h4>
                 </div>
                 <div class="modal-body">
-                    <p>Sie sind dabei einen Feiertag zu LÖSCHEN, dies kann nicht rückgängig gemacht werden.</p>
-                    <p>Wollen Sie den Feiertag wirklich löschen?</p>
+                    <p>Sie sind dabei einen Urlaubsantrag zu LÖSCHEN, dies kann nicht rückgängig gemacht werden.</p>
+                    <p>Wollen Sie den Urlaubsantrag wirklich löschen?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
@@ -233,7 +233,7 @@ $(document).ready(function(){
 				$('#confirm-delete .modal-title').text('Urlaubsantrag gelöscht!');
 				$('#confirm-delete .modal-body').html('Der Urlaubsantrag wurde erfolgreich gelöscht!');
 				$('#confirm-delete .modal-footer').html('');
-				$(window).wait(2000).attr("location","<?php echo $viewModel->get ( 'BaseUrl' ); ?>holiday");
+				$(window).wait(2000).attr("location","<?php echo $viewModel->get ( 'BaseUrl' ); ?>manager/userdetails?userID=" + $.getUrlParam('userID'));
 				}).fail(function() {
 				    alert( "error" );
 				  });

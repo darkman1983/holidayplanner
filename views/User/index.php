@@ -31,7 +31,7 @@
         <th>Email</th>
         <th>Benutzername</th>
         <th>Berechtigungsstufe</th>
-        <th>Löschen - Editieren</th>
+        <th class="text-center">Aktion</th>
       </tr>
     </thead>
     <tbody>
@@ -69,7 +69,7 @@
         </td>
         <td class="vertical-center center-text a-spacing-4">
         <?php 
-        if($userID != $data['id'] && strtotime("+10 minutes", $data['createdate']) < time())
+        if($userID != $data['id'] && strtotime("+10 minutes", $data['createdate']) > time())
         {
         ?>
         <a href="#" class="glyphicon glyphicon-remove nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Löschen" data-href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/deleteuser?usersFilter=&userDeleteID=<?php echo $data['id']; ?>" data-toggle="modal" data-target="#confirm-delete" aria-hidden="true"></a>

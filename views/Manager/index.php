@@ -42,16 +42,16 @@
       foreach($userData as &$data) {
     ?>
       <tr>
-        <td class="vertical-center">
-          <span><?php echo str_pad($data['id'], $maxNum, 0, STR_PAD_LEFT); ?></span>
+        <td class="col-xs-1 vertical-center">
+          <span><?php echo $data['staffid']; ?></span>
         </td>
-        <td class="col-xs-2 vertical-center">
+        <td class="col-xs-1 vertical-center">
           <span><?php echo $data['firstname']; ?></span>
         </td>
         <td class="col-xs-2 vertical-center">
           <span><?php echo $data['lastname']; ?></span>
         </td>
-        <td class="col-xs-2 vertical-center">
+        <td class="col-xs-1 vertical-center">
           <span><?php echo $data['maxHoliday']; ?></span>
         </td>
         <td class="col-xs-2 vertical-center">

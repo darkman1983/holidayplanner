@@ -26,6 +26,5 @@
           <p>Passwort <a href="#">Vergessen?</a></p>
         </div>
       </div>
-      
     </div>
   </div> 

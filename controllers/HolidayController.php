@@ -77,7 +77,7 @@ class HolidayController extends BaseController {
         return;
       }
       
-      $checkDateRangeSql = sprintf ( "SELECT COUNT(*) FROM holiday h WHERE h.employeeID = %s AND (FROM_UNIXTIME(%s, '%%Y-%%m-%%d') BETWEEN FROM_UNIXTIME(startdate, '%%Y-%%m-%%d') AND FROM_UNIXTIME(enddate, '%%Y-%%m-%%d') OR FROM_UNIXTIME(%s, '%%Y-%%m-%%d') BETWEEN FROM_UNIXTIME(startdate, '%%Y-%%m-%%d') AND FROM_UNIXTIME(enddate, '%%Y-%%m-%%d'))", $this->session->get ( 'id' ), strtotime ( $dates [0] ), strtotime ( $dates [1] ) );
+      $checkDateRangeSql = sprintf ( "SELECT COUNT(*) FROM holiday h WHERE h.employeeID = '%s' AND (FROM_UNIXTIME(%s, '%%Y-%%m-%%d') BETWEEN FROM_UNIXTIME(startdate, '%%Y-%%m-%%d') AND FROM_UNIXTIME(enddate, '%%Y-%%m-%%d') OR FROM_UNIXTIME(%s, '%%Y-%%m-%%d') BETWEEN FROM_UNIXTIME(startdate, '%%Y-%%m-%%d') AND FROM_UNIXTIME(enddate, '%%Y-%%m-%%d'))", $this->session->get ( 'id' ), strtotime ( $dates [0] ), strtotime ( $dates [1] ) );
       $result = $this->db->query ( $checkDateRangeSql );
       $resultsets = $result->fetch_all ( MYSQLI_NUM );
       

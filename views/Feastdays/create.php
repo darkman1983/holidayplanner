@@ -25,7 +25,7 @@
                                   <textarea rows="4" cols="2" class="form-control" id="frm_description" name="frm_description" placeholder="Beschreibung Eingeben" required></textarea>
                                   <div class="help-block with-errors"></div>
                               </div>
-                              <span id="loadingIndicator" class="fa fa-cog fa-spin fa-med link-color-black vertical-center loading-indicator-hidden" aria-hidden="true"></span>&nbsp;<button type="submit" class="btn btn-success btn-default"><span class="glyphicon glyphicon-plus"></span> Erstellen</button>
+                              <span id="loadingIndicator" class="fa fa-cog fa-spin fa-med link-color-black vertical-center loading-indicator-hidden" aria-hidden="true"></span>&nbsp;<button type="submit" id="feastdaysButton" class="btn btn-success btn-default"><span class="glyphicon glyphicon-plus"></span> Erstellen</button>
                               <a href="<?php echo $viewModel->get('BaseUrl'); ?>feastdays" class="btn btn-danger btn-default"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
                           </form>
                       </div>
@@ -87,6 +87,7 @@ $(document).ready(function(){
             dataType: 'json',
             beforeSend: function(){
             	$("#loadingIndicator").toggleClass('loading-indicator-hidden');
+            	$('#feastdaysButton').attr('disabled','disabled');
             },
             success: function(data)
             {
@@ -98,6 +99,7 @@ $(document).ready(function(){
                 	    text: data.text,
                 	    type: 'error'
                 	});
+                	$('#feastdaysButton').removeAttr('disabled');
                 	break;
                 case '4f4b':
                 	new PNotify({
@@ -116,6 +118,7 @@ $(document).ready(function(){
             	    text: 'Es kann keine Verbindung zum Server hergestellt werden.',
             	    type: 'error'
             	});
+            	$('#feastdaysButton').removeAttr('disabled');
             }
           });
     	e.preventDefault(); // avoid to execute the actual submit of the form.
