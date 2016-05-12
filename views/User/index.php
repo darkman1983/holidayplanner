@@ -43,7 +43,7 @@
     ?>
       <tr>
         <td class="vertical-center">
-          <span><?php echo str_pad($data['id'], $maxNum, 0, STR_PAD_LEFT); ?></span>
+          <span><?php echo $data['staffid']; ?></span>
         </td>
         <td class="col-xs-2 vertical-center">
           <span><?php echo $data['firstname']; ?></span>
@@ -69,7 +69,7 @@
         </td>
         <td class="vertical-center center-text a-spacing-4">
         <?php 
-        if($userID != $data['id'])
+        if($userID != $data['id'] && strtotime("+10 minutes", $data['createdate']) < time())
         {
         ?>
         <a href="#" class="glyphicon glyphicon-remove nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Löschen" data-href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/deleteuser?usersFilter=&userDeleteID=<?php echo $data['id']; ?>" data-toggle="modal" data-target="#confirm-delete" aria-hidden="true"></a>

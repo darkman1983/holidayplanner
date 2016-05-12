@@ -46,8 +46,9 @@ class HolidayModel extends BaseModel {
     return $this->viewModel;
   }
 
-  public function databaseError( $dbError ) {
+  public function databaseError( $dbError, $extra = array() ) {
     $this->viewModel->set ( "dbError", $dbError );
+    $this->viewModel->set ( "extra", $extra );
     
     return $this->viewModel;
   }

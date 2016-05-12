@@ -33,6 +33,22 @@ class AjaxModel extends BaseModel {
     
     return $this->viewModel;
   }
+  
+  public function validateStaffId( ) {
+    $checkUserSql = sprintf ( "SELECT username FROM users WHERE staffid = '%s'", $this->urlValues ['frm_staffid'] );
+    $result = $this->db->query ( $checkUserSql );
+    if ( $result->num_rows > 0 ) {
+      $this->viewModel->set ( "statusCode", 418 );
+      $this->viewModel->set ( "statusText", 'Personalnummer existiert schon!' );
+    } else {
+      $this->viewModel->set ( "statusCode", 200 );
+      $this->viewModel->set ( "statusText", 'OK - Personalnummer ist frei.' );
+    }
+  
+    $result->free();
+  
+    return $this->viewModel;
+  }
 
   public function getLogoutTime( ) {
     return $this->viewModel;

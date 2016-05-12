@@ -55,26 +55,46 @@ class HolidayController extends BaseController {
     }
     
     if ( $dataValid ) {
-      $dates = explode(" - ", $this->urlValues ['frm_daterange']);
+      $dates = explode ( " - ", $this->urlValues ['frm_daterange'] );
       
-      $checkDateRangeSql = sprintf("SELECT COUNT(*) FROM holiday h WHERE h.employeeID = %s AND (FROM_UNIXTIME(%s, '%%Y-%%m-%%d') BETWEEN FROM_UNIXTIME(startdate, '%%Y-%%m-%%d') AND FROM_UNIXTIME(enddate, '%%Y-%%m-%%d') OR FROM_UNIXTIME(%s, '%%Y-%%m-%%d') BETWEEN FROM_UNIXTIME(startdate, '%%Y-%%m-%%d') AND FROM_UNIXTIME(enddate, '%%Y-%%m-%%d'))", $this->session->get('id'), strtotime($dates[0]), strtotime($dates[1]));
+      $getHolidaySql = sprintf ( "SELECT (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.employeeID = h.employeeID AND ho.type = 'H' AND FROM_UNIXTIME(ho.startdate, '%%Y') = FROM_UNIXTIME(%s, '%%Y')) - (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.employeeID = h.employeeID AND ho.type = 'I' AND FROM_UNIXTIME(ho.startdate, '%%Y') = FROM_UNIXTIME(%s, '%%Y')) AS remainingHoliday, (SELECT getNumDays(%s, %s, 3)) AS days FROM holiday h WHERE h.employeeID = '%s'", strtotime ( $dates [0] ), strtotime ( $dates [0] ), strtotime ( $dates [0] ), strtotime ( $dates [1] ), $this->session->get ( 'id' ) );
+      $result = $this->db->query ( $getHolidaySql );
+      $resultsets = $result->fetch_all ( MYSQLI_ASSOC );
+      
+      $remainingHoliday = $resultsets [0] ['remainingHoliday'];
+      $days = $resultsets [0] ['days'];
+      $result->free ( );
+      
+      $getMaxHolidaySql = sprintf ( "SELECT maxHoliday FROM mhy WHERE year = FROM_UNIXTIME(%s, '%%Y') AND employeeID = '%s'", strtotime ( $dates [0] ), $this->session->get ( 'id' ) );
+      $result = $this->db->query ( $getMaxHolidaySql );
+      $resultsets = $result->fetch_all ( MYSQLI_ASSOC );
+      
+      $maxHoliday = $resultsets [0] ['maxHoliday'];
+      $result->free ( );
+      
+      if ( ($remainingHoliday + $days) > $maxHoliday ) {
+        $this->view->output ( $this->model->databaseError ( '4e4f4e45', array( $maxHoliday - $remainingHoliday, $days )), 'Holiday/databaseerror' );
+        return;
+      }
+      
+      $checkDateRangeSql = sprintf ( "SELECT COUNT(*) FROM holiday h WHERE h.employeeID = %s AND (FROM_UNIXTIME(%s, '%%Y-%%m-%%d') BETWEEN FROM_UNIXTIME(startdate, '%%Y-%%m-%%d') AND FROM_UNIXTIME(enddate, '%%Y-%%m-%%d') OR FROM_UNIXTIME(%s, '%%Y-%%m-%%d') BETWEEN FROM_UNIXTIME(startdate, '%%Y-%%m-%%d') AND FROM_UNIXTIME(enddate, '%%Y-%%m-%%d'))", $this->session->get ( 'id' ), strtotime ( $dates [0] ), strtotime ( $dates [1] ) );
       $result = $this->db->query ( $checkDateRangeSql );
       $resultsets = $result->fetch_all ( MYSQLI_NUM );
       
-      if($resultsets[0][0] > 0) {
+      if ( $resultsets [0] [0] > 0 ) {
         $this->view->output ( $this->model->databaseError ( 1062 ), 'Holiday/databaseerror' );
         return;
       }
       
-      $resultsets->free();
+      $result->free ( );
       
-      $createProposeSql = sprintf ( "INSERT INTO holiday SET employeeID = '%s', startdate = '%s', enddate = '%s', type = '%s', note = '%s', submitdate = '%s'", $this->session->get('id'), strtotime($dates[0]), strtotime($dates[1]), 'H', $this->urlValues['frm_note'], time() );
+      $createProposeSql = sprintf ( "INSERT INTO holiday SET employeeID = '%s', startdate = '%s', enddate = '%s', type = '%s', note = '%s', submitdate = '%s'", $this->session->get ( 'id' ), strtotime ( $dates [0] ), strtotime ( $dates [1] ), 'H', $this->urlValues ['frm_note'], time ( ) );
       $result = $this->db->query ( $createProposeSql );
-
+      
       if ( $this->db->affected_rows != 1 ) {
         $this->view->output ( $this->model->databaseError ( $this->db->errno ), 'Holiday/databaseerror' );
         return;
-      } else {        
+      } else {
         $this->view->output ( $this->model->success ( ), 'Holiday/success' );
         return;
       }

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 10. Mai 2016 um 12:17
+-- Erstellungszeit: 12. Mai 2016 um 11:43
 -- Server-Version: 10.1.9-MariaDB
 -- PHP-Version: 5.6.15
 
@@ -108,7 +108,8 @@ INSERT INTO `feastdays` (`id`, `userID`, `date`, `description`) VALUES
 (17, 1, 1509404400, 'Reformationstag - HH'),
 (18, 1, 1514156400, '1. Weichnatchstag'),
 (19, 1, 1514242800, '2. Weichnatschtag'),
-(21, 1, 1464213600, 'FrÃ¶hlich');
+(21, 1, 1464213600, 'FrÃ¶hlich'),
+(22, 1, 1452034800, 'Heilige drei KÃ¶nige');
 
 -- --------------------------------------------------------
 
@@ -136,7 +137,9 @@ CREATE TABLE `holiday` (
 
 INSERT INTO `holiday` (`id`, `employeeID`, `startdate`, `enddate`, `submitdate`, `processeddate`, `note`, `response_note`, `type`, `status`) VALUES
 (30, 1, 1466373600, 1466892000, 1462875045, NULL, 'Kreta', NULL, 'H', 0),
-(31, 1, 1471816800, 1472335200, 1462875360, NULL, 'Nordsee mit den Kindern', NULL, 'H', 0);
+(31, 1, 1471816800, 1472335200, 1462875360, NULL, 'Nordsee mit den Kindern', NULL, 'H', 0),
+(35, 1, 1467583200, 1468706400, 1463036477, NULL, 'Blubb', NULL, 'H', 0),
+(36, 1, 1468792800, 1469311200, 1463036566, NULL, '', NULL, 'H', 0);
 
 -- --------------------------------------------------------
 
@@ -160,6 +163,7 @@ INSERT INTO `mhy` (`employeeID`, `maxHoliday`, `year`) VALUES
 (1, 30, 2017),
 (2, 30, 2015),
 (2, 30, 2016),
+(3, 30, 2016),
 (16, 30, 2016);
 
 -- --------------------------------------------------------
@@ -180,7 +184,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `data`, `timestamp`) VALUES
-('k8t7jmjk9k6hd372tblhrr27v2', 'id|s:1:"1";firstname|s:4:"Timo";lastname|s:10:"Stepputtis";email|s:22:"Timo.Stepputtis@gmx.de";level|s:1:"3";loggedIN|b:1;timestamp|s:10:"1462875362";', 1462875391);
+('k8t7jmjk9k6hd372tblhrr27v2', 'timestamp|s:10:"1463046113";id|s:1:"1";firstname|s:4:"Timo";lastname|s:10:"Stepputtis";email|s:22:"Timo.Stepputtis@gmx.de";level|s:1:"3";loggedIN|b:1;', 1463046190);
 
 -- --------------------------------------------------------
 
@@ -191,6 +195,8 @@ INSERT INTO `sessions` (`id`, `data`, `timestamp`) VALUES
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
+  `staffid` int(11) NOT NULL,
+  `createdate` int(11) NOT NULL,
   `firstname` varchar(50) NOT NULL,
   `lastname` varchar(100) NOT NULL,
   `username` varchar(80) NOT NULL,
@@ -203,20 +209,20 @@ CREATE TABLE `users` (
 -- Daten für Tabelle `users`
 --
 
-INSERT INTO `users` (`id`, `firstname`, `lastname`, `username`, `password`, `email`, `level`) VALUES
-(1, 'Timo', 'Stepputtis', 'tstepputtis', '9c402c4806d33430b781492227a47adf30624e9c', 'Timo.Stepputtis@gmx.de', 3),
-(2, 'Heinz', 'Mustermann', 'heinz', '023087601ffa058f24441d227962c1f9b15aa85d', 'heinz@gmx.de', 1),
-(3, 'Harry', 'Beinfurt', 'harry', 'b8cf35b1e4d9c6ac9f02c27e32d5341848d3a272', 'harry@gmx.de', 1),
-(4, 'Tim', 'Rohrbruch', 'timmy', 'c43d74a74283c11cf6002b023ca8aab9851a2b68', 'timmy@gmx.de', 1),
-(5, 'Karl', 'Kleisterbaum', 'karlito', '2b65529da7df79cd70da9a8ceb7a2a2ea6800993', 'karl@gmx.de', 1),
-(6, 'Phillip', 'Becker', 'phillip', 'a1875a5070b9a6cf28e90f6339f27796bee73922', 'phillip@gmx.de', 1),
-(7, 'Andreas', 'Maier', 'andreas', 'f99d9af5fa25aa965419fc507fd7e71b788bdd3a', 'andreas@gmx.de', 1),
-(8, 'Hannelore', 'Geisner', 'hannelore', '251e21782378011e81f08eac4a385f4e35ac2e34', 'hannelore@web.de', 1),
-(9, 'Gisela', 'Geier', 'gisela', '4f09c93b28559bdbbe59cc30777ce82e0915f716', 'gisela@gmail.com', 1),
-(10, 'Alexandra', 'Kraft', 'alexandra', 'd11b93c86b976997fec1026436201d32b5d0efa6', 'alex.andra@yahoo.com', 1),
-(11, 'Olliver', 'Gunst', 'olli', 'b04225b21bdde516eb1b7d30fc28e9cd6a44b8af', 'olli.p@t-online.de', 1),
-(12, 'Ralf', 'Zacherl', 'ralf', 'e72f4fe7d3f27849dc7d171935ec6db7541dc211', 'ralfz@rtl2.de', 1),
-(16, 'Bobby', 'Brown', 'bobby', '6b81eda5198ddc08891a5d434616aa4afb2c02b2', 'bobby@bobtail.com', 1);
+INSERT INTO `users` (`id`, `staffid`, `createdate`, `firstname`, `lastname`, `username`, `password`, `email`, `level`) VALUES
+(1, 500000, 1463034999, 'Timo', 'Stepputtis', 'tstepputtis', '9c402c4806d33430b781492227a47adf30624e9c', 'Timo.Stepputtis@gmx.de', 3),
+(2, 500001, 1463034999, 'Heinz', 'Mustermann', 'heinz', '023087601ffa058f24441d227962c1f9b15aa85d', 'heinz@gmx.de', 1),
+(3, 500002, 1463034999, 'Harry', 'Beinfurt', 'harry', 'b8cf35b1e4d9c6ac9f02c27e32d5341848d3a272', 'harry@gmx.de', 1),
+(4, 500003, 1463034999, 'Tim', 'Rohrbruch', 'timmy', 'c43d74a74283c11cf6002b023ca8aab9851a2b68', 'timmy@gmx.de', 1),
+(5, 500004, 1463034999, 'Karl', 'Kleisterbaum', 'karlito', '2b65529da7df79cd70da9a8ceb7a2a2ea6800993', 'karl@gmx.de', 1),
+(6, 500005, 1463034999, 'Phillip', 'Becker', 'phillip', 'a1875a5070b9a6cf28e90f6339f27796bee73922', 'phillip@gmx.de', 1),
+(7, 500006, 1463034999, 'Andreas', 'Maier', 'andreas', 'f99d9af5fa25aa965419fc507fd7e71b788bdd3a', 'andreas@gmx.de', 1),
+(8, 500007, 1463034999, 'Hannelore', 'Geisner', 'hannelore', '251e21782378011e81f08eac4a385f4e35ac2e34', 'hannelore@web.de', 1),
+(9, 500008, 1463034999, 'Gisela', 'Geier', 'gisela', '4f09c93b28559bdbbe59cc30777ce82e0915f716', 'gisela@gmail.com', 1),
+(10, 500009, 1463034999, 'Alexandra', 'Kraft', 'alexandra', 'd11b93c86b976997fec1026436201d32b5d0efa6', 'alex.andra@yahoo.com', 1),
+(11, 500010, 1463034999, 'Olliver', 'Gunst', 'olli', 'b04225b21bdde516eb1b7d30fc28e9cd6a44b8af', 'olli.p@t-online.de', 1),
+(12, 500011, 1463034999, 'Ralf', 'Zacherl', 'ralf', 'e72f4fe7d3f27849dc7d171935ec6db7541dc211', 'ralfz@rtl2.de', 1),
+(16, 500012, 1463034999, 'Bobby', 'Brown', 'bobby', '6b81eda5198ddc08891a5d434616aa4afb2c02b2', 'bobby@bobtail.com', 1);
 
 --
 -- Trigger `users`
@@ -227,6 +233,11 @@ CREATE TRIGGER `clear_data` AFTER DELETE ON `users` FOR EACH ROW BEGIN
 DELETE FROM mhy WHERE employeeID = OLD.id;
 DELETE FROM holiday WHERE employeeID = OLD.id;
 END
+$$
+DELIMITER ;
+DROP TRIGGER IF EXISTS `create_createdate_insert`;
+DELIMITER $$
+CREATE TRIGGER `create_createdate_insert` BEFORE INSERT ON `users` FOR EACH ROW SET new.createdate = UNIX_TIMESTAMP(NOW())
 $$
 DELIMITER ;
 DROP TRIGGER IF EXISTS `create_mhy_after_insert`;
@@ -280,12 +291,12 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT für Tabelle `feastdays`
 --
 ALTER TABLE `feastdays`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 --
 -- AUTO_INCREMENT für Tabelle `holiday`
 --
 ALTER TABLE `holiday`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 --
 -- AUTO_INCREMENT für Tabelle `users`
 --

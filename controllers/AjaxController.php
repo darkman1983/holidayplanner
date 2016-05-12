@@ -19,7 +19,7 @@ class AjaxController extends BaseController {
   public function __construct( $action, $urlValues ) {
     parent::__construct ( $action, $urlValues );
     
-    $this->levels = array ("validateuser" => 1, "getlogouttime" => 1, "filterusers" => 2,"deleteuser" => 3,"filterfeastdays" => 3, "filterholidays" => 1, "deleteholiday" => 1 );
+    $this->levels = array ("validateuser" => 1, "validatestaffid" => 3, "getlogouttime" => 1, "filterusers" => 2,"deleteuser" => 3,"filterfeastdays" => 3, "filterholidays" => 1, "deleteholiday" => 1 );
     
     $this->db = Database::getInstance()->getCon();
     
@@ -39,6 +39,16 @@ class AjaxController extends BaseController {
     }
     
     $this->view->output ( $this->model->validateUser ( ), '' );
+  }
+  
+  // default method
+  protected function validateStaffId( ) {
+    if ( ! $this->checkAccess ( $this->levels ) ) {
+      $this->view->output ( $this->model->badsession ( array("ajax" => true) ), 'Error/notallowed' );
+      return;
+    }
+  
+    $this->view->output ( $this->model->validateStaffId ( ), '' );
   }
   
   protected function getLogoutTime()

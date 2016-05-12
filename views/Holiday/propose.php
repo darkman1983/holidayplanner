@@ -107,6 +107,13 @@ $(document).ready(function(){
                 	});
                 	$(location).wait(2500).attr('href', '<?php echo $viewModel->get('BaseUrl'); ?>holiday');
                     break;
+                case '4e4f4e45':
+                	new PNotify({
+                	    title: 'Oh Nein!',
+                	    text: data.text,
+                	    type: 'error'
+                	});
+                    break;
                 }
                 $("#loadingIndicator").toggleClass('loading-indicator-hidden');
             },

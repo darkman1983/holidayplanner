@@ -11,6 +11,11 @@
                   <div class="col-xs-12">
                       <div class="well">
                           <form id="loginForm" method="POST" action="<?php echo $viewModel->get('BaseUrl') ?>user/create?do=1" role="form" data-toggle="validator">
+                          <div class="form-group has-feedback">
+                                  <label for="frm_staffid" class="control-label">Personalnummer</label>
+                                  <input type="text" class="form-control" id="frm_staffid" name="frm_staffid" placeholder="Personalnummer Eingeben" data-remote="<?php echo $viewModel->get('BaseUrl'); ?>ajax/validatestaffid" data-error="Oops! Diese Personalnummer existiert schon!" required>
+                                  <div class="help-block with-errors"></div>
+                              </div>
                               <div class="form-group has-feedback" id="usernameGroup">
                                   <label for="frm_username" class="control-label">Benutzername</label>
                                   <div class="input-group">
