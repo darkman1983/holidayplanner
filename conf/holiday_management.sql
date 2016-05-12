@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 12. Mai 2016 um 15:04
+-- Erstellungszeit: 13. Mai 2016 um 01:22
 -- Server-Version: 10.1.10-MariaDB
 -- PHP-Version: 7.0.4
 
@@ -138,8 +138,10 @@ CREATE TABLE `holiday` (
 INSERT INTO `holiday` (`id`, `employeeID`, `startdate`, `enddate`, `submitdate`, `processeddate`, `note`, `response_note`, `type`, `status`) VALUES
 (30, 1, 1466373600, 1466892000, 1462875045, NULL, 'Kreta', NULL, 'H', 0),
 (31, 1, 1471816800, 1472335200, 1462875360, NULL, 'Nordsee mit den Kindern', NULL, 'H', 0),
-(35, 1, 1467583200, 1468706400, 1463036477, NULL, 'Blubb', NULL, 'H', 0),
-(52, 2, 1463954400, 1464472800, 1463052200, NULL, '', NULL, 'H', 0);
+(35, 1, 1467583200, 1468706400, 1463036477, NULL, 'Blubb', NULL, 'H', 2),
+(52, 2, 1463954400, 1464472800, 1463052200, NULL, '', NULL, 'H', 0),
+(57, 1, 1479078000, 1479596400, 1463084910, NULL, '', 'Klappt es?', 'H', 2),
+(58, 1, 1479250800, 1479337200, 1463084958, NULL, '', '', 'I', 3);
 
 -- --------------------------------------------------------
 
@@ -161,9 +163,7 @@ CREATE TABLE `mhy` (
 INSERT INTO `mhy` (`employeeID`, `maxHoliday`, `year`) VALUES
 (1, 30, 2016),
 (1, 30, 2017),
-(2, 30, 2015),
 (2, 30, 2016),
-(3, 30, 2016),
 (4, 30, 2016),
 (5, 30, 2016),
 (6, 30, 2016),
@@ -173,7 +173,8 @@ INSERT INTO `mhy` (`employeeID`, `maxHoliday`, `year`) VALUES
 (10, 30, 2016),
 (11, 30, 2016),
 (12, 30, 2016),
-(16, 30, 2016);
+(16, 30, 2016),
+(20, 30, 2016);
 
 -- --------------------------------------------------------
 
@@ -193,7 +194,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `data`, `timestamp`) VALUES
-('f67s4sbfo45fml2splptkop505', 'id|s:1:"1";firstname|s:4:"Timo";lastname|s:10:"Stepputtis";email|s:22:"Timo.Stepputtis@gmx.de";level|s:1:"3";loggedIN|b:1;timestamp|s:10:"1463058184";', 1463058188);
+('f67s4sbfo45fml2splptkop505', 'timestamp|s:10:"1463095308";id|s:1:"1";firstname|s:4:"Timo";lastname|s:10:"Stepputtis";email|s:22:"Timo.Stepputtis@gmx.de";level|s:1:"3";loggedIN|b:1;', 1463095312);
 
 -- --------------------------------------------------------
 
@@ -220,7 +221,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `staffid`, `createdate`, `firstname`, `lastname`, `username`, `password`, `email`, `level`) VALUES
 (1, 500000, 1463034999, 'Timo', 'Stepputtis', 'tstepputtis', '9c402c4806d33430b781492227a47adf30624e9c', 'Timo.Stepputtis@gmx.de', 3),
-(2, 500001, 1463034999, 'Heinz', 'Mustermann', 'heinz', '023087601ffa058f24441d227962c1f9b15aa85d', 'heinz@gmx.de', 1),
+(2, 500001, 1463034999, 'Heinzi', 'Mustermann', 'heinz', '023087601ffa058f24441d227962c1f9b15aa85d', 'heinz@gmx.de', 1),
 (3, 500002, 1463034999, 'Harry', 'Beinfurt', 'harry', 'b8cf35b1e4d9c6ac9f02c27e32d5341848d3a272', 'harry@gmx.de', 1),
 (4, 500003, 1463034999, 'Tim', 'Rohrbruch', 'timmy', 'c43d74a74283c11cf6002b023ca8aab9851a2b68', 'timmy@gmx.de', 1),
 (5, 500004, 1463034999, 'Karl', 'Kleisterbaum', 'karlito', '2b65529da7df79cd70da9a8ceb7a2a2ea6800993', 'karl@gmx.de', 1),
@@ -231,7 +232,8 @@ INSERT INTO `users` (`id`, `staffid`, `createdate`, `firstname`, `lastname`, `us
 (10, 500009, 1463034999, 'Alexandra', 'Kraft', 'alexandra', 'd11b93c86b976997fec1026436201d32b5d0efa6', 'alex.andra@yahoo.com', 1),
 (11, 500010, 1463034999, 'Olliver', 'Gunst', 'olli', 'b04225b21bdde516eb1b7d30fc28e9cd6a44b8af', 'olli.p@t-online.de', 1),
 (12, 500011, 1463034999, 'Ralf', 'Zacherl', 'ralf', 'e72f4fe7d3f27849dc7d171935ec6db7541dc211', 'ralfz@rtl2.de', 1),
-(16, 500012, 1463034999, 'Bobby', 'Brown', 'bobby', '6b81eda5198ddc08891a5d434616aa4afb2c02b2', 'bobby@bobtail.com', 1);
+(16, 500012, 1463034999, 'Bobby', 'Brown', 'bobby', '6b81eda5198ddc08891a5d434616aa4afb2c02b2', 'bobby@bobtail.com', 1),
+(20, 500018, 1463093508, 'Test', 'You', 'testu', '2cbbd70f3f734583e122b9c37f2d5440d84bf3f1', 'testu@hubble.com', 1);
 
 --
 -- Trigger `users`
@@ -304,12 +306,12 @@ ALTER TABLE `feastdays`
 -- AUTO_INCREMENT für Tabelle `holiday`
 --
 ALTER TABLE `holiday`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 --
 -- AUTO_INCREMENT für Tabelle `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 DELIMITER $$
 --
 -- Ereignisse
