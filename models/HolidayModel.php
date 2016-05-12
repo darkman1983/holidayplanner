@@ -21,6 +21,7 @@ class HolidayModel extends BaseModel {
     $totalHoliday = $totalResult->fetch_row ( );
     
     $pagination = Utils::generatePagination(intval(@$urlValues['page']), $totalHoliday[0]);
+    $totalResult->free();
     
     $this->viewModel->set ( "pagination", $pagination );
     
@@ -29,12 +30,14 @@ class HolidayModel extends BaseModel {
     $resultsets = $result->fetch_all ( MYSQLI_ASSOC );
     
     $this->viewModel->set ( "userHolidayData", $resultsets );
+    $result->free();
     
     $getMaxHolidaySql = sprintf ( "SELECT maxHoliday FROM mhy WHERE year = FROM_UNIXTIME(%s, '%%Y') AND employeeID = '%s'", time(), $this->session->get('id') );
     $result = $this->db->query ( $getMaxHolidaySql );
     $resultsets = $result->fetch_all ( MYSQLI_ASSOC );
     
     $this->viewModel->set ( "maxHoliday", @$resultsets[0]['maxHoliday'] );
+    $result->free();
     
     return $this->viewModel;
   }

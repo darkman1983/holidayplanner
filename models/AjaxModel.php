@@ -29,6 +29,8 @@ class AjaxModel extends BaseModel {
       $this->viewModel->set ( "statusText", 'OK - Username is available' );
     }
     
+    $result->free();
+    
     return $this->viewModel;
   }
 
@@ -43,6 +45,7 @@ class AjaxModel extends BaseModel {
       $totalUsers = $totalResult->fetch_row ( );
       
       $pagination = Utils::generatePagination ( intval($this->urlValues['page']), $totalUsers [0] );
+      $totalResult->free();
     }
     
     $getFilteredUsersSql = sprintf ( "SELECT * FROM users
@@ -56,6 +59,8 @@ class AjaxModel extends BaseModel {
     $result = $this->db->query ( $getFilteredUsersSql );
     
     $this->viewModel->set ( "filteredUsers", $result->fetch_all ( MYSQLI_ASSOC ) );
+    
+    $result->free();
     
     return $this->viewModel;
   }
@@ -71,6 +76,7 @@ class AjaxModel extends BaseModel {
       $totalFeastDays = $totalResult->fetch_row ( );
       
       $pagination = Utils::generatePagination ( intval($this->urlValues['page']), $totalFeastDays [0] );
+      $totalResult->free();
     }
     
     if ( strstr ( $this->urlValues ['feastDaysFilter'], "." ) ) {
@@ -108,6 +114,7 @@ class AjaxModel extends BaseModel {
     $result = $this->db->query ( $getFilteredFeastDaysSql );
     
     $this->viewModel->set ( "filteredFeastDays", $result->fetch_all ( MYSQLI_ASSOC ) );
+    $result->free();
     
     return $this->viewModel;
   }
@@ -123,6 +130,7 @@ class AjaxModel extends BaseModel {
       $totalHolidayDays = $totalResult->fetch_row ( );
   
       $pagination = Utils::generatePagination ( intval($this->urlValues['page']), $totalHolidayDays [0] );
+      $totalResult->free();
     }
   
     if ( strstr ( $this->urlValues ['holidayFilter'], "." ) ) {
@@ -189,6 +197,7 @@ class AjaxModel extends BaseModel {
     $result = $this->db->query ( $getFilteredHolidaySql );
   
     $this->viewModel->set ( "filteredHolidays", $result->fetch_all ( MYSQLI_ASSOC ) );
+    $result->free();
   
     return $this->viewModel;
   }

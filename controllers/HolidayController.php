@@ -66,6 +66,8 @@ class HolidayController extends BaseController {
         return;
       }
       
+      $resultsets->free();
+      
       $createProposeSql = sprintf ( "INSERT INTO holiday SET employeeID = '%s', startdate = '%s', enddate = '%s', type = '%s', note = '%s', submitdate = '%s'", $this->session->get('id'), strtotime($dates[0]), strtotime($dates[1]), 'H', $this->urlValues['frm_note'], time() );
       $result = $this->db->query ( $createProposeSql );
 

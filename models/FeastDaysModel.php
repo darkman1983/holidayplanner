@@ -23,6 +23,7 @@ class FeastDaysModel extends BaseModel {
     $totalFeastDaysCustom = $totalResult->fetch_row ( );
     
     $pagination = Utils::generatePagination ( intval(@$urlValues['page']), $totalFeastDaysCustom [0] );
+    $totalResult->free();
     
     $this->viewModel->set ( "pagination", $pagination );
     
@@ -31,6 +32,7 @@ class FeastDaysModel extends BaseModel {
     $resultsets = $result->fetch_all ( MYSQLI_ASSOC );
     
     $this->viewModel->set ( "feastDaysData", $resultsets );
+    $result->free();
     
     return $this->viewModel;
   }
@@ -46,6 +48,7 @@ class FeastDaysModel extends BaseModel {
     
     $this->viewModel->set ( "feastDaysData", $resultsets [0] );
     $this->viewModel->set ( "feastDaysEditID", $urlValues ['feastDaysEditID'] );
+    $result->free();
     
     return $this->viewModel;
   }

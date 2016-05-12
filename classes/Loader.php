@@ -1,11 +1,4 @@
 <?php
-
-//Check if we loaded from index
-if (!defined('IN_HOLIDAYMANAGER'))
-{
-  exit();
-}
-
 /**
  * The Loader class will try to initialize the requested controller class or throw an error
  * 

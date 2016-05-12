@@ -26,19 +26,19 @@ class LoginModel extends BaseModel {
   public function login( ) {
     if ( isset ( $this->urlValues ['usrname'] ) && isset ( $this->urlValues ['psw'] ) ) {
       $loginCheck_SQL = sprintf ( "SELECT * FROM users WHERE username = '%s' AND password = '%s'", strtolower ( $this->urlValues ['usrname'] ), sha1 ( strtolower ( $this->urlValues ['usrname'] ) . ':' . $this->urlValues ['psw'] ) );
-      $resultset = $this->db->query ( $loginCheck_SQL );
+      $result = $this->db->query ( $loginCheck_SQL );
       
-      if ( $resultset->num_rows > 0 ) {
-        $result = $resultset->fetch_all ( MYSQLI_ASSOC );
+      if ( $result->num_rows > 0 ) {
+        $resultset = $result->fetch_all ( MYSQLI_ASSOC );
         
-        $this->session->set ( 'id', $result [0] ['id'] );
-        $this->session->set ( 'firstname', $result [0] ['firstname'] );
-        $this->session->set ( 'lastname', $result [0] ['lastname'] );
-        $this->session->set ( 'email', $result [0] ['email'] );
-        $this->session->set ( 'level', $result [0] ['level'] );
+        $this->session->set ( 'id', $resultset [0] ['id'] );
+        $this->session->set ( 'firstname', $resultset [0] ['firstname'] );
+        $this->session->set ( 'lastname', $resultset [0] ['lastname'] );
+        $this->session->set ( 'email', $resultset [0] ['email'] );
+        $this->session->set ( 'level', $resultset [0] ['level'] );
         $this->session->set ( 'loggedIN', true );
         
-        $this->viewModel->set ( "loggedIN", $this->session->get ( 'loggedIN' ) );
+        $this->viewModel->set ( "loggedIN", true );
         $this->viewModel->set ( "status", 1 );
       } else {
         $this->viewModel->set ( "status", 0 );

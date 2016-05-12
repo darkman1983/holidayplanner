@@ -61,6 +61,8 @@ class FeastdaysController extends BaseController {
         return;
       }
       
+      $resultsets->free();
+      
       $createFeastDaysSql = sprintf ( "INSERT INTO feastdays SET userID = '%s', date = '%s', description = '%s'", $this->session->get ( 'id' ), strtotime ( $this->urlValues ['frm_date'] ), $this->urlValues ['frm_description'] );
       $result = $this->db->query ( $createFeastDaysSql );
       
