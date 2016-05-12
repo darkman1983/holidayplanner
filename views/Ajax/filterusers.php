@@ -7,7 +7,7 @@
         <th>Email</th>
         <th>Benutzername</th>
         <th>Berechtigungsstufe</th>
-        <th>Löschen - Editieren</th>
+        <th class="text-center">Aktion</th>
       </tr>
     </thead>
     <tbody>
@@ -20,7 +20,7 @@
     ?>
       <tr>
         <td class="vertical-center">
-          <span><?php echo str_pad($data['id'], $maxNum, 0, STR_PAD_LEFT); ?></span>
+          <span><?php echo $data['staffid']; ?></span>
         </td>
         <td class="col-xs-2 vertical-center">
           <span><?php echo $data['firstname']; ?></span>
@@ -44,16 +44,16 @@
           printf( "%s - %s", $data['level'], $levels[$data['level']]);
         ?>
         </td>
-        <td class="vertical-center center-text">
+        <td class="vertical-center center-text a-spacing-4">
         <?php 
-        if($userID != $data['id'])
+        if($userID != $data['id'] && strtotime("+10 minutes", $data['createdate']) > time())
         {
         ?>
-        <a href="#" class="glyphicon glyphicon-remove nounderline link-color-black link-color-lightgrey glyphicon-medium" data-href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/deleteuser?usersFilter=&userID=<?php echo $data['id']; ?>" data-toggle="modal" data-target="#confirm-delete" aria-hidden="true"></a>
-        <a href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>user/edit?userEditID=<?php echo $data['id']; ?>" class="glyphicon glyphicon-edit nounderline link-color-black link-color-lightgrey glyphicon-medium" aria-hidden="true"></a>
-        <?php 
-        }
-        ?>
+        <a href="#" class="glyphicon glyphicon-remove nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Löschen" data-href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/deleteuser?usersFilter=&userDeleteID=<?php echo $data['id']; ?>" data-toggle="modal" data-target="#confirm-delete" aria-hidden="true"></a>
+        <?php } else { ?>
+        <a href="#" class="glyphicon glyphicon-remove glyphicon-medium nounderline link-disabled"></a>
+        <?php } ?>
+        <a href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>user/edit?userEditID=<?php echo $data['id']; ?>" class="glyphicon glyphicon-edit nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Bearbeiten" aria-hidden="true"></a>
         </td>
       </tr>
       <?php

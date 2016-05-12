@@ -1,5 +1,7 @@
 <?php include 'views/header.php'; ?>
-<?php include 'views/navbar.php'; ?>
+<?php include 'views/navbar.php';
+$userHolidayData = $viewModel->get('userHolidayData');
+?>
     <div class="container">
       <div id="login-overlay" class="modal-dialog">
       <div class="modal-content">
@@ -10,12 +12,12 @@
               <div class="row">
                   <div class="col-xs-12">
                       <div class="well">
-                          <form id="addForm" name="addForm" method="POST" action="<?php echo $viewModel->get('BaseUrl') ?>manager/add?do=1" role="form" data-toggle="validator">
+                          <form id="processForm" name="processForm" method="POST" action="<?php echo $viewModel->get('BaseUrl') ?>manager/process?do=1" role="form" data-toggle="validator">
                               <div class="form-group has-feedback has-feedback-left" id="usernameGroup">
                                   <label for="frm_daterange" class="control-label">Urlaubs- / Krankheitstage wählen</label>
                                   <div class='input-group input-daterange'>
                                     <span class="input-group-addon" id="sizing-addon1">Format: TT.MM.JJJJ - TT.MM.JJJJ</span>
-                                    <input type="text" class="form-control" id="frm_daterange" name="frm_daterange" placeholder="Bitte Datum Wählen oder Eingeben" required>
+                                    <input type="text" class="form-control" id="frm_daterange" name="frm_daterange" value="<?php echo date("d.m.Y", $userHolidayData['startdate']); ?> - <?php echo date("d.m.Y", $userHolidayData['enddate']); ?>" disabled>
                                     <i class="form-control-feedback glyphicon glyphicon-calendar"></i>
                                   </div>
                                   <div class="help-block with-errors"></div>
@@ -24,29 +26,30 @@
   								  <label for="frm_type">Typ Wählen</label>
   								  <select class="form-control" id="frm_type" name="frm_type">
   								    <option value="H">Urlaub</option>
-  								    <option value="I">Krankheit</option>
+  								    <option value="I"<?php echo ($userHolidayData['type'] == 'I') ? ' selected' : ''; ?>>Krankheit</option>
   								  </select>
                               </div>
                               <div class="form-group has-feedback">
   								  <label for="frm_status">Status Wählen</label>
   								  <select class="form-control" id="frm_status" name="frm_status">
-  								    <option value="1">Nicht genehmigt</option>
-  								    <option value="2">Genehmigt</option>
-  								    <option value="3">Eingetragen</option>
+  								  <option value="0">Unbearbeitet</option>
+  								    <option value="1"<?php echo ($userHolidayData['status'] == 1) ? ' selected' : ''; ?>>Nicht genehmigt</option>
+  								    <option value="2"<?php echo ($userHolidayData['status'] == 2) ? ' selected' : ''; ?>>Genehmigt</option>
+  								    <option value="3"<?php echo ($userHolidayData['status'] == 3) ? ' selected' : ''; ?>>Eingetragen</option>
   								  </select>
                               </div>
                               <div class="form-group">
                                   <label for="frm_note" class="control-label">Anmerkungen</label>
-                                  <textarea rows="4" cols="2" class="form-control" id="frm_note" name="frm_note" placeholder="Anmerkungen Eingeben"></textarea>
+                                  <textarea rows="4" cols="2" class="form-control" id="frm_note" name="frm_note" disabled><?php echo $userHolidayData['note']; ?></textarea>
                                   <div class="help-block with-errors"></div>
                               </div>
                               <div class="form-group">
                                   <label for="frm_response_note" class="control-label">Rückmeldung</label>
-                                  <textarea rows="4" cols="2" class="form-control" id="frm_response_note" name="frm_response_note" placeholder="Rückmeldung Eingeben"></textarea>
+                                  <textarea rows="4" cols="2" class="form-control" id="frm_response_note" name="frm_response_note" placeholder="Rückmeldung Eingeben"><?php echo $userHolidayData['response_note']; ?></textarea>
                                   <div class="help-block with-errors"></div>
                               </div>
                               <span id="loadingIndicator" class="fa fa-cog fa-spin fa-med link-color-black vertical-center loading-indicator-hidden" aria-hidden="true"></span>&nbsp;<button type="submit" id="addButton" class="btn btn-success btn-default"><span class="glyphicon glyphicon-plus"></span> Erstellen</button>
-                              <a href="<?php echo $viewModel->get('BaseUrl'); ?>manager/userdetails?userID=<?php echo $viewModel->get('uid'); ?>" class="btn btn-danger btn-default"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
+                              <a id="pageBack" href="#" class="btn btn-danger btn-default"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
                           </form>
                       </div>
                   </div>
@@ -57,53 +60,18 @@
       </div>
 <script>
 $(document).ready(function(){
-	$('#frm_daterange').daterangepicker({
-	    "showWeekNumbers": true,
-	    "locale": {
-	        "format": "DD.MM.YYYY",
-	        "separator": " - ",
-	        "applyLabel": "OK",
-	        "cancelLabel": "Schließen",
-	        "fromLabel": "Von",
-	        "toLabel": "Bis",
-	        "daysOfWeek": [
-	            "So",
-	            "Mo",
-	            "Di",
-	            "Mi",
-	            "Do",
-	            "Fr",
-	            "Sa"
-	        ],
-	        "monthNames": [
-	            "Januar",
-	            "Februar",
-	            "März",
-	            "April",
-	            "Mai",
-	            "Juni",
-	            "Juli",
-	            "August",
-	            "September",
-	            "October",
-	            "November",
-	            "Dezember"
-	        ],
-	        "firstDay": 1
-	    },
-	    "minDate": "<?php echo date("d.m.Y", time()) ?>",
-        "maxDate": "<?php echo date("d.m.Y", strtotime("Dec 31", strtotime("+1 year"))); ?>"
-	}, function(start, end, label) {
-	  //console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
-	});
-
 	$('textarea').inputlimiter();
 
-	$('#addForm').on('submit', function(e) {
+	$('#pageBack').on('click', function(e){
+		window.history.back();
+		e.preventDefault(); // avoid to execute the actual submit of the form.
+		});
+
+	$('#processForm').on('submit', function(e) {
     	$.ajax({
             type: "POST",
-            url: '<?php echo $viewModel->get('BaseUrl') ?>manager/add?do=1&userID=' + $.getUrlParam('userID'),
-            data: $("#addForm").serialize(), // serializes the form's elements.
+            url: '<?php echo $viewModel->get('BaseUrl') ?>manager/process?do=1&holidayProcessID=' + $.getUrlParam('holidayProcessID'),
+            data: $("#processForm").serialize(), // serializes the form's elements.
             dataType: 'json',
             beforeSend: function(){
             	$("#loadingIndicator").toggleClass('loading-indicator-hidden');
@@ -113,7 +81,7 @@ $(document).ready(function(){
             {
                 switch(data.status)
                 {
-                case 'NOTHINGINSERTED':
+                case 'NOTHINGUPDATED':
                 	new PNotify({
                 	    title: 'Oh Nein!',
                 	    text: data.text,

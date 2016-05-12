@@ -12,7 +12,7 @@ $userData = $viewModel->get('userData');
               <div class="row">
                   <div class="col-xs-12">
                       <div class="well">
-                          <form id="loginForm" method="POST" action="<?php echo $viewModel->get('BaseUrl') ?>user/edit?do=1&userEditID=<?php echo $viewModel->get('userEditID'); ?>" role="form" data-toggle="validator">
+                          <form id="editForm" name="editForm" method="POST" action="<?php echo $viewModel->get('BaseUrl') ?>user/edit?do=1&userEditID=<?php echo $viewModel->get('userEditID'); ?>" role="form" data-toggle="validator">
                               <div class="form-group has-feedback" id="usernameGroup">
                                   <label for="frm_username" class="control-label">Benutzername</label>
                                   <input type="text" class="form-control" id="frm_username" name="frm_username" placeholder="Benutzernamen Eingeben" data-remote="<?php echo $viewModel->get('BaseUrl'); ?>ajax/validateuser?userEditID=<?php echo $userData[0]['id'] ?>" data-error="Oops! Dieser Benutzer existiert schon!" value="<?php echo $userData[0]['username'] ?>" required>
@@ -92,7 +92,7 @@ $userData = $viewModel->get('userData');
                                   <input type="text" class="form-control" id="frm_lastname" name="frm_lastname" placeholder="Nachname Eingeben" value="<?php echo $userData[0]['lastname'] ?>" required>
                                   <div class="help-block with-errors"></div>
                               </div>
-                              <button type="submit" class="btn btn-success btn-default">Ändern</button>
+                              <span id="loadingIndicator" class="fa fa-cog fa-spin fa-med link-color-black vertical-center loading-indicator-hidden" aria-hidden="true"></span>&nbsp;<button type="submit" id="editButton" class="btn btn-success btn-default">Ändern</button>
                               <a href="<?php echo $viewModel->get('BaseUrl'); ?>user" class="btn btn-danger btn-default"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
                           </form>
                       </div>
@@ -174,16 +174,68 @@ $(document).ready(function(){
 	    	$('#mhy > tbody').append('<tr><td><input type="hidden" name="frm_years[]" id="years" value="' + $('#frm_mhyyear').val() + '">' + $('#frm_mhyyear').val() +'</td><td><input type="hidden" name="frm_maxHolidays[]" id="maxHolidays" value="' + $('#frm_mhydays').val() +'">' + $('#frm_mhydays').val() +'</td></tr>');
 	    }
 		});
-	/*$("#usernameGroup").hide();
-	$("#lastname").keyup(function() {
-        var firstname = $("#firstname");
-        var lastname = $("#lastname");
-        var username = firstname.val().toLowerCase().charAt(0) + lastname.val().toLowerCase();
-
-        $("#username").val(username);
-        $("#loginForm").validator('validate');
-        $("#usernameGroup").show();
-    });*/
+	
+	$('#editForm').on('submit', function(e) {
+    	$.ajax({
+            type: "POST",
+            url: '<?php echo $viewModel->get('BaseUrl') ?>user/edit?do=1&userEditID=<?php echo $viewModel->get('userEditID'); ?>',
+            data: $("#editForm").serialize(), // serializes the form's elements.
+            dataType: 'json',
+            beforeSend: function(){
+            	$("#loadingIndicator").toggleClass('loading-indicator-hidden');
+            	$('#editButton').attr('disabled','disabled');
+            },
+            success: function(data)
+            {
+                switch(data.status)
+                {
+                case 'NOTHINGUPDATED':
+                	new PNotify({
+                	    title: 'Verdammt!',
+                	    text: data.text,
+                	    type: 'warning'
+                	});
+                	$('#editButton').removeAttr('disabled');
+                	break;
+                case 'OK':
+                	new PNotify({
+                	    title: 'Super!',
+                	    text: data.text,
+                	    type: 'success'
+                	});
+                	$(location).wait(2500).attr('href', '<?php echo $viewModel->get('BaseUrl'); ?>user');
+                    break;
+                case 'NOACCESSEXPIRED':
+                	new PNotify({
+                	    title: 'Oh Nein!',
+                	    text: data.text,
+                	    type: 'error'
+                	});
+                	$('#editButton').removeAttr('disabled');
+                    break;
+                case 'NOTCOMPLETE':
+                	new PNotify({
+                	    title: 'Verdammt!',
+                	    text: data.text,
+                	    type: 'warning'
+                	});
+                	$('#editButton').removeAttr('disabled');
+                    break;
+                }
+                $("#loadingIndicator").toggleClass('loading-indicator-hidden');
+            },
+            fail: function() {
+            	$("#loadingIndicator").toggleClass('loading-indicator-hidden');
+            	new PNotify({
+            	    title: 'Oh Nein!',
+            	    text: 'Es kann keine Verbindung zum Server hergestellt werden.',
+            	    type: 'error'
+            	});
+            	$('#editButton').removeAttr('disabled');
+            }
+          });
+    	e.preventDefault(); // avoid to execute the actual submit of the form.
+    });
 });
 </script>
 <?php include 'views/footer.php'; ?>

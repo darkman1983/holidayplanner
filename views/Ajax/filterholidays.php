@@ -1,10 +1,8 @@
 <table class="table table-striped">
     <thead>
       <tr>
-        <th>#</th>
         <th>Einreichdatum</th>
-        <th>Startdatum</th>
-        <th>Enddatum</th>
+        <th>Von - Bis</th>
         <th>Tage</th>
         <th>Anmerkung</th>
         <th>Rückmeldung</th>
@@ -23,16 +21,10 @@
     ?>
       <tr>
         <td class="vertical-center">
-          <span><?php echo str_pad($data['id'], $maxNum, 0, STR_PAD_LEFT); ?></span>
-        </td>
-        <td class="vertical-center">
           <span><?php echo date("d.m.Y", $data['submitdate']); ?></span>
         </td>
         <td class="vertical-center">
-          <span><?php echo date("d.m.Y", $data['startdate']); ?></span>
-        </td>
-        <td class="vertical-center">
-          <span><?php echo date("d.m.Y", $data['enddate']); ?></span>
+          <span><?php echo date("d.m.Y", $data['startdate']); ?> - <?php echo date("d.m.Y", $data['enddate']); ?></span>
         </td>
         <td class="vertical-center">
           <span><?php echo $data['days']; ?></span>

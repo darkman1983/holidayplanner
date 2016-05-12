@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Loader class will try to initialize the requested controller class or throw an error
  * 
@@ -9,45 +10,51 @@ class Loader {
 
   /**
    * The name of a controller
+   * 
    * @var string $controllerName
    */
   private $controllerName;
 
   /**
    * The name of a class
+   * 
    * @var string $controllerClass
    */
   private $controllerClass;
 
   /**
    * The action that was requested
+   * 
    * @var string $action
    */
   private $action;
 
   /**
    * The request array
+   * 
    * @var array $request
    */
   private $request;
 
   /**
    * The session object
+   * 
    * @var object $session
    */
   private $session;
-  
+
   /**
    * Store the URL request values on object creation and initialize the session
    */
   public function __construct( ) {
     $this->request = array_merge ( $_GET, $_POST );
     
-    $db = Database::getInstance()->getCon();
+    $db = Database::getInstance ( )->getCon ( );
     
-    foreach ($this->request as &$data)
-    {
-      $data = $db->escape_string($data);
+    foreach ( $this->request as &$data ) {
+      if ( ! is_array ( $data ) ) {
+        $data = $db->escape_string ( $data );
+      }
     }
     
     if ( $this->request ['controller'] == "" ) {
@@ -66,9 +73,10 @@ class Loader {
     
     $this->session = Session::getInstance ( );
   }
-  
+
   /**
    * Factory method which establishes the requested controller as an object
+   * 
    * @return ErrorController|object <p>Returns either an class object of the requested controller or an ErrorController object</p>
    */
   public function createController( ) {

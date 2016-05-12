@@ -93,7 +93,7 @@ $(document).ready(function(){
             {
                 switch(data.status)
                 {
-                case 1062:
+                case 'DUPLICATE':
                 	new PNotify({
                 	    title: 'Oh Nein!',
                 	    text: data.text,
@@ -101,7 +101,7 @@ $(document).ready(function(){
                 	});
                 	$('#proposeButton').removeAttr('disabled');
                 	break;
-                case '4f4b':
+                case 'OK':
                 	new PNotify({
                 	    title: 'Super!',
                 	    text: data.text,
@@ -109,13 +109,37 @@ $(document).ready(function(){
                 	});
                 	$(location).wait(2500).attr('href', '<?php echo $viewModel->get('BaseUrl'); ?>holiday');
                     break;
-                case '4e4f4e45':
+                case 'NOACCESSEXPIRED':
                 	new PNotify({
                 	    title: 'Oh Nein!',
                 	    text: data.text,
                 	    type: 'error'
                 	});
-                	$('#proposeButton').removeAttr('disabled');
+                	$('#processButton').removeAttr('disabled');
+                    break;
+                case 'NOTCOMPLETE':
+                	new PNotify({
+                	    title: 'Verdammt!',
+                	    text: data.text,
+                	    type: 'warning'
+                	});
+                	$('#processButton').removeAttr('disabled');
+                    break;
+                case 'NOTHINGINSERTED':
+                	new PNotify({
+                	    title: 'Verdammt!',
+                	    text: data.text,
+                	    type: 'warning'
+                	});
+                	$('#processButton').removeAttr('disabled');
+                    break;
+                case 'NOTENOUGH':
+                	new PNotify({
+                	    title: 'Oh Nein!',
+                	    text: data.text,
+                	    type: 'error'
+                	});
+                	$('#processButton').removeAttr('disabled');
                     break;
                 }
                 $("#loadingIndicator").toggleClass('loading-indicator-hidden');
@@ -126,6 +150,7 @@ $(document).ready(function(){
             	    text: 'Es kann keine Verbindung zum Server hergestellt werden.',
             	    type: 'error'
             	});
+            	$("#loadingIndicator").toggleClass('loading-indicator-hidden');
             	$('#proposeButton').removeAttr('disabled');
             }
           });

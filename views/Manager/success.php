@@ -1,3 +1,3 @@
 <?php
-header("Location: http://hday.localhost/holiday"); /* Redirect browser */
+echo json_encode(array('status' => 'OK', 'text' => 'Der Urlaubs- / Krankheitstag wurde eingetragen / aktualisiert.'));
 ?>

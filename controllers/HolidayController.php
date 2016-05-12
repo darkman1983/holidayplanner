@@ -17,7 +17,7 @@ class HolidayController extends BaseController {
     $this->levels = array ("index" => 1,"propose" => 1 );
     
     // create the model object
-    if ( ! $this->checkAccess ( $this->levels ) ) {
+    if ( ! $this->checkAccess ( $this->levels ) && $this->action != 'propose' ) {
       $this->model = new ErrorModel ( );
     } else {
       $this->model = new HolidayModel ( );
@@ -37,7 +37,7 @@ class HolidayController extends BaseController {
 
   protected function propose( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
-      $this->view->output ( $this->model->notAllowed ( ), 'Error/notallowed' );
+      $this->view->output ( $this->model->error ( 'NOACCESSEXPIRED' ), 'Holiday/error' );
       return;
     }
     
@@ -46,7 +46,7 @@ class HolidayController extends BaseController {
     if ( isset ( $this->urlValues ['do'] ) && $this->urlValues ['do'] == 1 ) {
       foreach ( $this->urlValues as $key => &$data ) {
         if ( strstr ( $data, "frm_" ) && empty ( $data ) ) {
-          $this->view->output ( $this->model->badRegData ( $this->urlValues ), 'User/badregdata' );
+          $this->view->output ( $this->model->error ( 'NOTCOMPLETE' ), 'Holiday/error' );
           return;
         } else {
           $dataValid = true;
@@ -73,7 +73,7 @@ class HolidayController extends BaseController {
       $result->free ( );
       
       if ( ($remainingHoliday + $days) > $maxHoliday ) {
-        $this->view->output ( $this->model->databaseError ( '4e4f4e45', array( $maxHoliday - $remainingHoliday, $days )), 'Holiday/databaseerror' );
+        $this->view->output ( $this->model->error ( 'NOTENOUGH', array( $maxHoliday - $remainingHoliday, $days )), 'Holiday/error' );
         return;
       }
       
@@ -82,7 +82,7 @@ class HolidayController extends BaseController {
       $resultsets = $result->fetch_all ( MYSQLI_NUM );
       
       if ( $resultsets [0] [0] > 0 ) {
-        $this->view->output ( $this->model->databaseError ( 1062 ), 'Holiday/databaseerror' );
+        $this->view->output ( $this->model->error ( 'DUPLICATE' ), 'Holiday/error' );
         return;
       }
       
@@ -92,7 +92,7 @@ class HolidayController extends BaseController {
       $result = $this->db->query ( $createProposeSql );
       
       if ( $this->db->affected_rows != 1 ) {
-        $this->view->output ( $this->model->databaseError ( $this->db->errno ), 'Holiday/databaseerror' );
+        $this->view->output ( $this->model->error ( 'NOTHINGINSERTED' ), 'Holiday/error' );
         return;
       } else {
         $this->view->output ( $this->model->success ( ), 'Holiday/success' );

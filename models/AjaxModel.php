@@ -91,7 +91,7 @@ class AjaxModel extends BaseModel {
       $totalResult = $this->db->query ( $getFeastDaysTotalSql );
       $totalFeastDays = $totalResult->fetch_row ( );
       
-      $pagination = Utils::generatePagination ( intval($this->urlValues['page']), $totalFeastDays [0] );
+      $pagination = Utils::generatePagination ( intval(@$this->urlValues['page']), $totalFeastDays [0] );
       $totalResult->free();
     }
     
@@ -145,7 +145,7 @@ class AjaxModel extends BaseModel {
       $totalResult = $this->db->query ( $getHolidayTotalSql );
       $totalHolidayDays = $totalResult->fetch_row ( );
   
-      $pagination = Utils::generatePagination ( intval($this->urlValues['page']), $totalHolidayDays [0] );
+      $pagination = Utils::generatePagination ( intval(@$this->urlValues['page']), $totalHolidayDays [0] );
       $totalResult->free();
     }
   
@@ -186,7 +186,7 @@ class AjaxModel extends BaseModel {
     }
   
     $getFilteredHolidaySql = sprintf ( "SELECT *, (SELECT getNumDays(startdate, enddate, 3)) AS days FROM holiday
-        WHERE (
+        WHERE employeeID = '%s' AND ((
         FROM_UNIXTIME(startdate, '%%d') = '%s'
         AND FROM_UNIXTIME(startdate, '%%m') = '%s'
         AND FROM_UNIXTIME(startdate, '%%Y') = '%s'
@@ -198,7 +198,8 @@ class AjaxModel extends BaseModel {
         AND FROM_UNIXTIME(submitdate, '%%Y') = '%s'
         )
         OR note LIKE '%%%s%%'
-        OR response_note LIKE '%%%s%%'%s%s",
+        OR response_note LIKE '%%%s%%'%s)%s",
+        $this->session->get('id'),
         $day,
         $month,
         $year,

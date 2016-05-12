@@ -10,7 +10,7 @@
               <div class="row">
                   <div class="col-xs-12">
                       <div class="well">
-                          <form id="loginForm" method="POST" action="<?php echo $viewModel->get('BaseUrl') ?>user/create?do=1" role="form" data-toggle="validator">
+                          <form id="createForm" name="createForm" method="POST" action="<?php echo $viewModel->get('BaseUrl') ?>user/create?do=1" role="form" data-toggle="validator">
                           <div class="form-group has-feedback">
                                   <label for="frm_staffid" class="control-label">Personalnummer</label>
                                   <input type="text" class="form-control" id="frm_staffid" name="frm_staffid" placeholder="Personalnummer Eingeben" data-remote="<?php echo $viewModel->get('BaseUrl'); ?>ajax/validatestaffid" data-error="Oops! Diese Personalnummer existiert schon, Feld nicht ausgefüllt oder keine Nummer." required>
@@ -58,7 +58,7 @@
                                   <input type="text" class="form-control" id="frm_lastname" name="frm_lastname" placeholder="Nachname Eingeben" required>
                                   <div class="help-block with-errors"></div>
                               </div>
-                              <span id="loadingIndicator" class="fa fa-cog fa-spin fa-med link-color-black vertical-center loading-indicator-hidden" aria-hidden="true"></span>&nbsp;<button type="submit" class="btn btn-success btn-default"><span class="glyphicon glyphicon-plus"></span> Erstellen</button>
+                              <span id="loadingIndicator" class="fa fa-cog fa-spin fa-med link-color-black vertical-center loading-indicator-hidden" aria-hidden="true"></span>&nbsp;<button type="submit" id="createButton" class="btn btn-success btn-default"><span class="glyphicon glyphicon-plus"></span> Erstellen</button>
                               <a href="<?php echo $viewModel->get('BaseUrl'); ?>user" class="btn btn-danger btn-default"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
                           </form>
                       </div>
@@ -70,16 +70,67 @@
       </div>
 <script>
 $(document).ready(function(){
-	/*$("#usernameGroup").hide();
-	$("#lastname").keyup(function() {
-        var firstname = $("#firstname");
-        var lastname = $("#lastname");
-        var username = firstname.val().toLowerCase().charAt(0) + lastname.val().toLowerCase();
-
-        $("#username").val(username);
-        $("#loginForm").validator('validate');
-        $("#usernameGroup").show();
-    });*/
+	$('#createForm').on('submit', function(e) {
+    	$.ajax({
+            type: "POST",
+            url: '<?php echo $viewModel->get('BaseUrl') ?>user/create?do=1',
+            data: $("#createForm").serialize(), // serializes the form's elements.
+            dataType: 'json',
+            beforeSend: function(){
+            	$("#loadingIndicator").toggleClass('loading-indicator-hidden');
+            	$('#createButton').attr('disabled','disabled');
+            },
+            success: function(data)
+            {
+                switch(data.status)
+                {
+                case 'NOTHINGINSERTED':
+                	new PNotify({
+                	    title: 'Oh Nein!',
+                	    text: data.text,
+                	    type: 'warning'
+                	});
+                	$('#createButton').removeAttr('disabled');
+                	break;
+                case 'OK':
+                	new PNotify({
+                	    title: 'Super!',
+                	    text: data.text,
+                	    type: 'success'
+                	});
+                	$(location).wait(2500).attr('href', '<?php echo $viewModel->get('BaseUrl'); ?>user');
+                    break;
+                case 'NOACCESSEXPIRED':
+                	new PNotify({
+                	    title: 'Oh Nein!',
+                	    text: data.text,
+                	    type: 'error'
+                	});
+                	$('#createButton').removeAttr('disabled');
+                    break;
+                case 'NOTCOMPLETE':
+                	new PNotify({
+                	    title: 'Oh Nein!',
+                	    text: data.text,
+                	    type: 'warning'
+                	});
+                	$('#createButton').removeAttr('disabled');
+                    break;
+                }
+                $("#loadingIndicator").toggleClass('loading-indicator-hidden');
+            },
+            fail: function() {
+            	$("#loadingIndicator").toggleClass('loading-indicator-hidden');
+            	new PNotify({
+            	    title: 'Oh Nein!',
+            	    text: 'Es kann keine Verbindung zum Server hergestellt werden.',
+            	    type: 'error'
+            	});
+            	$('#createButton').removeAttr('disabled');
+            }
+          });
+    	e.preventDefault(); // avoid to execute the actual submit of the form.
+    });
 });
 </script>
 <?php include 'views/footer.php'; ?>

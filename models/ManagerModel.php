@@ -64,10 +64,21 @@ class ManagerModel extends BaseModel {
     return $this->viewModel;
   }
 
-  public function edit( $urlValues ) {
-    $this->viewModel->set ( "urlValues", $urlValues );
-    $this->viewModel->set ( "dbError", $dbError );
+  public function process( $urlValues ) {
+    $getHolidaySql = sprintf ( "SELECT h.* FROM holiday h WHERE h.id = '%s'", $urlValues['holidayProcessID'] );
+    $result = $this->db->query ( $getHolidaySql );
+    $resultsets = $result->fetch_all ( MYSQLI_ASSOC );
     
+    $this->viewModel->set ( "userHolidayData", $resultsets[0] );
+    $this->viewModel->set('uid', $urlValues['userID']);
+    $result->free();
+    
+    return $this->viewModel;
+  }
+  
+  public function error( $status ) {
+    $this->viewModel->set ( "status", $status );
+  
     return $this->viewModel;
   }
 
