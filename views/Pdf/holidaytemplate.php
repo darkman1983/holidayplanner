@@ -41,6 +41,9 @@ table .table-border-outer tr td  {
 .table-top-margin20 {
     margin-top: 20px;
 }
+.middle {
+    vertical-align: middle;
+}
 </style>
 </head>
 <body>
@@ -76,7 +79,7 @@ table .table-border-outer tr td  {
       <tr>
         <td width="15%%">Urlaub vom</td>
         <td width="15%%">%s</td>
-        <td width="9%%" align="center">bis</td>
+        <td width="10%%" align="center">bis</td>
         <td width="15%%">%s</td>
         <td>&nbsp;</td>
         <td align="right">%s</td>
@@ -92,6 +95,46 @@ table .table-border-outer tr td  {
   </tr>
   <tr>
   <td colspan="4">&nbsp;</td>
+  </tr>
+  <tr>
+  <td colspan="4" style="font-weight: bold;">Anmerkung</td>
+  </tr>
+  <tr>
+  <td colspan="4">%s</td>
+  </tr>
+  <tr>
+  <td colspan="4">&nbsp;</td>
+  </tr>
+  <tr>
+  <td colspan="4" style="font-weight: bold;">Rückmeldung</td>
+  </tr>
+  <tr>
+  <td colspan="4">%s</td>
+  </tr>
+  <tr>
+  <td colspan="4">&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="4"><table width="100%%" border="0" cellspacing="6" cellpadding="6">
+      <tr>
+        <td width="180px">Geändert am %s:</td>
+        <td class="underline">%s %s</td>
+        <td width="40px">auf</td>
+        <td width="130px">%s</td>
+      </tr>
+      <tr>
+        <td colspan="4">&nbsp;</td>
+        </tr>
+      <tr>
+        <td colspan="4"><table width="100%%" border="0" cellspacing="4" cellpadding="4">
+      <tr>
+        <td width="33%%"><img src="views/Assets/images/check-box-outline.png" style="width: 16px; height: 16px"> SAP HMC erledigt</td>
+        <td width="33%%"><img src="views/Assets/images/check-box-outline-blank.png" style="width: 16px; height: 16px"> Urlaubsübersicht</td>
+        <td width="33%%"><img src="views/Assets/images/check-box-outline-blank.png" style="width: 16px; height: 16px"> Karte</td>
+      </tr>
+    <tr></table></td>
+      </tr>
+    </table></td>
   </tr>
 </table>
 </body>';

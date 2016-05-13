@@ -80,6 +80,23 @@ class Utils {
   public static function generatePdf( $pdfData ) {
     require_once 'views/Pdf/holidaytemplate.php';
     
+    $status = '';
+    
+    switch ($pdfData['status']) {
+      case 0:
+        $status = "Unbearbeitet";
+        break;
+      case 1:
+        $status = "Nicht genehmigt";
+        break;
+      case 2:
+        $status = "Genehmigt";
+        break;
+      case 3:
+        $status = "Eingetragen";
+        break;
+    }
+    
     $currentYear = date ( "Y", $pdfData ['startdate'] );
     $lastYear = ($pdfData ['lastYearHoliday'] > 0) ? $pdfData ['maxHoliday'] + ($pdfData ['lastYearHoliday'] - $pdfData ['maxHoliday']) : $pdfData ['maxHolidayLast'];
     $html = sprintf ( $tpl,
@@ -97,7 +114,14 @@ class Utils {
         date ( "d.m.Y", $pdfData ['enddate'] ),
         $pdfData ['days'],
         $currentYear,
-        $pdfData ['maxHoliday'] - $pdfData ['remainingHoliday'] + $lastYear -  $pdfData ['days']);
+        ($pdfData ['maxHoliday'] - $pdfData ['remainingHoliday'] + $lastYear -  $pdfData ['days']),
+        $pdfData['note'],
+        $pdfData['response_note'],
+        date("d.m.Y", $pdfData['processeddate']),
+        $pdfData['processedFirstname'],
+        $pdfData['processedLastname'],
+        $status
+        );
     
     require_once 'classes/pdf/mpdf.php';
     
@@ -113,9 +137,9 @@ class Utils {
     
     $mpdf->SetHTMLHeader ( $header );
     
-    // LOAD a stylesheet
-    $stylesheet = file_get_contents ( 'views/Assets/css/mpdfstyletables.css' );
-    $mpdf->WriteHTML ( $stylesheet, 1 ); // The parameter 1 tells that this is css/style only and no body/html/text
+    // LOAD a stylesheets
+    $stylesheet2 = file_get_contents ( 'views/Assets/css/mpdfstyletables.css' );
+    $mpdf->WriteHTML ( $stylesheet2, 1 ); // The parameter 1 tells that this is css/style only and no body/html/text
     
     $mpdf->WriteHTML ( $html );
     
