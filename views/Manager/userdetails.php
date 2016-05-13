@@ -112,7 +112,7 @@
         <?php } ?>
         <a href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>manager/process?holidayProcessID=<?php echo $data['id']; ?>&userID=<?php echo $viewModel->get ( 'uid' )?>" class="glyphicon glyphicon-edit nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Bearbeiten" aria-hidden="true"></a>
         <?php if ($data['type'] != 'I') { ?>
-        <a href="#" class="fa fa-file-pdf-o nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Als PDF anzeigen" data-href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>pdf/managerShowPdf?pdfID=<?php echo $data['id']; ?>" data-toggle="modal" data-target="#viewPdf" aria-hidden="true"></a>
+        <a href="#" class="fa fa-file-pdf-o nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Als PDF anzeigen" data-href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>pdf/managershowpdf?pdfID=<?php echo $data['id']; ?>" data-toggle="modal" data-target="#viewPdf" aria-hidden="true"></a>
         <?php } else { ?>
         <a href="#" class="fa fa-file-pdf-o nounderline glyphicon-medium link-disabled"></a>
         <?php } ?>

@@ -41,14 +41,14 @@ class View {
         if ( file_exists ( $templateFile ) ) {
           require ($templateFile);
         } else {
-          require ("views/error/badtemplate.php");
+          require ("views/Error/badtemplate.php");
         }
       } else {
         // we're not using a template View so just output the method's View directly
         require ($this->viewFile);
       }
     } else {
-      require ("views/error/badview.php");
+      require ("views/Error/badview.php");
     }
   }
 }

@@ -5,7 +5,7 @@ class PdfController extends BaseController {
   public function __construct( $action, $urlValues ) {
     parent::__construct ( $action, $urlValues );
     
-    $this->levels = array ("showPdf" => 1, "managerShowPdf" => 2 );
+    $this->levels = array ("showpdf" => 1, "managershowpdf" => 2 );
     
     // create the model object
     if ( ! $this->checkAccess ( $this->levels ) ) {
