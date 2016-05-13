@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 13. Mai 2016 um 01:22
--- Server-Version: 10.1.10-MariaDB
--- PHP-Version: 7.0.4
+-- Erstellungszeit: 13. Mai 2016 um 11:04
+-- Server-Version: 10.1.9-MariaDB
+-- PHP-Version: 5.6.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -121,6 +121,7 @@ DROP TABLE IF EXISTS `holiday`;
 CREATE TABLE `holiday` (
   `id` int(11) NOT NULL,
   `employeeID` int(11) NOT NULL,
+  `processedByID` int(11) DEFAULT NULL,
   `startdate` int(11) NOT NULL,
   `enddate` int(11) NOT NULL,
   `submitdate` int(11) NOT NULL,
@@ -135,13 +136,13 @@ CREATE TABLE `holiday` (
 -- Daten für Tabelle `holiday`
 --
 
-INSERT INTO `holiday` (`id`, `employeeID`, `startdate`, `enddate`, `submitdate`, `processeddate`, `note`, `response_note`, `type`, `status`) VALUES
-(30, 1, 1466373600, 1466892000, 1462875045, NULL, 'Kreta', NULL, 'H', 0),
-(31, 1, 1471816800, 1472335200, 1462875360, NULL, 'Nordsee mit den Kindern', NULL, 'H', 0),
-(35, 1, 1467583200, 1468706400, 1463036477, NULL, 'Blubb', NULL, 'H', 2),
-(52, 2, 1463954400, 1464472800, 1463052200, NULL, '', NULL, 'H', 0),
-(57, 1, 1479078000, 1479596400, 1463084910, NULL, '', 'Klappt es?', 'H', 2),
-(58, 1, 1479250800, 1479337200, 1463084958, NULL, '', '', 'I', 3);
+INSERT INTO `holiday` (`id`, `employeeID`, `processedByID`, `startdate`, `enddate`, `submitdate`, `processeddate`, `note`, `response_note`, `type`, `status`) VALUES
+(30, 1, 0, 1466373600, 1466892000, 1462875045, 1463120796, 'Kreta', '', 'H', 1),
+(31, 1, 0, 1471816800, 1472335200, 1462875360, NULL, 'Nordsee mit den Kindern', NULL, 'H', 0),
+(35, 1, 0, 1467583200, 1468706400, 1463036477, NULL, 'Blubb', NULL, 'H', 2),
+(52, 2, 0, 1463954400, 1464472800, 1463052200, NULL, '', NULL, 'H', 0),
+(57, 1, 0, 1479078000, 1479596400, 1463084910, NULL, '', 'Klappt es?', 'H', 2),
+(58, 1, 0, 1479250800, 1479337200, 1463084958, NULL, '', '', 'I', 3);
 
 -- --------------------------------------------------------
 
@@ -164,6 +165,7 @@ INSERT INTO `mhy` (`employeeID`, `maxHoliday`, `year`) VALUES
 (1, 30, 2016),
 (1, 30, 2017),
 (2, 30, 2016),
+(3, 30, 2016),
 (4, 30, 2016),
 (5, 30, 2016),
 (6, 30, 2016),
@@ -194,7 +196,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `data`, `timestamp`) VALUES
-('f67s4sbfo45fml2splptkop505', 'timestamp|s:10:"1463095308";id|s:1:"1";firstname|s:4:"Timo";lastname|s:10:"Stepputtis";email|s:22:"Timo.Stepputtis@gmx.de";level|s:1:"3";loggedIN|b:1;', 1463095312);
+('k8t7jmjk9k6hd372tblhrr27v2', 'timestamp|s:10:"1463121567";id|s:1:"1";firstname|s:4:"Timo";lastname|s:10:"Stepputtis";email|s:22:"Timo.Stepputtis@gmx.de";level|s:1:"3";loggedIN|b:1;', 1463121582);
 
 -- --------------------------------------------------------
 
@@ -312,15 +314,6 @@ ALTER TABLE `holiday`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
-DELIMITER $$
---
--- Ereignisse
---
-DROP EVENT IF EXISTS `update_remainingHoliday`$$
-CREATE DEFINER=`root`@`localhost` EVENT `update_remainingHoliday` ON SCHEDULE EVERY 1 YEAR STARTS '2016-01-01 00:00:00' ON COMPLETION PRESERVE ENABLE DO UPDATE users SET remainingHoliday = remainingHoliday + maxHoliday$$
-
-DELIMITER ;
-
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
