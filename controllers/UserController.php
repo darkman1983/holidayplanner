@@ -85,26 +85,30 @@ class UserController extends BaseController {
     if ( $dataValid ) {
       $createUserSql = sprintf ( "UPDATE users SET firstname = '%s', lastname = '%s', username = '%s', %semail = '%s', level = '%s' WHERE id = '%s'", $this->urlValues ['frm_firstname'], $this->urlValues ['frm_lastname'], $this->urlValues ['frm_username'], ! empty ( $this->urlValues ['frm_uPassword'] ) ? sprintf ( "password = '%s', ", sha1 ( $this->urlValues ['frm_username'] . ":" . $this->urlValues ['frm_uPassword'] ) ) : '', $this->urlValues ['frm_email'], $this->urlValues ['frm_userlevel'], $this->urlValues ['userEditID'] );
       $result = $this->db->query ( $createUserSql );
+      $createAffected = $this->db->affected_rows;
+      $mhyAffected = 0;
       
-      if ( $this->db->affected_rows != 1 ) {
+      $mhyParts = '';
+      $years = @$this->urlValues ['frm_years'];
+      $days = @$this->urlValues ['frm_maxHolidays'];
+      
+      if ( isset ( $years ) && ! empty ( $years ) ) {
+        for( $i = 0; $i < count ( $years ); $i ++ ) {
+          $mhyParts .= sprintf ( "('%s', '%s', '%s'),", $this->urlValues ['userEditID'], $days [$i], $years [$i] );
+        }
+      
+        $mhyDeleteSql = sprintf("DELETE FROM mhy WHERE employeeID = '%s'", $this->urlValues ['userEditID']);
+        $result = $this->db->query($mhyDeleteSql);
+      
+        $mhyInsertSql = sprintf ( "INSERT INTO mhy VALUES %s", substr ( $mhyParts, 0, - 1 ) );
+        $result = $this->db->query ( $mhyInsertSql );
+        $mhyAffected = $this->db->affected_rows;
+      }
+      
+      if ( $createAffected != 1 && $mhyAffected < 1 ) {
         $this->view->output ( $this->model->error ( 'NOTHINGUPDATED' ), 'User/error' );
         return;
       } else {
-        $mhyParts = '';
-        $years = @$this->urlValues ['frm_years'];
-        $days = @$this->urlValues ['frm_maxHolidays'];
-        
-        if ( isset ( $years ) && ! empty ( $years ) ) {
-          for( $i = 0; $i < count ( $years ); $i ++ ) {
-            $mhyParts .= sprintf ( "('%s', '%s', '%s'),", $this->urlValues ['userEditID'], $days [$i], $years [$i] );
-          }
-          
-          $mhyDeleteSql = sprintf("DELETE FROM mhy WHERE employeeID = '%s'", $this->urlValues ['userEditID']);
-          $result = $this->db->query($mhyDeleteSql);
-          
-          $mhyInsertSql = sprintf ( "INSERT INTO mhy VALUES %s", substr ( $mhyParts, 0, - 1 ) );
-          $result = $this->db->query ( $mhyInsertSql );
-        }
         
         $this->view->output ( $this->model->success ( ), 'User/success' );
         return;

@@ -316,7 +316,7 @@ DELIMITER $$
 --
 -- Ereignisse
 --
-DROP EVENT `update_remainingHoliday`$$
+DROP EVENT IF EXISTS `update_remainingHoliday`$$
 CREATE DEFINER=`root`@`localhost` EVENT `update_remainingHoliday` ON SCHEDULE EVERY 1 YEAR STARTS '2016-01-01 00:00:00' ON COMPLETION PRESERVE ENABLE DO UPDATE users SET remainingHoliday = remainingHoliday + maxHoliday$$
 
 DELIMITER ;
