@@ -10,17 +10,17 @@
     <div class="navbar-header navbar-right table-navbar">
 			<div class="form-group">
 			  <div class="input-group help-addon max-200">
-				<input type="text" class="form-control" id="userFilter" name="userFilter" placeholder="Filter">
+				<input type="text" class="form-control" id="managerHolidaysFilter" name="managerHolidaysFilter" placeholder="Filter">
 				<div class="input-group-btn">
                   <button class="btn btn-default" data-toggle="modal" data-target="#filter-help"><i class="glyphicon glyphicon-question-sign"></i></button>
                 </div>
 			  </div>
 			</div>
 	</div>
-	<a href="#" class="glyphicon glyphicon-refresh nounderline navbar-right padding-right-5 link-color-black link-color-lightgrey" id="reloadUsers" title="Benutzertabelle neu Laden"></a>
+	<a href="#" class="glyphicon glyphicon-refresh nounderline navbar-right padding-right-5 link-color-black link-color-lightgrey" id="reloadHoliday" title="Benutzertabelle neu Laden"></a>
 	</div>
 	<div class="modal-body">
-  <div class="table-responsive" id="users">
+  <div class="table-responsive" id="managerHolidays">
   <table class="table table-striped ">
     <thead>
       <tr>
@@ -124,7 +124,7 @@ $paginationData = $viewModel->get ( 'pagination' );
                 </div>
                 <div class="modal-body">
                     <p>Wenn sie einen Suchbegriff eingeben, wird automatisch gesucht in:</p>
-                    <p>Vorname, Nachname, Email und Benutzername</p>
+                    <p># (Personalnummer), Vorname und Nachname</p>
                     <p>Während gefiltert wird, ist die Datensatznavigation nicht verfügbar!</p>
                 </div>
                 <div class="modal-footer">
@@ -135,7 +135,10 @@ $paginationData = $viewModel->get ( 'pagination' );
     </div>
 <script>
 $(document).ready(function(){
-	$("#userFilter").keyup(function() {
+	var timer;
+	var x;
+	
+	$("#managerHolidaysFilter").keyup(function() {
 		var withPage = '';
 		
 		if($(this).val() != '')
@@ -145,25 +148,35 @@ $(document).ready(function(){
 			withPage = "&page=" + $.getUrlParam('page');
 			$(".pagination").show();
 		}
+
+		if (x) { x.abort() } // If there is an existing XHR, abort it.
+	    clearTimeout(timer); // Clear the timer so we don't end up with dupes.
+	    timer = setTimeout(function() { // assign timer a new timeout
 		$("#loadingIndicator").toggleClass('hidden');
-		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterusers?usersFilter=" + $("#userFilter").val() + withPage , function( data ) {
-			  $( "#users" ).html( data );
+		x = $.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filtermanagerholidays?managerHolidaysFilter=" + $('#managerHolidaysFilter').val() + withPage , function( data ) {
+			  $( "#managerHolidays" ).html( data );
+
+			  if($( "#managerHolidays table tbody tr").length == 0)
+				{
+				  $( "#managerHolidays table tbody").append('<tr><td colspan="8" class="text-center">Nichts gefunden</td></tr>');
+				}
 			  $("#loadingIndicator").toggleClass('hidden');
 			});
 		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/getlogouttime", function( data ) {
 			$( "#logouttime" ).html( data );
 			});
+	    }, 1000);
     });
     
-	$("#reloadUsers").click(function() {
-		$("#userFilter").val('');
+	$("#reloadHoliday").click(function() {
+		$("#managerHolidaysFilter").val('');
 		$(".pagination").show();
 		$("#loadingIndicator").toggleClass('hidden');
-		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterusers?usersFilter=&page=" + $.getUrlParam('page'), function( data ) {
-			$( "#users" ).html( data );
+		$.getq( "reload", "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filtermanagerholidays?managerHolidaysFilter=&page=" + $.getUrlParam('page'), function( data ) {
+			$( "#managerHolidays" ).html( data );
 			$("#loadingIndicator").toggleClass('hidden');
 			});
-		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/getlogouttime", function( data ) {
+		$.getq( "logouttime", "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/getlogouttime", function( data ) {
 			$( "#logouttime" ).html( data );
 			});
 		});
@@ -175,7 +188,7 @@ $(document).ready(function(){
 				$('#confirm-delete .modal-title').text('Benutzer gelöscht!');
 				$('#confirm-delete .modal-body').html('Der Benutzer wurde erfolgreich gelöscht!');
 				$('#confirm-delete .modal-footer').html('');
-				$(window).wait(2000).attr("location","<?php echo $viewModel->get ( 'BaseUrl' ); ?>user");
+				$(window).wait(2000).attr("location","<?php echo $viewModel->get ( 'BaseUrl' ); ?>manager");
 				}).fail(function() {
 				    alert( "error" );
 				  });

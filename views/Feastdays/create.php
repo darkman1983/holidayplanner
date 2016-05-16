@@ -93,21 +93,37 @@ $(document).ready(function(){
             {
                 switch(data.status)
                 {
-                case 1062:
+                case 'NOTHINGINSERTED':
                 	new PNotify({
                 	    title: 'Oh Nein!',
                 	    text: data.text,
-                	    type: 'error'
+                	    type: 'warning'
                 	});
-                	$('#feastdaysButton').removeAttr('disabled');
+                	$('#processButton').removeAttr('disabled');
                 	break;
-                case '4f4b':
+                case 'OK':
                 	new PNotify({
                 	    title: 'Super!',
                 	    text: data.text,
                 	    type: 'success'
                 	});
                 	$(location).wait(2500).attr('href', '<?php echo $viewModel->get('BaseUrl'); ?>feastdays');
+                    break;
+                case 'NOACCESSEXPIRED':
+                	new PNotify({
+                	    title: 'Oh Nein!',
+                	    text: data.text,
+                	    type: 'error'
+                	});
+                	$('#processButton').removeAttr('disabled');
+                    break;
+                case 'NOTCOMPLETE':
+                	new PNotify({
+                	    title: 'Oh Nein!',
+                	    text: data.text,
+                	    type: 'warning'
+                	});
+                	$('#processButton').removeAttr('disabled');
                     break;
                 }
                 $("#loadingIndicator").toggleClass('loading-indicator-hidden');

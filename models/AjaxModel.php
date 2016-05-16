@@ -116,9 +116,9 @@ class AjaxModel extends BaseModel {
     $getFilteredFeastDaysSql = sprintf ( "SELECT f.*, u.username FROM feastdays f
         LEFT JOIN users u ON f.userID = u.id
         WHERE u.username = '%s'
-        OR (FROM_UNIXTIME(start, '%%d') = '%s'
-        AND FROM_UNIXTIME(start, '%%m') = '%s'
-        AND FROM_UNIXTIME(start, '%%Y') = '%s')
+        OR (FROM_UNIXTIME(date, '%%d') = '%s'
+        AND FROM_UNIXTIME(date, '%%m') = '%s'
+        AND FROM_UNIXTIME(date, '%%Y') = '%s')
         OR description LIKE '%%%s%%'%s",
         $this->urlValues ['feastDaysFilter'],
         $day,
@@ -129,7 +129,7 @@ class AjaxModel extends BaseModel {
     
     $result = $this->db->query ( $getFilteredFeastDaysSql );
     
-    $this->viewModel->set ( "filteredFeastDays", $result->fetch_all ( MYSQLI_ASSOC ) );
+    $this->viewModel->set ( "filteredFeastDays", @$result->fetch_all ( MYSQLI_ASSOC ) );
     $result->free();
     
     return $this->viewModel;
@@ -169,16 +169,16 @@ class AjaxModel extends BaseModel {
     
     switch(strtolower(trim($this->urlValues ['holidayFilter']))) {
       case 'unbearbeitet':
-        $sqlPart = "OR status = 0";
+        $sqlPart = " OR status = 0";
         break;
       case 'nicht genehmigt':
-        $sqlPart = "OR status = 1";
+        $sqlPart = " OR status = 1";
         break;
       case 'genehmigt':
-        $sqlPart = "OR status = 2";
+        $sqlPart = " OR status = 2";
         break;
       case 'eingetragen':
-        $sqlPart = "OR status = 3";
+        $sqlPart = " OR status = 3";
         break;
       default:
         $sqlPart = "";
@@ -213,7 +213,140 @@ class AjaxModel extends BaseModel {
     
     $result = $this->db->query ( $getFilteredHolidaySql );
   
-    $this->viewModel->set ( "filteredHolidays", $result->fetch_all ( MYSQLI_ASSOC ) );
+    $this->viewModel->set ( "filteredHolidays", @$result->fetch_all ( MYSQLI_ASSOC ) );
+    $result->free();
+  
+    return $this->viewModel;
+  }
+  
+  public function filterManagerHolidays( ) {  
+    if ( empty ( $this->urlValues ['managerHolidaysFilter'] ) ) {
+      $getHolidayTotalSql = sprintf("SELECT COUNT(*) FROM holiday WHERE employeeID = '%s'", $this->session->get('id'));
+      $totalResult = $this->db->query ( $getHolidayTotalSql );
+      $totalHolidayDays = $totalResult->fetch_row ( );
+  
+      $pagination = Utils::generatePagination ( intval(@$this->urlValues['page']), $totalHolidayDays [0] );
+      $totalResult->free();
+    }
+    
+    $getFilteredHolidaySql = sprintf ( "SELECT u.*,
+        (SELECT COUNT(*) FROM holiday WHERE employeeID = u.id AND status = 0) as notProcessed,
+        (SELECT COUNT(*) FROM holiday WHERE employeeID = u.id) as allProposals,
+        (SELECT COALESCE(SUM(maxHoliday), 0) FROM mhy WHERE year = YEAR(CURRENT_DATE) AND employeeID = u.id) as maxHoliday,
+        (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), (SELECT COALESCE(SUM(maxHoliday), 0) FROM mhy WHERE year = YEAR(CURRENT_DATE) AND employeeID = u.id)) FROM holiday ho WHERE ho.employeeID = u.id AND ho.type = 'H' AND status != 1 AND FROM_UNIXTIME(ho.startdate, '%%Y') = YEAR(CURRENT_DATE)) - (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.employeeID = u.id AND ho.type = 'I' AND FROM_UNIXTIME(ho.startdate, '%%Y') = YEAR(CURRENT_DATE)) AS remainingHoliday
+        FROM users u
+        WHERE u.staffid LIKE '%%%s%%' OR u.firstname LIKE '%%%s%%' OR u.lastname LIKE '%%%s%%'%s",
+        $this->urlValues ['managerHolidaysFilter'],
+        $this->urlValues ['managerHolidaysFilter'],
+        $this->urlValues ['managerHolidaysFilter'],
+        empty ( $this->urlValues ['managerHolidaysFilter'] ) ? sprintf ( " LIMIT %s OFFSET %s", $pagination ['limit'], $pagination ['offset'] ) : '' );
+  
+    $result = $this->db->query ( $getFilteredHolidaySql );
+  
+    $this->viewModel->set ( "filteredManagerHolidays", @$result->fetch_all ( MYSQLI_ASSOC ) );
+    $result->free();
+  
+    return $this->viewModel;
+  }
+  
+  public function filterManagerUserDetails( ) {
+    $day = '';
+    $month = '';
+    $year = '';
+  
+    if ( empty ( $this->urlValues ['managerUserDetailsFilter'] ) ) {
+      $getHolidayTotalSql = sprintf("SELECT COUNT(*) FROM holiday WHERE employeeID = '%s'", $this->session->get('id'));
+      $totalResult = $this->db->query ( $getHolidayTotalSql );
+      $totalHolidayDays = $totalResult->fetch_row ( );
+  
+      $pagination = Utils::generatePagination ( intval(@$this->urlValues['page']), $totalHolidayDays [0] );
+      $totalResult->free();
+    }
+  
+    if ( strstr ( $this->urlValues ['managerUserDetailsFilter'], "." ) ) {
+      $dateParts = explode ( ".", $this->urlValues ['managerUserDetailsFilter'] );
+  
+      for( $i = 0; $i < count ( $dateParts ); $i ++ ) {
+        switch ( $i ) {
+          case 0 :
+            $day = $dateParts [$i];
+            break;
+          case 1 :
+            $month = $dateParts [$i];
+            break;
+          case 2 :
+            $year = $dateParts [$i];
+            break;
+        }
+      }
+    }
+  
+    switch ( strtolower ( trim ( $this->urlValues ['managerUserDetailsFilter'] ) ) ) {
+      case 'unbearbeitet' :
+        $sqlPart = " OR h.status = 0";
+        break;
+      case 'nicht genehmigt' :
+        $sqlPart = " OR h.status = 1";
+        break;
+      case 'genehmigt' :
+        $sqlPart = " OR h.status = 2";
+        break;
+      case 'eingetragen' :
+        $sqlPart = " OR h.status = 3";
+        break;
+      case 'urlaub' :
+        $sqlPart = " OR h.type = 'H'";
+        break;
+      case 'krankheit' :
+        $sqlPart = " OR h.type = 'I'";
+        break;
+      default :
+        $sqlPart = "";
+        break;
+    }
+    
+    $getFilteredHolidaySql = sprintf ( "SELECT h.*, u.firstname, u.lastname,
+        (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.employeeID = h.employeeID AND ho.type = 'H' AND FROM_UNIXTIME(ho.startdate, '%%Y') = FROM_UNIXTIME(%s, '%%Y')) - (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.employeeID = h.employeeID AND ho.type = 'I' AND FROM_UNIXTIME(ho.startdate, '%%Y') = FROM_UNIXTIME(%s, '%%Y')) AS remainingHoliday,
+        (SELECT getNumDays(h.startdate, h.enddate, 3)) AS days
+        FROM holiday h JOIN users u ON h.employeeID = u.id WHERE h.employeeID = '%s' AND
+        ((
+        FROM_UNIXTIME(h.startdate, '%%d') = '%s'
+        AND FROM_UNIXTIME(h.startdate, '%%m') = '%s'
+        AND FROM_UNIXTIME(h.startdate, '%%Y') = '%s'
+        )
+        OR
+        (
+        FROM_UNIXTIME(h.submitdate, '%%d') = '%s'
+        AND FROM_UNIXTIME(h.submitdate, '%%m') = '%s'
+        AND FROM_UNIXTIME(h.submitdate, '%%Y') = '%s'
+        )
+        OR h.note LIKE '%%%s%%'
+        OR h.response_note LIKE '%%%s%%'%s)%s",
+        time ( ),
+        time ( ),
+        $this->urlValues ['userID'],
+        $day,
+        $month,
+        $year,
+        $day,
+        $month,
+        $year,
+        $this->urlValues ['managerUserDetailsFilter'],
+        $this->urlValues ['managerUserDetailsFilter'],
+        $sqlPart,
+        empty ( $this->urlValues ['managerUserDetailsFilter'] ) ? sprintf ( " LIMIT %s OFFSET %s", $pagination ['limit'], $pagination ['offset'] ) : '' );
+  
+    $result = $this->db->query ( $getFilteredHolidaySql );
+  
+    $this->viewModel->set ( "userHolidayData", @$result->fetch_all ( MYSQLI_ASSOC ) );
+    $result->free();
+    
+    $getMaxHolidaySql = sprintf ( "SELECT maxHoliday FROM mhy WHERE year = FROM_UNIXTIME(%s, '%%Y') AND employeeID = '%s'", time ( ), $this->urlValues ['userID'] );
+    $result = $this->db->query ( $getMaxHolidaySql );
+    $resultsets = $result->fetch_all ( MYSQLI_ASSOC );
+    
+    $this->viewModel->set ( "maxHolidays", @$resultsets [0] ['maxHoliday'] );
+    $this->viewModel->set ( 'uid', $this->urlValues ['userID'] );
     $result->free();
   
     return $this->viewModel;

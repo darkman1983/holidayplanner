@@ -9,19 +9,19 @@
     <div class="navbar-header navbar-right table-navbar">
 			<div class="form-group">
 			<div class="input-group help-addon max-200">
-				<input type="text" class="form-control" id="holidayFilter" name="holidayFilter" placeholder="Filter">
+				<input type="text" class="form-control" id="managerUserDetailsFilter" name="managerUserDetailsFilter" placeholder="Filter">
 				<div class="input-group-btn">
                   <button class="btn btn-default" data-toggle="modal" data-target="#filter-help"><i class="glyphicon glyphicon-question-sign"></i></button>
                 </div>
 			</div>
 			</div>
 	</div>
-	<a href="#" class="glyphicon glyphicon-refresh nounderline navbar-right padding-right-5 link-color-black link-color-lightgrey spacing-4" id="reloadFeastDays" title="Urlaubsanträge neu laden"></a>
+	<a href="#" class="glyphicon glyphicon-refresh nounderline navbar-right padding-right-5 link-color-black link-color-lightgrey spacing-4" id="reloadmanagerUserDetails" title="Urlaubsanträge neu laden"></a>
 	<a href="<?php echo $viewModel->get ( 'BaseUrl' )?>manager/add?userID=<?php echo $viewModel->get ( 'uid' )?>" class="glyphicon glyphicon-plus nounderline navbar-right link-color-black link-color-lightgrey spacing-4" title="Urlaub oder Krankheit Hinzufügen"></a>
 	<a href="<?php echo $viewModel->get ( 'BaseUrl' )?>manager" class="glyphicon glyphicon-arrow-left nounderline navbar-right link-color-black link-color-lightgrey spacing-4" title="Zurück zur Übersicht"></a>
 	</div>
 	<div class="modal-body">
-  <div class="table-responsive" id="feastdays">
+  <div class="table-responsive" id="managerUserDetails">
   <table class="table table-striped">
     <thead>
       <tr>
@@ -174,7 +174,7 @@ $paginationData = $viewModel->get ( 'pagination' );
                 </div>
                 <div class="modal-body">
                     <p>Wenn sie einen Suchbegriff eingeben, wird automatisch gesucht in:</p>
-                    <p>Startdatum, Anmerkung, Rückmeldung, Status</p>
+                    <p>Einreichdatum, Startdatum, Anmerkung, Rückmeldung, Typ und Status</p>
                     <p>Während gefiltert wird, ist die Datensatznavigation nicht verfügbar!</p>
                 </div>
                 <div class="modal-footer">
@@ -197,7 +197,10 @@ $paginationData = $viewModel->get ( 'pagination' );
     </div>
 <script>
 $(document).ready(function(){
-	$("#holidayFilter").keyup(function() {
+	var timer;
+	var x;
+	
+	$("#managerUserDetailsFilter").keyup(function() {
 		var withPage = '';
 		
 		if($(this).val() != '')
@@ -207,24 +210,34 @@ $(document).ready(function(){
 			withPage = "&page=" + $.getUrlParam('page');
 			$(".pagination").show();
 		}
+
+		if (x) { x.abort() } // If there is an existing XHR, abort it.
+	    clearTimeout(timer); // Clear the timer so we don't end up with dupes.
+	    timer = setTimeout(function() { // assign timer a new timeout
 		$("#loadingIndicator").toggleClass('hidden');
-		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterholidays?holidayFilter=" + $("#holidayFilter").val(), function( data ) {
-			  $( "#feastdays" ).html( data );
+		x = $.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filtermanageruserdetails?managerUserDetailsFilter=" + $("#managerUserDetailsFilter").val() + '&userID=' + $.getUrlParam('userID'), function( data ) {
+			$( "#managerUserDetails").html( data );
+			if($( "#managerUserDetails table tbody tr").length == 0)
+				{
+				  $( "#managerUserDetails table tbody").append('<tr><td colspan="10" class="text-center">Nichts gefunden</td></tr>');
+				}
+			  
 			  $("#loadingIndicator").toggleClass('hidden');
 			});
 		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/getlogouttime", function( data ) {
 			$( "#logouttime" ).html( data );
 			});
+	    }, 1000);
     });
     
-	$("#reloadFeastDays").click(function() {
-		$("#FeastDaysFilter").val('');
+	$("#reloadmanagerUserDetails").click(function() {
+		$("#managerUserDetailsFilter").val('');
 		$("#loadingIndicator").toggleClass('hidden');
-		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterholidays?holidayFilter=&page=" + $.getUrlParam('page'), function( data ) {
-			$( "#feastdays" ).html( data );
+		$.getq( "reload", "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filtermanageruserdetails?managerUserDetailsFilter=&page=" + $.getUrlParam('page') + '&userID=' + $.getUrlParam('userID'), function( data ) {
+			$( "#managerUserDetails" ).html( data );
 			$("#loadingIndicator").toggleClass('hidden');
 			});
-		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/getlogouttime", function( data ) {
+		$.getq( "logouttime", "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/getlogouttime", function( data ) {
 			$( "#logouttime" ).html( data );
 			});
 		});

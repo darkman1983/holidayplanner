@@ -192,6 +192,9 @@ $paginationData = $viewModel->get ( 'pagination' );
     </div>
 <script>
 $(document).ready(function(){
+	var timer;
+	var x;
+	
 	$("#holidayFilter").keyup(function() {
 		var withPage = '';
 		
@@ -202,24 +205,29 @@ $(document).ready(function(){
 			withPage = "&page=" + $.getUrlParam('page');
 			$(".pagination").show();
 		}
-		$("#loadingIndicator").toggleClass('hidden');
-		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterholidays?holidayFilter=" + $("#holidayFilter").val(), function( data ) {
-			  $( "#feastdays" ).html( data );
-			  $("#loadingIndicator").toggleClass('hidden');
-			});
-		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/getlogouttime", function( data ) {
-			$( "#logouttime" ).html( data );
-			});
+
+		if (x) { x.abort() } // If there is an existing XHR, abort it.
+	    clearTimeout(timer); // Clear the timer so we don't end up with dupes.
+	    timer = setTimeout(function() { // assign timer a new timeout
+	    	$("#loadingIndicator").toggleClass('hidden');
+	        x = $.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterholidays?holidayFilter=" + $("#holidayFilter").val(), function( data ) {
+				  $( "#feastdays" ).html( data );
+				  $("#loadingIndicator").toggleClass('hidden');
+				});
+	        $.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/getlogouttime", function( data ) {
+				$( "#logouttime" ).html( data );
+				});
+	    }, 1000);
     });
     
 	$("#reloadFeastDays").click(function() {
 		$("#FeastDaysFilter").val('');
 		$("#loadingIndicator").toggleClass('hidden');
-		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterholidays?holidayFilter=&page=" + $.getUrlParam('page'), function( data ) {
+		$.getq( "reloadQueue", "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterholidays?holidayFilter=&page=" + $.getUrlParam('page'), function( data ) {
 			$( "#feastdays" ).html( data );
 			$("#loadingIndicator").toggleClass('hidden');
 			});
-		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/getlogouttime", function( data ) {
+		$.getq( "reloadQueue", "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/getlogouttime", function( data ) {
 			$( "#logouttime" ).html( data );
 			});
 		});

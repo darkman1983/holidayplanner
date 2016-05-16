@@ -48,7 +48,7 @@ $userHolidayData = $viewModel->get('userHolidayData');
                                   <textarea rows="4" cols="2" class="form-control" id="frm_response_note" name="frm_response_note" placeholder="Rückmeldung Eingeben"><?php echo $userHolidayData['response_note']; ?></textarea>
                                   <div class="help-block with-errors"></div>
                               </div>
-                              <span id="loadingIndicator" class="fa fa-cog fa-spin fa-med link-color-black vertical-center loading-indicator-hidden" aria-hidden="true"></span>&nbsp;<button type="submit" id="addButton" class="btn btn-success btn-default"><span class="glyphicon glyphicon-plus"></span> Erstellen</button>
+                              <span id="loadingIndicator" class="fa fa-cog fa-spin fa-med link-color-black vertical-center loading-indicator-hidden" aria-hidden="true"></span>&nbsp;<button type="submit" id="addButton" class="btn btn-success btn-default"><span class="glyphicon glyphicon-plus"></span> Bearbeiten</button>
                               <a id="pageBack" href="#" class="btn btn-danger btn-default"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
                           </form>
                       </div>

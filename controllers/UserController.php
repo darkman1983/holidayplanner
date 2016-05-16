@@ -96,10 +96,10 @@ class UserController extends BaseController {
         for( $i = 0; $i < count ( $years ); $i ++ ) {
           $mhyParts .= sprintf ( "('%s', '%s', '%s'),", $this->urlValues ['userEditID'], $days [$i], $years [$i] );
         }
-      
-        $mhyDeleteSql = sprintf("DELETE FROM mhy WHERE employeeID = '%s'", $this->urlValues ['userEditID']);
-        $result = $this->db->query($mhyDeleteSql);
-      
+        
+        $mhyDeleteSql = sprintf ( "DELETE FROM mhy WHERE employeeID = '%s'", $this->urlValues ['userEditID'] );
+        $result = $this->db->query ( $mhyDeleteSql );
+        
         $mhyInsertSql = sprintf ( "INSERT INTO mhy VALUES %s", substr ( $mhyParts, 0, - 1 ) );
         $result = $this->db->query ( $mhyInsertSql );
         $mhyAffected = $this->db->affected_rows;
@@ -108,11 +108,10 @@ class UserController extends BaseController {
       if ( $createAffected != 1 && $mhyAffected < 1 ) {
         $this->view->output ( $this->model->error ( 'NOTHINGUPDATED' ), 'User/error' );
         return;
-      } else {
-        
-        $this->view->output ( $this->model->success ( ), 'User/success' );
-        return;
       }
+      
+      $this->view->output ( $this->model->success ( ), 'User/success' );
+      return;
     }
     
     $this->view->output ( $this->model->edit ( $this->urlValues ), '' );

@@ -147,6 +147,9 @@ $paginationData = $viewModel->get ( 'pagination' );
     </div>
 <script>
 $(document).ready(function(){
+	var timer;
+	var x;
+	
 	$("#userFilter").keyup(function() {
 		var withPage = '';
 		
@@ -157,25 +160,36 @@ $(document).ready(function(){
 			withPage = "&page=" + $.getUrlParam('page');
 			$(".pagination").show();
 		}
+		
+		if (x) { x.abort() } // If there is an existing XHR, abort it.
+	    clearTimeout(timer); // Clear the timer so we don't end up with dupes.
+	    timer = setTimeout(function() { // assign timer a new timeout
 		$("#loadingIndicator").toggleClass('hidden');
-		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterusers?usersFilter=" + $("#userFilter").val() + withPage , function( data ) {
+		x = $.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterusers?usersFilter=" + $("#userFilter").val() + withPage , function( data ) {
 			  $( "#users" ).html( data );
+
+			  if($( "#users table tbody tr").length == 0)
+				{
+				  $( "#users table tbody").append('<tr><td colspan="7" class="text-center">Nichts gefunden</td></tr>');
+				}
+				
 			  $("#loadingIndicator").toggleClass('hidden');
 			});
 		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/getlogouttime", function( data ) {
 			$( "#logouttime" ).html( data );
 			});
+    }, 1000);
     });
     
 	$("#reloadUsers").click(function() {
 		$("#userFilter").val('');
 		$(".pagination").show();
 		$("#loadingIndicator").toggleClass('hidden');
-		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterusers?usersFilter=&page=" + $.getUrlParam('page'), function( data ) {
+		$.getq( "reload", "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterusers?usersFilter=&page=" + $.getUrlParam('page'), function( data ) {
 			$( "#users" ).html( data );
 			$("#loadingIndicator").toggleClass('hidden');
 			});
-		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/getlogouttime", function( data ) {
+		$.getq( "logouttime", "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/getlogouttime", function( data ) {
 			$( "#logouttime" ).html( data );
 			});
 		});

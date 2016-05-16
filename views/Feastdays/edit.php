@@ -13,7 +13,7 @@ $feastDaysData = $viewModel->get('feastDaysData');
               <div class="row">
                   <div class="col-xs-12">
                       <div class="well">
-                          <form id="loginForm" method="POST" action="<?php echo $viewModel->get('BaseUrl') ?>feastdays/edit?do=1&feastDaysEditID=<?php echo $viewModel->get('feastDaysEditID'); ?>" role="form" data-toggle="validator">
+                          <form id="feastDaysEditForm" name="feastDaysEditForm" method="POST" action="<?php echo $viewModel->get('BaseUrl') ?>feastdays/edit?do=1&feastDaysEditID=<?php echo $viewModel->get('feastDaysEditID'); ?>" role="form" data-toggle="validator">
                               <div class="form-group has-feedback" id="usernameGroup">
                                   <label for="frm_daterange" class="control-label">Feiertag wählen</label>
                                   <div class='input-group input-daterange'>
@@ -28,7 +28,7 @@ $feastDaysData = $viewModel->get('feastDaysData');
                                   <textarea rows="4" cols="2" class="form-control" id="frm_description" name="frm_description" placeholder="Beschreibung Eingeben" required><?php echo $feastDaysData['description']; ?></textarea>
                                   <div class="help-block with-errors"></div>
                               </div>
-                              <button type="submit" class="btn btn-success btn-default">Ändern</button>
+                              <span id="loadingIndicator" class="fa fa-cog fa-spin fa-med link-color-black vertical-center loading-indicator-hidden" aria-hidden="true"></span>&nbsp;<button type="submit" class="btn btn-success btn-default">Ändern</button>
                               <a href="<?php echo $viewModel->get('BaseUrl'); ?>feastdays" class="btn btn-danger btn-default"><span class="glyphicon glyphicon-remove"></span> Abbrechen</a>
                           </form>
                       </div>
@@ -81,6 +81,67 @@ $(document).ready(function(){
 		});
 
 		$('textarea').inputlimiter();
+
+		$('#feastDaysEditForm').on('submit', function(e) {
+	    	$.ajax({
+	            type: "POST",
+	            url: '<?php echo $viewModel->get('BaseUrl'); ?>feastdays/edit?do=1&feastDaysEditID=' + $.getUrlParam('feastDaysEditID'),
+	            data: $("#feastDaysEditForm").serialize(), // serializes the form's elements.
+	            dataType: 'json',
+	            beforeSend: function(){
+	            	$("#loadingIndicator").toggleClass('loading-indicator-hidden');
+	            	$('#feastdaysButton').attr('disabled','disabled');
+	            },
+	            success: function(data)
+	            {
+	                switch(data.status)
+	                {
+	                case 'NOTHINGUPDATED':
+	                	new PNotify({
+	                	    title: 'Oh Nein!',
+	                	    text: data.text,
+	                	    type: 'warning'
+	                	});
+	                	$('#processButton').removeAttr('disabled');
+	                	break;
+	                case 'OK':
+	                	new PNotify({
+	                	    title: 'Super!',
+	                	    text: data.text,
+	                	    type: 'success'
+	                	});
+	                	$(location).wait(2500).attr('href', '<?php echo $viewModel->get('BaseUrl'); ?>feastdays');
+	                    break;
+	                case 'NOACCESSEXPIRED':
+	                	new PNotify({
+	                	    title: 'Oh Nein!',
+	                	    text: data.text,
+	                	    type: 'error'
+	                	});
+	                	$('#processButton').removeAttr('disabled');
+	                    break;
+	                case 'NOTCOMPLETE':
+	                	new PNotify({
+	                	    title: 'Oh Nein!',
+	                	    text: data.text,
+	                	    type: 'warning'
+	                	});
+	                	$('#processButton').removeAttr('disabled');
+	                    break;
+	                }
+	                $("#loadingIndicator").toggleClass('loading-indicator-hidden');
+	            },
+	            fail: function() {
+	            	new PNotify({
+	            	    title: 'Oh Nein!',
+	            	    text: 'Es kann keine Verbindung zum Server hergestellt werden.',
+	            	    type: 'error'
+	            	});
+	            	$('#feastdaysButton').removeAttr('disabled');
+	            }
+	          });
+	    	e.preventDefault(); // avoid to execute the actual submit of the form.
+	    });
 });
 </script>
 <?php include 'views/footer.php'; ?>

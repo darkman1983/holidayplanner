@@ -30,6 +30,7 @@
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/jquery.urlparam.min.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/jquery.periodic.min.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/jquery.inputlimiter.min.js"></script>
+<script src="<?php echo $viewModel->get('AssetPath'); ?>js/jquery.ajaxq.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/soundmanager2-nodebug-jsmin.js"></script>
 <script src="<?php echo $viewModel->get('AssetPath'); ?>js/pnotify.custom.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->

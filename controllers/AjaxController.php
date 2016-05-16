@@ -22,7 +22,7 @@ class AjaxController extends BaseController {
   public function __construct( $action, $urlValues ) {
     parent::__construct ( $action, $urlValues );
     
-    $this->levels = array ("validateuser" => 1,"validatestaffid" => 3,"getlogouttime" => 1,"filterusers" => 2,"deleteuser" => 3,"filterfeastdays" => 3,"filterholidays" => 1,"deleteholiday" => 1,"managerdeleteholiday" => 2 );
+    $this->levels = array ("validateuser" => 1,"validatestaffid" => 3,"getlogouttime" => 1,"filterusers" => 2,"deleteuser" => 3,"filterfeastdays" => 3,"filterholidays" => 1,"filtermanagerholidays" => 2,"filtermanageruserdetails" => 2,"deleteholiday" => 1,"managerdeleteholiday" => 2 );
     
     $this->db = Database::getInstance ( )->getCon ( );
     
@@ -83,6 +83,24 @@ class AjaxController extends BaseController {
     }
     
     $this->view->output ( $this->model->filterHolidays ( ), 'Ajax/filterholidays' );
+  }
+  
+  protected function filterManagerHolidays( ) {
+    if ( ! $this->checkAccess ( $this->levels ) ) {
+      $this->view->output ( $this->model->badsession ( array ("ajax" => true ) ), 'Error/notallowed' );
+      return;
+    }
+  
+    $this->view->output ( $this->model->filterManagerHolidays ( ), 'Ajax/filtermanagerholidays' );
+  }
+  
+  protected function filterManagerUserDetails( ) {
+    if ( ! $this->checkAccess ( $this->levels ) ) {
+      $this->view->output ( $this->model->badsession ( array ("ajax" => true ) ), 'Error/notallowed' );
+      return;
+    }
+  
+    $this->view->output ( $this->model->filterManagerUserDetails ( ), 'Ajax/filtermanageruserdetails' );
   }
 
   protected function deleteUser( ) {
