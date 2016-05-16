@@ -23,7 +23,7 @@
         <div class="modal-footer">
           <span id="loadingIndicator" class="fa fa-cog fa-spin fa-med link-color-black pull-left loading-indicator-footer loading-indicator-hidden" aria-hidden="true"></span>&nbsp;<button type="submit" id="loginButton" class="btn btn-default btn-success pull-left"><span class="glyphicon glyphicon-off"></span> Login</button>
           <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Abbrechen</button>
-          <p>Passwort <a href="#">Vergessen?</a></p>
+          <p>Passwort <a href="#" id="forgotPassword" class="link-color-black">Vergessen?</a></p>
         </div>
       </div>
     </div>

@@ -12,6 +12,13 @@ $(document).ready(function(){
         $("#loginModal").modal();
     });
 
+    $('#forgotPassword').popover({
+		'trigger': 'hover focus',
+		'placement': 'bottom',
+		'title': 'Information',
+		'content': 'Bitte den Administrator für ein neues Passwort Informieren!'
+		});
+
     $('#loginModal').on('shown.bs.modal', function () {
         $('#usrname').focus();
     });
