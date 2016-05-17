@@ -81,6 +81,7 @@ class Utils {
     require_once 'views/Pdf/holidaytemplate.php';
     
     $status = '';
+    $checkboxes = unserialize($pdfData['extdata']);
     
     switch ($pdfData['status']) {
       case 0:
@@ -120,7 +121,10 @@ class Utils {
         date("d.m.Y", $pdfData['processeddate']),
         $pdfData['processedFirstname'],
         $pdfData['processedLastname'],
-        $status
+        $status,
+        $checkboxes['sap'] ? '' : '-blank',
+        $checkboxes['uue'] ? '' : '-blank',
+        $checkboxes['map'] ? '' : '-blank'
         );
     
     require_once 'classes/pdf/mpdf.php';

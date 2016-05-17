@@ -169,7 +169,7 @@ $paginationData = $viewModel->get ( 'pagination' );
                 </div>
                 <div class="modal-body">
                     <p>Wenn sie einen Suchbegriff eingeben, wird automatisch gesucht in:</p>
-                    <p>Startdatum, Anmerkung, Rückmeldung, Status</p>
+                    <p>Einreichdatum, Von (Startdatum), Anmerkung, Rückmeldung und Status</p>
                     <p>Während gefiltert wird, ist die Datensatznavigation nicht verfügbar!</p>
                 </div>
                 <div class="modal-footer">

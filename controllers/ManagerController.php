@@ -92,7 +92,7 @@ class ManagerController extends BaseController {
     }
     
     if ( $dataValid ) {
-      $createUserSql = sprintf ( "UPDATE holiday SET response_note = '%s', processeddate = '%s', status = '%s', type = '%s' WHERE id = '%s'", $this->urlValues ['frm_response_note'], time ( ), $this->urlValues ['frm_status'], $this->urlValues ['frm_type'], $this->urlValues ['holidayProcessID'] );
+      $createUserSql = sprintf ( "UPDATE holiday SET response_note = '%s', processeddate = '%s', status = '%s', type = '%s', extdata = '%s' WHERE id = '%s'", $this->urlValues ['frm_response_note'], time ( ), $this->urlValues ['frm_status'], $this->urlValues ['frm_type'], serialize(array("sap" => @$this->urlValues ['frm_sap'], "uue" => @$this->urlValues ['frm_uue'], "map" => @$this->urlValues ['frm_map'])), $this->urlValues ['holidayProcessID'] );
       $result = $this->db->query ( $createUserSql );
       
       if ( $this->db->affected_rows != 1 ) {

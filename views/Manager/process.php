@@ -1,6 +1,7 @@
 <?php include 'views/header.php'; ?>
 <?php include 'views/navbar.php';
 $userHolidayData = $viewModel->get('userHolidayData');
+$checkbox = unserialize($userHolidayData['extdata']);
 ?>
     <div class="container">
       <div id="login-overlay" class="modal-dialog">
@@ -46,6 +47,27 @@ $userHolidayData = $viewModel->get('userHolidayData');
                               <div class="form-group">
                                   <label for="frm_response_note" class="control-label">Rückmeldung</label>
                                   <textarea rows="4" cols="2" class="form-control" id="frm_response_note" name="frm_response_note" placeholder="Rückmeldung Eingeben"><?php echo $userHolidayData['response_note']; ?></textarea>
+                                  <div class="help-block with-errors"></div>
+                              </div>
+                              <div class="form-group">
+                              <label class="fancy-checkbox">
+    							<input type="checkbox" name="frm_sap" value="1"<?php echo $checkbox['sap'] ? ' checked' : ''; ?>>
+   								<i class="fa fa-fw fa-square-o unchecked"></i>
+    							<i class="fa fa-fw fa-check-square-o checked"></i>
+    							SAP HMC
+							  </label>
+							  <label class="fancy-checkbox">
+    							<input type="checkbox" name="frm_uue" value="1"<?php echo $checkbox['uue'] ? ' checked' : ''; ?>>
+   								<i class="fa fa-fw fa-square-o unchecked"></i>
+    							<i class="fa fa-fw fa-check-square-o checked"></i>
+    							Urlaubsübersicht
+							  </label>
+							  <label class="fancy-checkbox">
+    							<input type="checkbox" name="frm_map" value="1"<?php echo $checkbox['map'] ? ' checked' : ''; ?>>
+   								<i class="fa fa-fw fa-square-o unchecked"></i>
+    							<i class="fa fa-fw fa-check-square-o checked"></i>
+    							Karte
+							  </label>
                                   <div class="help-block with-errors"></div>
                               </div>
                               <span id="loadingIndicator" class="fa fa-cog fa-spin fa-med link-color-black vertical-center loading-indicator-hidden" aria-hidden="true"></span>&nbsp;<button type="submit" id="addButton" class="btn btn-success btn-default"><span class="glyphicon glyphicon-plus"></span> Bearbeiten</button>

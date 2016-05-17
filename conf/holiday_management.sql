@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 16. Mai 2016 um 21:53
--- Server-Version: 10.1.13-MariaDB
--- PHP-Version: 7.0.5
+-- Erstellungszeit: 17. Mai 2016 um 11:45
+-- Server-Version: 10.1.9-MariaDB
+-- PHP-Version: 5.6.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -128,6 +128,7 @@ CREATE TABLE `holiday` (
   `processeddate` int(11) DEFAULT NULL,
   `note` tinytext,
   `response_note` tinytext,
+  `extdata` mediumblob,
   `type` char(1) NOT NULL,
   `status` tinyint(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -136,13 +137,13 @@ CREATE TABLE `holiday` (
 -- Daten für Tabelle `holiday`
 --
 
-INSERT INTO `holiday` (`id`, `employeeID`, `processedByID`, `startdate`, `enddate`, `submitdate`, `processeddate`, `note`, `response_note`, `type`, `status`) VALUES
-(30, 1, 1, 1466373600, 1466892000, 1462875045, 1463120796, 'Kreta', '', 'H', 1),
-(31, 1, 0, 1471816800, 1472335200, 1462875360, NULL, 'Nordsee mit den Kindern', NULL, 'H', 0),
-(35, 1, 1, 1467583200, 1468706400, 1463036477, 1463120796, 'Blubb', NULL, 'H', 2),
-(52, 2, 0, 1463954400, 1464472800, 1463052200, NULL, '', NULL, 'H', 0),
-(57, 1, 0, 1479078000, 1479596400, 1463084910, NULL, '', 'Klappt es?', 'H', 2),
-(58, 1, 0, 1479250800, 1479337200, 1463084958, NULL, '', '', 'I', 3);
+INSERT INTO `holiday` (`id`, `employeeID`, `processedByID`, `startdate`, `enddate`, `submitdate`, `processeddate`, `note`, `response_note`, `extdata`, `type`, `status`) VALUES
+(30, 1, 1, 1466373600, 1466892000, 1462875045, 1463478038, 'Kreta', '', 0x613a333a7b733a333a22736170223b733a313a2231223b733a333a22757565223b4e3b733a333a226d6170223b733a313a2231223b7d, 'H', 1),
+(31, 1, 0, 1471816800, 1472335200, 1462875360, NULL, 'Nordsee mit den Kindern', NULL, NULL, 'H', 0),
+(35, 1, 1, 1467583200, 1468706400, 1463036477, 1463120796, 'Blubb', NULL, NULL, 'H', 2),
+(52, 2, 0, 1463954400, 1464472800, 1463052200, NULL, '', NULL, NULL, 'H', 0),
+(57, 1, 0, 1479078000, 1479596400, 1463084910, NULL, '', 'Klappt es?', NULL, 'H', 2),
+(58, 1, 0, 1479250800, 1479337200, 1463084958, NULL, '', '', NULL, 'I', 3);
 
 -- --------------------------------------------------------
 
@@ -191,18 +192,31 @@ INSERT INTO `mhy` (`employeeID`, `maxHoliday`, `year`) VALUES
 (1, 30, 2016),
 (1, 30, 2017),
 (2, 30, 2016),
+(2, 30, 2017),
 (3, 30, 2016),
+(3, 30, 2017),
 (4, 30, 2016),
+(4, 30, 2017),
 (5, 30, 2016),
+(5, 30, 2017),
 (6, 30, 2016),
+(6, 30, 2017),
 (7, 30, 2016),
+(7, 30, 2017),
 (8, 30, 2016),
+(8, 30, 2017),
 (9, 30, 2016),
+(9, 30, 2017),
 (10, 30, 2016),
+(10, 30, 2017),
 (11, 30, 2016),
+(11, 30, 2017),
 (12, 30, 2016),
+(12, 30, 2017),
 (16, 30, 2016),
-(20, 30, 2016);
+(16, 30, 2017),
+(20, 30, 2016),
+(20, 30, 2017);
 
 -- --------------------------------------------------------
 
@@ -222,7 +236,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `data`, `timestamp`) VALUES
-('sg60amie3ddch17cek1gea5t33', '', 1463428366);
+('k8t7jmjk9k6hd372tblhrr27v2', 'id|s:1:"1";firstname|s:4:"Timo";lastname|s:10:"Stepputtis";email|s:22:"Timo.Stepputtis@gmx.de";level|s:1:"3";loggedIN|b:1;timestamp|s:10:"1463478086";', 1463478091);
 
 -- --------------------------------------------------------
 
@@ -248,7 +262,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `staffid`, `createdate`, `firstname`, `lastname`, `username`, `password`, `email`, `level`) VALUES
-(1, 500000, 1463034999, 'Timo', 'Stepputtis', 'tstepputtis', '9c402c4806d33430b781492227a47adf30624e9c', 'Timo.Stepputtis@gmx.de', 3),
+(1, 500000, 1463034999, 'Timo', 'Stepputtis', 'tstepputtis', 'c642c20448ae67d1e27f499d9fcfdc3058641519', 'Timo.Stepputtis@gmx.de', 3),
 (2, 500001, 1463034999, 'Heinzi', 'Mustermann', 'heinz', '023087601ffa058f24441d227962c1f9b15aa85d', 'heinz@gmx.de', 1),
 (3, 500002, 1463034999, 'Harry', 'Beinfurt', 'harry', 'b8cf35b1e4d9c6ac9f02c27e32d5341848d3a272', 'harry@gmx.de', 1),
 (4, 500003, 1463034999, 'Tim', 'Rohrbruch', 'timmy', 'c43d74a74283c11cf6002b023ca8aab9851a2b68', 'timmy@gmx.de', 1),
@@ -352,6 +366,21 @@ ALTER TABLE `holiday_custom`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+DELIMITER $$
+--
+-- Ereignisse
+--
+DROP EVENT `Add_maxHoliday_Year`$$
+CREATE DEFINER=`root`@`localhost` EVENT `Add_maxHoliday_Year` ON SCHEDULE EVERY 1 YEAR STARTS '2016-01-01 00:00:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
+SET @curYear = YEAR(CURRENT_DATE);
+INSERT IGNORE INTO mhy
+SELECT id, 30, @curYear FROM users;
+INSERT IGNORE INTO mhy
+SELECT id, 30, @curYear+1 FROM users;
+END$$
+
+DELIMITER ;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

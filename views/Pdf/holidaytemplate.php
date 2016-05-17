@@ -128,9 +128,9 @@ table .table-border-outer tr td  {
       <tr>
         <td colspan="4"><table width="100%%" border="0" cellspacing="4" cellpadding="4">
       <tr>
-        <td width="33%%"><img src="views/Assets/images/check-box-outline.png" style="width: 16px; height: 16px"> SAP HMC erledigt</td>
-        <td width="33%%"><img src="views/Assets/images/check-box-outline-blank.png" style="width: 16px; height: 16px"> Urlaubsübersicht</td>
-        <td width="33%%"><img src="views/Assets/images/check-box-outline-blank.png" style="width: 16px; height: 16px"> Karte</td>
+        <td width="33%%"><img src="views/Assets/images/check-box-outline%s.png" style="width: 16px; height: 16px"> SAP HMC erledigt</td>
+        <td width="33%%"><img src="views/Assets/images/check-box-outline%s.png" style="width: 16px; height: 16px"> Urlaubsübersicht</td>
+        <td width="33%%"><img src="views/Assets/images/check-box-outline%s.png" style="width: 16px; height: 16px"> Karte</td>
       </tr>
     <tr></table></td>
       </tr>

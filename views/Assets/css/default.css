@@ -17,6 +17,23 @@ a {
 	outline: none !important;
 }
 
+/*** custom checkboxes ***/
+
+.fancy-checkbox input[type="checkbox"],
+.fancy-checkbox .checked {
+    display: none;
+}
+ 
+.fancy-checkbox input[type="checkbox"]:checked ~ .checked
+{
+    display: inline-block;
+}
+ 
+.fancy-checkbox input[type="checkbox"]:checked ~ .unchecked
+{
+    display: none;
+}
+
 .vertical-center {
 	vertical-align: middle !important;
 }
