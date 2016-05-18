@@ -50,8 +50,6 @@ class Database {
   public function getCon( ) {
     return $this->con;
   }
-  
-  
 
   /**
    * Recursively escapes all values in an Array

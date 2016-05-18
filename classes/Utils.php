@@ -98,6 +98,9 @@ class Utils {
         break;
     }
     
+    /*print_r($pdfData);
+    return;*/
+    
     $currentYear = date ( "Y", $pdfData ['startdate'] );
     $lastYear = ($pdfData ['lastYearHoliday'] > 0) ? $pdfData ['maxHoliday'] + ($pdfData ['lastYearHoliday'] - $pdfData ['maxHoliday']) : $pdfData ['maxHolidayLast'];
     $html = sprintf ( $tpl,

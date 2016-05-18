@@ -16,7 +16,19 @@ class PdfModel extends BaseModel {
   
   // data passed to the home index view
   public function showPdf( $urlValues, $manager = false ) {
-    $getPdfDataSql = sprintf ( "SELECT h.*, (SELECT firstname FROM users us WHERE us.id = h.processedByID) AS processedFirstname, (SELECT lastname FROM users us WHERE us.id = h.processedByID) AS processedLastname, u.firstname, u.lastname, u.staffid, COALESCE((SELECT maxHoliday FROM mhy WHERE year = FROM_UNIXTIME(h.startdate, '%%Y') AND employeeID = h.employeeID), 0) AS maxHoliday, COALESCE((SELECT maxHoliday FROM mhy WHERE year = FROM_UNIXTIME(h.startdate, '%%Y') -1 AND employeeID = h.employeeID), 0) AS maxHolidayLast,  (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.id <> h.id AND ho.employeeID = h.employeeID AND ho.type = 'H' AND FROM_UNIXTIME(ho.startdate, '%%Y') = FROM_UNIXTIME(h.startdate, '%%Y') AND status = 2) - (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.employeeID = h.employeeID AND ho.type = 'I' AND FROM_UNIXTIME(ho.startdate, '%%Y') = FROM_UNIXTIME(h.startdate, '%%Y')) AS remainingHoliday, (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.employeeID = h.employeeID AND ho.type = 'H' AND FROM_UNIXTIME(ho.startdate, '%%Y') = FROM_UNIXTIME(h.startdate, '%%Y')-1) - (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.employeeID = h.employeeID AND ho.type = 'I' AND FROM_UNIXTIME(ho.startdate, '%%Y') = FROM_UNIXTIME(h.startdate, '%%Y')-1) AS lastYearHoliday, (SELECT `getNumDays`(h.startdate, h.enddate, 3)) AS days FROM holiday h JOIN users u ON h.employeeID = u.id WHERE h.id = %s%s", $urlValues ['pdfID'], $manager ? '' : sprintf(" AND u.id = '%s'", $this->session->get('id')) );
+    $getPdfDataSql = sprintf ( "SELECT h.*,
+        (SELECT firstname FROM users us WHERE us.id = h.processedByID) AS processedFirstname,
+        (SELECT lastname FROM users us WHERE us.id = h.processedByID) AS processedLastname,
+        u.firstname, u.lastname, u.staffid,
+        COALESCE((SELECT maxHoliday FROM mhy WHERE year = FROM_UNIXTIME(h.startdate, '%%Y') AND employeeID = h.employeeID), 0) AS maxHoliday,
+        COALESCE((SELECT maxHoliday FROM mhy WHERE year = FROM_UNIXTIME(h.startdate, '%%Y') -1 AND employeeID = h.employeeID), 0) AS maxHolidayLast,
+        (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.employeeID = h.employeeID AND ho.type = 'H' AND FROM_UNIXTIME(ho.startdate, '%%Y') = FROM_UNIXTIME(h.startdate, '%%Y') AND status = 2 AND ho.submitdate < h.submitdate) - (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.employeeID = h.employeeID AND ho.type = 'I' AND FROM_UNIXTIME(ho.startdate, '%%Y') = FROM_UNIXTIME(h.startdate, '%%Y') AND (ho.startdate BETWEEN h.startdate AND h.enddate OR ho.enddate BETWEEN h.startdate AND h.enddate)) AS remainingHoliday,
+        (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.employeeID = h.employeeID AND ho.type = 'H' AND FROM_UNIXTIME(ho.startdate, '%%Y') = FROM_UNIXTIME(h.startdate, '%%Y')-1) - (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.employeeID = h.employeeID AND ho.type = 'I' AND FROM_UNIXTIME(ho.startdate, '%%Y') = FROM_UNIXTIME(h.startdate, '%%Y')-1) AS lastYearHoliday,
+        (SELECT `getNumDays`(h.startdate, h.enddate, 3)) AS days
+        FROM holiday h JOIN users u ON h.employeeID = u.id WHERE h.id = %s%s",
+        $urlValues ['pdfID'],
+        $manager ? '' : sprintf(" AND u.id = '%s'", $this->session->get('id')) );
+    
     $resultQuery = $this->db->query ( $getPdfDataSql );
     $result = $resultQuery->fetch_all ( MYSQLI_ASSOC );
     
