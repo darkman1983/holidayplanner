@@ -10,7 +10,7 @@ class Database {
 
   /**
    * Get an instance of the Database class
-   * 
+   *
    * @return Database
    */
   public static function getInstance( ) {
@@ -39,16 +39,33 @@ class Database {
    */
   private function _init( ) {
     $this->con = new mysqli ( $this->conf ['DB_SERVER'], $this->conf ['DB_USER'], $this->conf ['DB_PASSWORD'], $this->conf ['DB_DATABASE'] );
-    $this->con->set_charset("utf-8");
+    $this->con->set_charset ( "utf-8" );
   }
 
   /**
    * Return the actual database connection
-   * 
+   *
    * @return resource
    */
   public function getCon( ) {
     return $this->con;
+  }
+  
+  
+
+  /**
+   * Recursively escapes all values in an Array
+   * 
+   * @param Array &$data
+   */
+  public function recursiveEscape( &$data ) {
+    foreach ( $data as &$current ) {
+      if ( is_array ( $current ) ) {
+        self::recursiveEscape ( $current );
+      } else {
+        $current = $this->con->escape_string ( $current );
+      }
+    }
   }
 }
 

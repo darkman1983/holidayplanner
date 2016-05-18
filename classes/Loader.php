@@ -10,35 +10,35 @@ class Loader {
 
   /**
    * The name of a controller
-   * 
+   *
    * @var string $controllerName
    */
   private $controllerName;
 
   /**
    * The name of a class
-   * 
+   *
    * @var string $controllerClass
    */
   private $controllerClass;
 
   /**
    * The action that was requested
-   * 
+   *
    * @var string $action
    */
   private $action;
 
   /**
    * The request array
-   * 
+   *
    * @var array $request
    */
   private $request;
 
   /**
    * The session object
-   * 
+   *
    * @var object $session
    */
   private $session;
@@ -48,14 +48,9 @@ class Loader {
    */
   public function __construct( ) {
     $this->request = array_merge ( $_GET, $_POST );
+    Database::getInstance ( )->recursiveEscape ( $this->request );
     
     $db = Database::getInstance ( )->getCon ( );
-    
-    foreach ( $this->request as &$data ) {
-      if ( ! is_array ( $data ) ) {
-        $data = $db->escape_string ( $data );
-      }
-    }
     
     if ( $this->request ['controller'] == "" ) {
       $this->controllerName = "IndexController";
@@ -76,7 +71,7 @@ class Loader {
 
   /**
    * Factory method which establishes the requested controller as an object
-   * 
+   *
    * @return ErrorController|object <p>Returns either an class object of the requested controller or an ErrorController object</p>
    */
   public function createController( ) {
