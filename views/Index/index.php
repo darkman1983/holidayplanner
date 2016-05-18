@@ -3,7 +3,7 @@
 <div class="jumbotron">
       <div class="container">
         <h1>Willkommen beim IT-Solutions Urlaubsplaner</h1>
-        <p>Hier können Sie nach dem Login Ihre Urlaubsanträge Verwalten</p>
+        <p>Hier können Sie nach dem Login Ihre Urlaubsanträge verwalten</p>
       </div>
     </div>
 
