@@ -223,11 +223,11 @@ $(document).ready(function(){
 	$("#reloadFeastDays").click(function() {
 		$("#FeastDaysFilter").val('');
 		$("#loadingIndicator").toggleClass('hidden');
-		$.getq( "reloadQueue", "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterholidays?holidayFilter=&page=" + $.getUrlParam('page'), function( data ) {
+		$.getq( "reload", "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterholidays?holidayFilter=&page=" + $.getUrlParam('page'), function( data ) {
 			$( "#feastdays" ).html( data );
 			$("#loadingIndicator").toggleClass('hidden');
 			});
-		$.getq( "reloadQueue", "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/getlogouttime", function( data ) {
+		$.getq( "logouttime", "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/getlogouttime", function( data ) {
 			$( "#logouttime" ).html( data );
 			});
 		});
