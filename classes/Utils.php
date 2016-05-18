@@ -65,7 +65,7 @@ class Utils {
    * @return boolean
    */
   public static function is_timestamp( $timestamp ) {
-    if ( strtotime ( date ( 'd-m-Y H:i:s', $timestamp ) ) === ( int ) $timestamp ) {
+    if ( is_numeric($timestamp) && strlen($timestamp) == 10 ) {
       return true;
     }
     
@@ -118,7 +118,7 @@ class Utils {
         ($pdfData ['maxHoliday'] - $pdfData ['remainingHoliday'] + $lastYear -  $pdfData ['days']),
         $pdfData['note'],
         $pdfData['response_note'],
-        date("d.m.Y", $pdfData['processeddate']),
+        Utils::is_timestamp($pdfData['processeddate']) ? date("d.m.Y", $pdfData['processeddate']) : '"noch nicht"',
         $pdfData['processedFirstname'],
         $pdfData['processedLastname'],
         $status,
