@@ -6,7 +6,7 @@
  */
 
 /**
- * Loads all classes recursive
+ * Loads all classes recursively
  */
 class Classloader {
 
