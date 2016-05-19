@@ -15,7 +15,7 @@ class Classloader {
   const searchDirs = array ('classes', 'controllers','models' );
 
   /**
-   * Search for $className recursive
+   * Search for $className recursively
    * 
    * @param string $className
    */
