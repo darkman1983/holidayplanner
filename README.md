@@ -3,7 +3,10 @@
 This is a project for a Holidayplanner
 
 # Installation
-[GLOBAL]
+[APACHE]
+mod_rewrite enabled
+
+[MYSQL]
 Add event_scheduler = on to the mysqld section of your my.cnf/ini
 
 [LINUX]
