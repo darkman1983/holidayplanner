@@ -1,8 +1,20 @@
 <?php
 
+/**
+ * Sets template variables and returns the view model for requested actions
+ * 
+ * @author Timo Stepputtis
+ *
+ */
 class ErrorModel extends BaseModel
 {    
-    //data passed to the bad URL error view
+    
+    /**
+     * Sets the pagetitle and returns the viewModel
+     * 
+     * @param array $request
+     * @return ViewModel
+     */
     public function badURL($request)
     {
         $this->viewModel->set("pageTitle","Error - Bad URL");
@@ -10,6 +22,12 @@ class ErrorModel extends BaseModel
         return $this->viewModel;
     }
     
+     /**
+     * Sets the pagetitle and returns the viewModel
+     * 
+     * @param array $request
+     * @return ViewModel
+     */
     public function badUsername($request)
     {
     	$this->viewModel->set("pageTitle","Error - Bad Username");
@@ -17,6 +35,12 @@ class ErrorModel extends BaseModel
     	return $this->viewModel;
     }
     
+    /**
+     * Sets the pagetitle and returns the viewModel
+     *
+     * @param array $request
+     * @return ViewModel
+     */
     public function badPassword($request)
     {
     	$this->viewModel->set("pageTitle","Error - Bad Password");
@@ -24,6 +48,12 @@ class ErrorModel extends BaseModel
     	return $this->viewModel;
     }
     
+    /**
+     * Sets the pagetitle and returns the viewModel
+     *
+     * @param array $request
+     * @return ViewModel
+     */
     public function badEmail($request)
     {
     	$this->viewModel->set("pageTitle","Error - Bad Password");
@@ -32,6 +62,12 @@ class ErrorModel extends BaseModel
     	return $this->viewModel;
     }
     
+    /**
+     * Sets the pagetitle and returns the viewModel
+     *
+     * @param array $request
+     * @return ViewModel
+     */
     public function badRegData($request)
     {
     	$this->viewModel->set("pageTitle","Error - Bad Password");
@@ -40,6 +76,12 @@ class ErrorModel extends BaseModel
     	return $this->viewModel;
     }
     
+    /**
+     * Sets the pagetitle and returns the viewModel
+     *
+     * @param array $request
+     * @return ViewModel
+     */
     public function notAllowed()
     {
       $this->viewModel->set("pageTitle","Error - Benutzerlevel reicht nicht aus um die Seite anzuzeigen!");
@@ -47,6 +89,12 @@ class ErrorModel extends BaseModel
       return $this->viewModel;
     }
     
+    /**
+     * Sets the pagetitle and returns the viewModel
+     *
+     * @param array $request
+     * @return ViewModel
+     */
     public function badsession($request)
     {
       $this->viewModel->set("pageTitle","Error - Sitzung abgelaufen!");

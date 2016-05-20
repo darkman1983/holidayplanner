@@ -1,6 +1,7 @@
 <?php
 
 /** 
+ * Util functions for use in all classes / functions
  * @author Timo Stepputtis
  * 
  */
@@ -20,7 +21,7 @@ class Utils {
     $pages = ceil ( $total / $limit );
     
     // What page are we currently on?
-    $page = min ( ($pages < 1) ? 1 : $pages, (isset ( $urlValues ['page'] ) && ! empty ( $urlValues ['page'] )) ? $urlValues ['page'] : 1 );
+    $page = min ( ($pages < 1) ? 1 : $pages, (isset ( $page ) && ! empty ( $page )) ? $page : 1 );
     
     // Calculate the offset for the query
     $offset = ($page - 1) * $limit;
@@ -65,7 +66,7 @@ class Utils {
    * @return boolean
    */
   public static function is_timestamp( $timestamp ) {
-    if ( strtotime ( date ( 'd-m-Y H:i:s', $timestamp ) ) === ( int ) $timestamp ) {
+    if ( is_numeric($timestamp) && strlen($timestamp) == 10 ) {
       return true;
     }
     
@@ -80,13 +81,31 @@ class Utils {
   public static function generatePdf( $pdfData ) {
     require_once 'views/Pdf/holidaytemplate.php';
     
+    $status = '';
+    $checkboxes = unserialize($pdfData['extdata']);
+    
+    switch ($pdfData['status']) {
+      case 0:
+        $status = "Unbearbeitet";
+        break;
+      case 1:
+        $status = "Nicht genehmigt";
+        break;
+      case 2:
+        $status = "Genehmigt";
+        break;
+      case 3:
+        $status = "Eingetragen";
+        break;
+    }
+    
     $currentYear = date ( "Y", $pdfData ['startdate'] );
     $lastYear = ($pdfData ['lastYearHoliday'] > 0) ? $pdfData ['maxHoliday'] + ($pdfData ['lastYearHoliday'] - $pdfData ['maxHoliday']) : $pdfData ['maxHolidayLast'];
     $html = sprintf ( $tpl,
         $currentYear,
         $pdfData ['firstname'],
         $pdfData ['lastname'],
-        $pdfData ['employeeID'],
+        $pdfData ['staffid'],
         date ( "Y", strtotime ( "-1 year", $pdfData ['startdate'] ) ),
         $lastYear,
         $currentYear,
@@ -97,7 +116,17 @@ class Utils {
         date ( "d.m.Y", $pdfData ['enddate'] ),
         $pdfData ['days'],
         $currentYear,
-        $pdfData ['maxHoliday'] - $pdfData ['remainingHoliday'] + $lastYear -  $pdfData ['days']);
+        ($pdfData ['maxHoliday'] - $pdfData ['remainingHoliday'] + $lastYear -  $pdfData ['days']),
+        ! empty ( $pdfData ['note'] ) ? $pdfData ['note'] : 'Keine',
+        ! empty ( $pdfData ['response_note'] ) ? $pdfData ['response_note'] : 'Keine',
+        Utils::is_timestamp($pdfData['processeddate']) ? date("d.m.Y", $pdfData['processeddate']) : '"noch nicht"',
+        $pdfData['processedFirstname'],
+        $pdfData['processedLastname'],
+        $status,
+        $checkboxes['sap'] ? '' : '-blank',
+        $checkboxes['uue'] ? '' : '-blank',
+        $checkboxes['map'] ? '' : '-blank'
+        );
     
     require_once 'classes/pdf/mpdf.php';
     
@@ -113,9 +142,9 @@ class Utils {
     
     $mpdf->SetHTMLHeader ( $header );
     
-    // LOAD a stylesheet
-    $stylesheet = file_get_contents ( 'views/Assets/css/mpdfstyletables.css' );
-    $mpdf->WriteHTML ( $stylesheet, 1 ); // The parameter 1 tells that this is css/style only and no body/html/text
+    // LOAD a stylesheets
+    $stylesheet2 = file_get_contents ( 'views/Assets/css/mpdfstyletables.css' );
+    $mpdf->WriteHTML ( $stylesheet2, 1 ); // The parameter 1 tells that this is css/style only and no body/html/text
     
     $mpdf->WriteHTML ( $html );
     
@@ -124,6 +153,12 @@ class Utils {
     return $mpdf->Output ( $savePath, "S" );
   }
   
+  /**
+   * Generates the pdf filename from pdf data array
+   * 
+   * @param array $pdfData
+   * @return string
+   */
   public static function generatePdfFileName( $pdfData ) {
     return sprintf ( "Urlaubsantrag%s%s%s.pdf", $pdfData ['id'], $pdfData ['employeeID'], date ( "dmY", $pdfData ['startdate'] ) );
   }

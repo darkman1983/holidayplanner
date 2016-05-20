@@ -1,13 +1,21 @@
 <?php
 
 /**
- * @author tstepputtis
+ * Processes the user holiday data
+ * 
+ * @author Timo Stepputtis
  *
  */
 class HolidayController extends BaseController {
 
+  /**
+   * @var resource
+   */
   private $db = NULL;
 
+  /**
+   * @var array
+   */
   private $levels;
   
   // add to the parent constructor
@@ -17,7 +25,7 @@ class HolidayController extends BaseController {
     $this->levels = array ("index" => 1,"propose" => 1 );
     
     // create the model object
-    if ( ! $this->checkAccess ( $this->levels ) ) {
+    if ( ! $this->checkAccess ( $this->levels ) && $this->action != 'propose' ) {
       $this->model = new ErrorModel ( );
     } else {
       $this->model = new HolidayModel ( );
@@ -26,7 +34,9 @@ class HolidayController extends BaseController {
     $this->db = Database::getInstance ( )->getCon ( );
   }
   
-  // default method
+  /**
+   * Sets the output for index
+   */
   protected function index( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->notAllowed ( ), 'Error/notallowed' );
@@ -35,9 +45,12 @@ class HolidayController extends BaseController {
     $this->view->output ( $this->model->index ( $this->urlValues ), '' );
   }
 
+  /**
+   * Adds the proposal of a user to the database and sets the view output
+   */
   protected function propose( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
-      $this->view->output ( $this->model->notAllowed ( ), 'Error/notallowed' );
+      $this->view->output ( $this->model->error ( 'NOACCESSEXPIRED' ), 'Holiday/error' );
       return;
     }
     
@@ -46,7 +59,7 @@ class HolidayController extends BaseController {
     if ( isset ( $this->urlValues ['do'] ) && $this->urlValues ['do'] == 1 ) {
       foreach ( $this->urlValues as $key => &$data ) {
         if ( strstr ( $data, "frm_" ) && empty ( $data ) ) {
-          $this->view->output ( $this->model->badRegData ( $this->urlValues ), 'User/badregdata' );
+          $this->view->output ( $this->model->error ( 'NOTCOMPLETE' ), 'Holiday/error' );
           return;
         } else {
           $dataValid = true;
@@ -55,24 +68,46 @@ class HolidayController extends BaseController {
     }
     
     if ( $dataValid ) {
-      $dates = explode(" - ", $this->urlValues ['frm_daterange']);
+      $dates = explode ( " - ", $this->urlValues ['frm_daterange'] );
       
-      $checkDateRangeSql = sprintf("SELECT COUNT(*) FROM holiday h WHERE h.employeeID = %s AND (FROM_UNIXTIME(%s, '%%Y-%%m-%%d') BETWEEN FROM_UNIXTIME(startdate, '%%Y-%%m-%%d') AND FROM_UNIXTIME(enddate, '%%Y-%%m-%%d') OR FROM_UNIXTIME(%s, '%%Y-%%m-%%d') BETWEEN FROM_UNIXTIME(startdate, '%%Y-%%m-%%d') AND FROM_UNIXTIME(enddate, '%%Y-%%m-%%d'))", $this->session->get('id'), strtotime($dates[0]), strtotime($dates[1]));
-      $result = $this->db->query ( $checkDateRangeSql );
-      $resultsets = $result->fetch_all ( MYSQLI_NUM );
+      $getHolidaySql = sprintf ( "SELECT (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.employeeID = h.employeeID AND ho.type = 'H' AND FROM_UNIXTIME(ho.startdate, '%%Y') = FROM_UNIXTIME(%s, '%%Y')) - (SELECT COALESCE(SUM(`getNumDays`(ho.startdate, ho.enddate, 3)), 0) FROM holiday ho WHERE ho.employeeID = h.employeeID AND ho.type = 'I' AND FROM_UNIXTIME(ho.startdate, '%%Y') = FROM_UNIXTIME(%s, '%%Y')) AS remainingHoliday, (SELECT getNumDays(%s, %s, 3)) AS days FROM holiday h WHERE h.employeeID = '%s'", strtotime ( $dates [0] ), strtotime ( $dates [0] ), strtotime ( $dates [0] ), strtotime ( $dates [1] ), $this->session->get ( 'id' ) );
+      $result = $this->db->query ( $getHolidaySql );
+      $resultsets = $result->fetch_all ( MYSQLI_ASSOC );
       
-      if($resultsets[0][0] > 0) {
-        $this->view->output ( $this->model->databaseError ( 1062 ), 'Holiday/databaseerror' );
+      $remainingHoliday = $resultsets [0] ['remainingHoliday'];
+      $days = $resultsets [0] ['days'];
+      $result->free ( );
+      
+      $getMaxHolidaySql = sprintf ( "SELECT maxHoliday FROM mhy WHERE year = FROM_UNIXTIME(%s, '%%Y') AND employeeID = '%s'", strtotime ( $dates [0] ), $this->session->get ( 'id' ) );
+      $result = $this->db->query ( $getMaxHolidaySql );
+      $resultsets = $result->fetch_all ( MYSQLI_ASSOC );
+      
+      $maxHoliday = $resultsets [0] ['maxHoliday'];
+      $result->free ( );
+      
+      if ( ($remainingHoliday + $days) > $maxHoliday ) {
+        $this->view->output ( $this->model->error ( 'NOTENOUGH', array( $maxHoliday - $remainingHoliday, $days )), 'Holiday/error' );
         return;
       }
       
-      $createProposeSql = sprintf ( "INSERT INTO holiday SET employeeID = '%s', startdate = '%s', enddate = '%s', type = '%s', note = '%s', submitdate = '%s'", $this->session->get('id'), strtotime($dates[0]), strtotime($dates[1]), 'H', $this->urlValues['frm_note'], time() );
-      $result = $this->db->query ( $createProposeSql );
-
-      if ( $this->db->affected_rows != 1 ) {
-        $this->view->output ( $this->model->databaseError ( $this->db->errno ), 'Holiday/databaseerror' );
+      $checkDateRangeSql = sprintf ( "SELECT COUNT(*) FROM holiday h WHERE h.employeeID = '%s' AND (FROM_UNIXTIME(%s, '%%Y-%%m-%%d') BETWEEN FROM_UNIXTIME(startdate, '%%Y-%%m-%%d') AND FROM_UNIXTIME(enddate, '%%Y-%%m-%%d') OR FROM_UNIXTIME(%s, '%%Y-%%m-%%d') BETWEEN FROM_UNIXTIME(startdate, '%%Y-%%m-%%d') AND FROM_UNIXTIME(enddate, '%%Y-%%m-%%d'))", $this->session->get ( 'id' ), strtotime ( $dates [0] ), strtotime ( $dates [1] ) );
+      $result = $this->db->query ( $checkDateRangeSql );
+      $resultsets = $result->fetch_all ( MYSQLI_NUM );
+      
+      if ( $resultsets [0] [0] > 0 ) {
+        $this->view->output ( $this->model->error ( 'DUPLICATE' ), 'Holiday/error' );
         return;
-      } else {        
+      }
+      
+      $result->free ( );
+      
+      $createProposeSql = sprintf ( "INSERT INTO holiday SET employeeID = '%s', startdate = '%s', enddate = '%s', type = '%s', note = '%s', submitdate = '%s'", $this->session->get ( 'id' ), strtotime ( $dates [0] ), strtotime ( $dates [1] ), 'H', $this->urlValues ['frm_note'], time ( ) );
+      $result = $this->db->query ( $createProposeSql );
+      
+      if ( $this->db->affected_rows != 1 ) {
+        $this->view->output ( $this->model->error ( 'NOTHINGINSERTED' ), 'Holiday/error' );
+        return;
+      } else {
         $this->view->output ( $this->model->success ( ), 'Holiday/success' );
         return;
       }

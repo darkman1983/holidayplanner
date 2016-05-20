@@ -1,13 +1,21 @@
 <?php
 
 /**
+ * The Manager Controller handles all managing holiday requests 
+ * 
  * @author Timo Stepputtis
  *
  */
 class ManagerController extends BaseController {
 
+  /**
+   * @var resource
+   */
   private $db = NULL;
 
+  /**
+   * @var array
+   */
   private $levels;
   
   // add to the parent constructor
@@ -26,7 +34,10 @@ class ManagerController extends BaseController {
     $this->db = Database::getInstance ( )->getCon ( );
   }
   
-  // default method
+
+  /**
+   * Sets the index view output
+   */
   protected function index( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->notAllowed ( ), 'Error/notallowed' );
@@ -35,6 +46,9 @@ class ManagerController extends BaseController {
     $this->view->output ( $this->model->index ( $this->urlValues ), '' );
   }
 
+  /**
+   * Sets the user details view output
+   */
   protected function userDetails( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->notAllowed ( ), 'Error/notallowed' );
@@ -43,6 +57,9 @@ class ManagerController extends BaseController {
     $this->view->output ( $this->model->userDetails ( $this->urlValues ), '' );
   }
 
+  /**
+   * Adds an holiday proposal / sick entry to database and sets the view output
+   */
   protected function add( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->error ( 'NOACCESSEXPIRED' ), 'Manager/error' );
@@ -79,6 +96,9 @@ class ManagerController extends BaseController {
     $this->view->output ( $this->model->add ( $this->urlValues ), '' );
   }
 
+  /**
+   * Processes the current proposal by id and sets the view output
+   */
   protected function process( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->error ( 'NOACCESSEXPIRED' ), 'Manager/error' );

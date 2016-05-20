@@ -1,13 +1,21 @@
 <?php
 
 /**
- * @author tstepputtis
+ * Handles all user related requests
+ * 
+ * @author Timo Stepputtis
  *
  */
 class UserController extends BaseController {
 
+  /**
+   * @var resource
+   */
   private $db = NULL;
 
+  /**
+   * @var array
+   */
   private $levels;
   
   // add to the parent constructor
@@ -26,7 +34,10 @@ class UserController extends BaseController {
     $this->db = Database::getInstance ( )->getCon ( );
   }
   
-  // default method
+
+  /**
+   * Sets the view output for index
+   */
   protected function index( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->notAllowed ( ), 'Error/notallowed' );
@@ -35,6 +46,9 @@ class UserController extends BaseController {
     $this->view->output ( $this->model->index ( $this->urlValues ), '' );
   }
 
+  /**
+   * Creates the user in database and sets the view output
+   */
   protected function create( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->error ( 'NOACCESSEXPIRED' ), 'User/error' );
@@ -70,6 +84,9 @@ class UserController extends BaseController {
     $this->view->output ( $this->model->create ( ), '' );
   }
 
+  /**
+   * Edits the user in database and sets the view output
+   */
   protected function edit( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->error ( 'NOACCESSEXPIRED' ), 'User/error' );

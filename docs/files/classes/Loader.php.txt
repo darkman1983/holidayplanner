@@ -1,11 +1,5 @@
 <?php
 
-//Check if we loaded from index
-if (!defined('IN_HOLIDAYMANAGER'))
-{
-  exit();
-}
-
 /**
  * The Loader class will try to initialize the requested controller class or throw an error
  * 
@@ -16,46 +10,47 @@ class Loader {
 
   /**
    * The name of a controller
-   * @var string $controllerName
+   *
+   * @var string
    */
   private $controllerName;
 
   /**
    * The name of a class
-   * @var string $controllerClass
+   *
+   * @var string
    */
   private $controllerClass;
 
   /**
    * The action that was requested
-   * @var string $action
+   *
+   * @var string
    */
   private $action;
 
   /**
    * The request array
-   * @var array $request
+   *
+   * @var array
    */
   private $request;
 
   /**
    * The session object
-   * @var object $session
+   *
+   * @var object
    */
   private $session;
-  
+
   /**
    * Store the URL request values on object creation and initialize the session
    */
   public function __construct( ) {
     $this->request = array_merge ( $_GET, $_POST );
+    Database::getInstance ( )->recursiveEscape ( $this->request );
     
-    $db = Database::getInstance()->getCon();
-    
-    foreach ($this->request as &$data)
-    {
-      $data = $db->escape_string($data);
-    }
+    $db = Database::getInstance ( )->getCon ( );
     
     if ( $this->request ['controller'] == "" ) {
       $this->controllerName = "IndexController";
@@ -73,9 +68,10 @@ class Loader {
     
     $this->session = Session::getInstance ( );
   }
-  
+
   /**
    * Factory method which establishes the requested controller as an object
+   *
    * @return ErrorController|object <p>Returns either an class object of the requested controller or an ErrorController object</p>
    */
   public function createController( ) {

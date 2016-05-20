@@ -1,12 +1,19 @@
 <?php
 
 /**
- * @author tstepputtis
+ * The index Model of the page
+ * 
+ * @author Timo Stepputtis
  *
  */
 class IndexModel extends BaseModel {
   
-  // data passed to the home index view
+  
+  /**
+   * Sets the pagetitle and returns the viewModel
+   * 
+   * @return ViewModel
+   */
   public function index( ) {
     $this->viewModel->set ( "pageTitle", "It-Solutions Urlaubsplaner" );
     

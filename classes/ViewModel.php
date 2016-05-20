@@ -1,21 +1,29 @@
 <?php
 /**
- * The ViewModel class file
- * @author Timo Stepputtis
- */
-
-/**
  * The ViewModel class holds all variables assigned to it for the templates
- *
+ * 
+ * @author Timo Stepputtis
  */
 class ViewModel {    
     
-    //dynamically adds a property or method to the ViewModel instance
+    
+    /**
+     * Dynamically adds a property or method to the ViewModel instance
+     * 
+     * @param string $name
+     * @param string $val
+     */
     public function set($name,$val) {
         $this->$name = $val;
     }
     
-    //returns the requested property value
+    
+    /**
+     * Returns the requested property value
+     * 
+     * @param string $name
+     * @return string|NULL
+     */
     public function get($name) {
         if (isset($this->{$name})) {
             return $this->{$name};

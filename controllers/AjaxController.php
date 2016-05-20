@@ -9,16 +9,20 @@ class AjaxController extends BaseController {
 
   /**
    *
-   * @var array $levels
+   * @var Array
    */
   private $levels;
 
   /**
    *
-   * @var resource $db
+   * @var Resource
    */
   private $db = NULL;
 
+  /**
+   * @param String $action
+   * @param Array $urlValues
+   */
   public function __construct( $action, $urlValues ) {
     parent::__construct ( $action, $urlValues );
     
@@ -34,7 +38,10 @@ class AjaxController extends BaseController {
     }
   }
   
-  // default method
+
+  /**
+   * Sets the view output
+   */
   protected function validateUser( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->badsession ( array ("ajax" => true ) ), 'Error/notallowed' );
@@ -44,7 +51,10 @@ class AjaxController extends BaseController {
     $this->view->output ( $this->model->validateUser ( ), '' );
   }
   
-  // default method
+  
+  /**
+   * Sets the view output
+   */
   protected function validateStaffId( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->badsession ( array ("ajax" => true ) ), 'Error/notallowed' );
@@ -54,10 +64,17 @@ class AjaxController extends BaseController {
     $this->view->output ( $this->model->validateStaffId ( ), '' );
   }
 
+  
+  /**
+   * Sets the view output
+   */
   protected function getLogoutTime( ) {
     $this->view->output ( $this->model->getLogoutTime ( ), '' );
   }
 
+  /**
+   * Sets the view output
+   */
   protected function filterUsers( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->badsession ( array ("ajax" => true ) ), 'Error/notallowed' );
@@ -67,6 +84,9 @@ class AjaxController extends BaseController {
     $this->view->output ( $this->model->filterUsers ( ), 'Ajax/filterusers' );
   }
 
+  /**
+   * Sets the view output
+   */
   protected function filterFeastDays( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->badsession ( array ("ajax" => true ) ), 'Error/notallowed' );
@@ -76,6 +96,9 @@ class AjaxController extends BaseController {
     $this->view->output ( $this->model->filterFeastDays ( ), 'Ajax/filterfeastdays' );
   }
 
+  /**
+   * Sets the view output
+   */
   protected function filterHolidays( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->badsession ( array ("ajax" => true ) ), 'Error/notallowed' );
@@ -85,6 +108,9 @@ class AjaxController extends BaseController {
     $this->view->output ( $this->model->filterHolidays ( ), 'Ajax/filterholidays' );
   }
   
+  /**
+   * Sets the view output
+   */
   protected function filterManagerHolidays( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->badsession ( array ("ajax" => true ) ), 'Error/notallowed' );
@@ -94,6 +120,9 @@ class AjaxController extends BaseController {
     $this->view->output ( $this->model->filterManagerHolidays ( ), 'Ajax/filtermanagerholidays' );
   }
   
+  /**
+   * Sets the view output
+   */
   protected function filterManagerUserDetails( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->badsession ( array ("ajax" => true ) ), 'Error/notallowed' );
@@ -103,6 +132,9 @@ class AjaxController extends BaseController {
     $this->view->output ( $this->model->filterManagerUserDetails ( ), 'Ajax/filtermanageruserdetails' );
   }
 
+  /**
+   * Deletes the user specified by id from url value and sets the view output
+   */
   protected function deleteUser( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->badsession ( array ("ajax" => true ) ), 'Error/notallowed' );
@@ -115,6 +147,9 @@ class AjaxController extends BaseController {
     $this->view->output ( $this->model->deleteUser ( ), 'Ajax/deleteuser' );
   }
 
+  /**
+   * Deletes the feastday specified by id from url value and sets the view output
+   */
   protected function deleteFeastDays( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->badsession ( array ("ajax" => true ) ), 'Error/notallowed' );
@@ -127,6 +162,11 @@ class AjaxController extends BaseController {
     $this->view->output ( $this->model->deleteFeastDays ( ), 'Ajax/deletefeastdays' );
   }
 
+  /**
+   * Deletes the holiday specified by id from url value and sets the view output
+   * 
+   * @param string $manager
+   */
   protected function deleteHoliday( $manager = false ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->badsession ( array ("ajax" => true ) ), 'Error/notallowed' );
@@ -139,6 +179,9 @@ class AjaxController extends BaseController {
     $this->view->output ( $this->model->deleteHoliday ( ), 'Ajax/deleteholiday' );
   }
 
+  /**
+   * Manager function for deleting holidays for all users, calls the deleteHoliday function with $manager true
+   */
   protected function managerDeleteHoliday( ) {
     $this->deleteHoliday ( true );
   }

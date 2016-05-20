@@ -11,35 +11,35 @@ class Loader {
   /**
    * The name of a controller
    *
-   * @var string $controllerName
+   * @var string
    */
   private $controllerName;
 
   /**
    * The name of a class
    *
-   * @var string $controllerClass
+   * @var string
    */
   private $controllerClass;
 
   /**
    * The action that was requested
    *
-   * @var string $action
+   * @var string
    */
   private $action;
 
   /**
    * The request array
    *
-   * @var array $request
+   * @var array
    */
   private $request;
 
   /**
    * The session object
    *
-   * @var object $session
+   * @var object
    */
   private $session;
 

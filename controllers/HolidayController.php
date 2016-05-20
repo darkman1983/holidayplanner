@@ -1,13 +1,21 @@
 <?php
 
 /**
- * @author tstepputtis
+ * Processes the user holiday data
+ * 
+ * @author Timo Stepputtis
  *
  */
 class HolidayController extends BaseController {
 
+  /**
+   * @var resource
+   */
   private $db = NULL;
 
+  /**
+   * @var array
+   */
   private $levels;
   
   // add to the parent constructor
@@ -26,7 +34,9 @@ class HolidayController extends BaseController {
     $this->db = Database::getInstance ( )->getCon ( );
   }
   
-  // default method
+  /**
+   * Sets the output for index
+   */
   protected function index( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->notAllowed ( ), 'Error/notallowed' );
@@ -35,6 +45,9 @@ class HolidayController extends BaseController {
     $this->view->output ( $this->model->index ( $this->urlValues ), '' );
   }
 
+  /**
+   * Adds the proposal of a user to the database and sets the view output
+   */
   protected function propose( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->error ( 'NOACCESSEXPIRED' ), 'Holiday/error' );

@@ -1,11 +1,16 @@
 <?php
 
 /**
- * @author tstepputtis
+ * Generates data for a PDF and returns the viewModel for the requested action
+ * 
+ * @author Timo Stepputtis
  *
  */
 class PdfModel extends BaseModel {
 
+  /**
+   * @var resource
+   */
   private $db = NULL;
 
   public function __construct( ) {
@@ -14,7 +19,13 @@ class PdfModel extends BaseModel {
     $this->db = Database::getInstance ( )->getCon ( );
   }
   
-  // data passed to the home index view
+  /**
+   * Generates the PDF data to be shown and returns the viewModel
+   * 
+   * @param array $urlValues
+   * @param string $manager
+   * @return ViewModel
+   */
   public function showPdf( $urlValues, $manager = false ) {
     $getPdfDataSql = sprintf ( "SELECT h.*,
         (SELECT firstname FROM users us WHERE us.id = h.processedByID) AS processedFirstname,
@@ -40,6 +51,12 @@ class PdfModel extends BaseModel {
     return $this->viewModel;
   }
   
+  /**
+   * Calls the showPdf function with manager true
+   * 
+   * @param array $urlValues
+   * @return ViewModel
+   */
   public function ManagerShowPdf( $urlValues ) {
     return $this->showPdf($urlValues, true);
   }

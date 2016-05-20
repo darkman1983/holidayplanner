@@ -1,14 +1,31 @@
 <?php
 /**
+ * The BaseController class
+ * 
  * @author Timo Stepputtis
  *
  */
 abstract class BaseController {
     
+    /**
+     * @var Array
+     */
     protected $urlValues;
+    /**
+     * @var String
+     */
     protected $action;
+    /**
+     * @var Model
+     */
     protected $model;
+    /**
+     * @var View
+     */
     protected $view;
+    /**
+     * @var Object
+     */
     protected $session;
     
     /**

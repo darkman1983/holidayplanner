@@ -1,11 +1,26 @@
 <?php
 
+/**
+ * The database class processes all database requests => mysqli
+ * 
+ * @author Timo Stepputtis
+ *
+ */
 class Database {
 
+  /**
+   * @var object
+   */
   private static $instance;
 
+  /**
+   * @var array
+   */
   private $conf = NULL;
 
+  /**
+   * @var resource
+   */
   private $con = NULL;
 
   /**

@@ -1,13 +1,21 @@
 <?php
 
 /**
- * @author tstepputtis
+ * The Login Model processes all login data and returns the viewModel for the requested action
+ * 
+ * @author Timo Stepputtis
  *
  */
 class LoginModel extends BaseModel {
 
+  /**
+   * @var resource
+   */
   private $db = NULL;
 
+  /**
+   * @var array
+   */
   private $urlValues = array ();
 
   public function __construct( $urlValues ) {
@@ -18,11 +26,21 @@ class LoginModel extends BaseModel {
     
     $this->viewModel->set ( "pageTitle", "It-Solutions Urlaubsplaner :: Login" );
   }
-  // data passed to the home index view
+  
+  
+  /**
+   * Returns the index vieModel
+   * @return ViewModel
+   */
   public function index( ) {
     return $this->viewModel;
   }
 
+  /**
+   * Processes an login request and returns the viewModel
+   * 
+   * @return ViewModel
+   */
   public function login( ) {
     if ( isset ( $this->urlValues ['usrname'] ) && isset ( $this->urlValues ['psw'] ) ) {
       $loginCheck_SQL = sprintf ( "SELECT * FROM users WHERE username = '%s' AND password = '%s'", strtolower ( $this->urlValues ['usrname'] ), sha1 ( strtolower ( $this->urlValues ['usrname'] ) . ':' . $this->urlValues ['psw'] ) );
@@ -50,6 +68,11 @@ class LoginModel extends BaseModel {
     return $this->viewModel;
   }
 
+  /**
+   * Processes an logout request and returns the viewModel
+   * 
+   * @return ViewModel
+   */
   public function logout( ) {
     $this->session->destroy ( );
     

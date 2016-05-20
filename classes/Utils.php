@@ -1,6 +1,7 @@
 <?php
 
 /** 
+ * Util functions for use in all classes / functions
  * @author Timo Stepputtis
  * 
  */
@@ -152,6 +153,12 @@ class Utils {
     return $mpdf->Output ( $savePath, "S" );
   }
   
+  /**
+   * Generates the pdf filename from pdf data array
+   * 
+   * @param array $pdfData
+   * @return string
+   */
   public static function generatePdfFileName( $pdfData ) {
     return sprintf ( "Urlaubsantrag%s%s%s.pdf", $pdfData ['id'], $pdfData ['employeeID'], date ( "dmY", $pdfData ['startdate'] ) );
   }

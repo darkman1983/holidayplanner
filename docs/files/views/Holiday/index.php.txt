@@ -25,7 +25,6 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>#</th>
         <th>Einreichdatum</th>
         <th>Von - Bis</th>
         <th>Tage</th>
@@ -47,9 +46,6 @@
       foreach($userData as &$data) {
     ?>
       <tr>
-        <td class="vertical-center">
-          <span><?php echo str_pad($data['id'], $maxNum, 0, STR_PAD_LEFT); ?></span>
-        </td>
         <td class="vertical-center">
           <span><?php echo date("d.m.Y", $data['submitdate']); ?></span>
         </td>
@@ -108,7 +104,7 @@
         <a href="#" class="glyphicon glyphicon-remove glyphicon-medium nounderline link-disabled"></a>
         <?php } ?>
         <?php if($data['type'] != 'I') { ?>
-        <a href="#" class="fa fa-file-pdf-o nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Als PDF anzeigen" data-href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>pdf/showPdf?pdfID=<?php echo $data['id']; ?>" data-toggle="modal" data-target="#viewPdf" aria-hidden="true"></a>
+        <a href="#" class="fa fa-file-pdf-o nounderline link-color-black link-color-lightgrey glyphicon-medium" title="Als PDF anzeigen" data-href="<?php echo $viewModel->get ( 'BaseUrl' ); ?>pdf/showpdf?pdfID=<?php echo $data['id']; ?>" data-toggle="modal" data-target="#viewPdf" aria-hidden="true"></a>
         <?php } else {?>
         <a href="#" class="fa fa-file-pdf-o glyphicon-medium nounderline link-disabled"></a>
         <?php } ?>
@@ -173,7 +169,7 @@ $paginationData = $viewModel->get ( 'pagination' );
                 </div>
                 <div class="modal-body">
                     <p>Wenn sie einen Suchbegriff eingeben, wird automatisch gesucht in:</p>
-                    <p>Startdatum, Anmerkung, Rückmeldung, Status</p>
+                    <p>Einreichdatum, Von (Startdatum), Anmerkung, Rückmeldung und Status</p>
                     <p>Während gefiltert wird, ist die Datensatznavigation nicht verfügbar!</p>
                 </div>
                 <div class="modal-footer">
@@ -196,6 +192,9 @@ $paginationData = $viewModel->get ( 'pagination' );
     </div>
 <script>
 $(document).ready(function(){
+	var timer;
+	var x;
+	
 	$("#holidayFilter").keyup(function() {
 		var withPage = '';
 		
@@ -206,24 +205,29 @@ $(document).ready(function(){
 			withPage = "&page=" + $.getUrlParam('page');
 			$(".pagination").show();
 		}
-		$("#loadingIndicator").toggleClass('hidden');
-		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterholidays?holidayFilter=" + $("#holidayFilter").val(), function( data ) {
-			  $( "#feastdays" ).html( data );
-			  $("#loadingIndicator").toggleClass('hidden');
-			});
-		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/getlogouttime", function( data ) {
-			$( "#logouttime" ).html( data );
-			});
+
+		if (x) { x.abort() } // If there is an existing XHR, abort it.
+	    clearTimeout(timer); // Clear the timer so we don't end up with dupes.
+	    timer = setTimeout(function() { // assign timer a new timeout
+	    	$("#loadingIndicator").toggleClass('hidden');
+	        x = $.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterholidays?holidayFilter=" + $("#holidayFilter").val(), function( data ) {
+				  $( "#feastdays" ).html( data );
+				  $("#loadingIndicator").toggleClass('hidden');
+				});
+	        $.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/getlogouttime", function( data ) {
+				$( "#logouttime" ).html( data );
+				});
+	    }, 1000);
     });
     
 	$("#reloadFeastDays").click(function() {
 		$("#FeastDaysFilter").val('');
 		$("#loadingIndicator").toggleClass('hidden');
-		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterholidays?holidayFilter=&page=" + $.getUrlParam('page'), function( data ) {
+		$.getq( "reload", "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/filterholidays?holidayFilter=&page=" + $.getUrlParam('page'), function( data ) {
 			$( "#feastdays" ).html( data );
 			$("#loadingIndicator").toggleClass('hidden');
 			});
-		$.get( "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/getlogouttime", function( data ) {
+		$.getq( "logouttime", "<?php echo $viewModel->get ( 'BaseUrl' ); ?>Ajax/getlogouttime", function( data ) {
 			$( "#logouttime" ).html( data );
 			});
 		});

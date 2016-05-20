@@ -46,10 +46,21 @@ class UserModel extends BaseModel {
     return $this->viewModel;
   }
 
+  /**
+   * Returns the viewModel
+   * 
+   * @return ViewModel
+   */
   public function create( ) {
     return $this->viewModel;
   }
 
+  /**
+   * Generates data for the view and returns the viewModel
+   * 
+   * @param array $urlValues
+   * @return ViewModel
+   */
   public function edit( $urlValues ) {
     $get_users_sql = sprintf ( "SELECT * FROM users WHERE id = '%s'", $urlValues ['userEditID'] );
     $result = $this->db->query ( $get_users_sql );
@@ -67,12 +78,23 @@ class UserModel extends BaseModel {
     return $this->viewModel;
   }
 
+  /**
+   * Sets the status template variable and returns the viewModel
+   * 
+   * @param string $status
+   * @return ViewModel
+   */
   public function error( $status ) {
     $this->viewModel->set ( "status", $status );
   
     return $this->viewModel;
   }
 
+  /**
+   * Returns the viewModel
+   * 
+   * @return ViewModel
+   */
   public function success( ) {
     return $this->viewModel;
   }

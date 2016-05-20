@@ -1,13 +1,21 @@
 <?php
 
 /**
+ * Processes ajax requests and gets the view ready to output
+ * 
  * @author tstepputtis
  *
  */
 class AjaxModel extends BaseModel {
 
+  /**
+   * @var Resource
+   */
   private $db = NULL;
 
+  /**
+   * @var Array
+   */
   private $urlValues;
 
   public function __construct( $urlValues ) {
@@ -17,7 +25,11 @@ class AjaxModel extends BaseModel {
     $this->urlValues = $urlValues;
   }
   
-  // data passed to the home index view
+  /**
+   * Validates the user and sets template variables
+   * 
+   * @return ViewModel
+   */
   public function validateUser( ) {
     $checkUserSql = sprintf ( "SELECT username FROM users WHERE username = '%s'%s", $this->urlValues ['frm_username'], isset ( $this->urlValues ['userEditID'] ) ? sprintf ( " AND id <> '%s'", $this->urlValues ['userEditID'] ) : '' );
     $result = $this->db->query ( $checkUserSql );
@@ -34,6 +46,11 @@ class AjaxModel extends BaseModel {
     return $this->viewModel;
   }
   
+  /**
+   * Validates the staffid and sets template variables
+   * 
+   * @return ViewModel
+   */
   public function validateStaffId( ) {
     $checkUserSql = sprintf ( "SELECT username FROM users WHERE staffid = '%s'", $this->urlValues ['frm_staffid'] );
     $result = $this->db->query ( $checkUserSql );
@@ -54,6 +71,11 @@ class AjaxModel extends BaseModel {
     return $this->viewModel;
   }
 
+  /**
+   * Filters the users
+   * 
+   * @return ViewModel
+   */
   public function filterUsers( ) {
     if ( empty ( $this->urlValues ['usersFilter'] ) ) {
       $getTotalUsersSql = "SELECT COUNT(*) FROM users";
@@ -81,6 +103,11 @@ class AjaxModel extends BaseModel {
     return $this->viewModel;
   }
 
+  /**
+   * Filters the feastdays
+   * 
+   * @return ViewModel
+   */
   public function filterFeastDays( ) {
     $day = '';
     $month = '';
@@ -135,6 +162,11 @@ class AjaxModel extends BaseModel {
     return $this->viewModel;
   }
   
+  /**
+   * Filters the holidays
+   * 
+   * @return ViewModel
+   */
   public function filterHolidays( ) {
     $day = '';
     $month = '';
@@ -219,6 +251,11 @@ class AjaxModel extends BaseModel {
     return $this->viewModel;
   }
   
+  /**
+   * Filters the manager holidays
+   * 
+   * @return ViewModel
+   */
   public function filterManagerHolidays( ) {  
     if ( empty ( $this->urlValues ['managerHolidaysFilter'] ) ) {
       $getHolidayTotalSql = sprintf("SELECT COUNT(*) FROM holiday WHERE employeeID = '%s'", $this->session->get('id'));
@@ -249,6 +286,11 @@ class AjaxModel extends BaseModel {
     return $this->viewModel;
   }
   
+  /**
+   * Filters the manager user details
+   * 
+   * @return ViewModel
+   */
   public function filterManagerUserDetails( ) {
     $day = '';
     $month = '';
@@ -352,14 +394,29 @@ class AjaxModel extends BaseModel {
     return $this->viewModel;
   }
 
+  /**
+   * Returns the ViewModel for deleteUser
+   * 
+   * @return ViewModel
+   */
   public function deleteUser( ) {
     return $this->viewModel;
   }
 
+  /**
+   * Returns the ViewModel for deleteFeastDays
+   * 
+   * @return ViewModel
+   */
   public function deleteFeastDays( ) {
     return $this->viewModel;
   }
   
+  /**
+   * Returns the ViewModel for deleteHoliday
+   * 
+   * @return ViewModel
+   */
   public function deleteHoliday( ) {
     return $this->viewModel;
   }

@@ -6,27 +6,41 @@
  */
 
 /**
- * Loads all classes recursive
+ * Excludes specified directories
+ */
+class MyRecursiveFilterIterator extends RecursiveFilterIterator {
+
+  public static $FILTERS = array ('pdf' );
+
+  public function accept( ) {
+    return ! in_array ( $this->current ( )->getFilename ( ), self::$FILTERS, true );
+  }
+}
+
+/**
+ * Loads all classes recursively
  */
 class Classloader {
 
   const BASE_DIR = __DIR__;
 
-  const searchDirs = array ('classes', 'controllers','models' );
+  const searchDirs = array ('classes','controllers','models' );
 
   /**
-   * Search for $className recursive
-   * 
-   * @param string $className
+   * Search for $className recursively
+   *
+   * @param string $className          
    */
   public static function load( $className ) {
     foreach ( Classloader::searchDirs as &$cDir ) {
       $dir = new RecursiveDirectoryIterator ( Classloader::BASE_DIR . DIRECTORY_SEPARATOR . $cDir, RecursiveDirectoryIterator::SKIP_DOTS );
-      $itr = new RecursiveIteratorIterator ( $dir );
+      $fItr = new MyRecursiveFilterIterator ( $dir );
+      $itr = new RecursiveIteratorIterator ( $fItr );
+      $regex = new RegexIterator ( $itr, '/^.+\.php$/i', RecursiveRegexIterator::GET_MATCH );
       
-      foreach ( $itr as $filename ) {
-        if ( strstr ( $filename, $className ) ) {
-          require_once $filename;
+      foreach ( $regex as $filename ) {
+        if ( strstr ( $filename [0], $className ) ) {
+          require_once $filename [0];
         }
       }
     }

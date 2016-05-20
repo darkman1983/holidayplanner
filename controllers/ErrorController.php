@@ -1,8 +1,13 @@
 <?php
 
+/**
+ * The ErrorController handles some base errors occuring on loading
+ * 
+ * @author Timo Stepputtis
+ *
+ */
 class ErrorController extends BaseController
 {    
-    //add to the parent constructor
     public function __construct($action, $urlValues) {
         parent::__construct($action, $urlValues);
         
@@ -10,27 +15,42 @@ class ErrorController extends BaseController
         $this->model = new ErrorModel();
     }
     
-    //bad URL request error
+    
+    /**
+     * Bad URL request error
+     */
     protected function badURL()
     {
         $this->view->output($this->model->badURL($this->urlValues));
     }
     
+    /**
+     * Bad username
+     */
     protected function badUsername()
     {
     	$this->view->output($this->model->badUsername($this->urlValues));
     }
     
+    /**
+     * Bad password
+     */
     protected function badPassword()
     {
     	$this->view->output($this->model->badPassword($this->urlValues));
     }
     
+    /**
+     * Bad email
+     */
     protected function badEmail()
     {
     	$this->view->output($this->model->badEmail($this->urlValues));
     }
     
+    /**
+     * Bad registration data
+     */
     protected function badRegData()
     {
     	$this->view->output($this->model->badRegData($this->urlValues));

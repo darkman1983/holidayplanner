@@ -1,7 +1,9 @@
 <?php
 
 /**
- * @author tstepputtis
+ * The Login Controller handles all login related requests
+ * 
+ * @author Timo Stepputtis
  *
  */
 class LoginController extends BaseController {
@@ -13,15 +15,24 @@ class LoginController extends BaseController {
     $this->model = new LoginModel ( $this->urlValues );
   }
   
-  // default method
+
+  /**
+   * Sets the index view output
+   */
   protected function index( ) {
     $this->view->output ( $this->model->index ( ), '' );
   }
 
+  /**
+   * Sets the login view output
+   */
   protected function login( ) {
     $this->view->output ( $this->model->login ( ), '' );
   }
 
+  /**
+   * Sets the logout view output
+   */
   protected function logout( ) {
     $this->view->output ( $this->model->logout ( ), 'Login/logout' );
   }

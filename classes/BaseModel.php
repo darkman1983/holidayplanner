@@ -1,6 +1,8 @@
 <?php
 
 /**
+ * The Base Model for all models 
+ * 
  * @author Timo Stepputtis
  *
  */

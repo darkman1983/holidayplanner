@@ -12,6 +12,13 @@ $(document).ready(function(){
         $("#loginModal").modal();
     });
 
+    $('#forgotPassword').popover({
+		'trigger': 'hover focus',
+		'placement': 'bottom',
+		'title': 'Information',
+		'content': 'Bitte den Administrator für ein neues Passwort Informieren!'
+		});
+
     $('#loginModal').on('shown.bs.modal', function () {
         $('#usrname').focus();
     });
@@ -24,6 +31,7 @@ $(document).ready(function(){
             dataType: 'json',
             beforeSend: function(){
             	$("#loadingIndicator").toggleClass('loading-indicator-hidden');
+            	$('#loginButton').attr('disabled','disabled');
             },
             success: function(data)
             {
@@ -35,6 +43,7 @@ $(document).ready(function(){
                 	    text: data.text,
                 	    type: 'error'
                 	});
+                	$('#loginButton').removeAttr('disabled');
                 	break;
                 case 1:
                 	new PNotify({
@@ -53,6 +62,7 @@ $(document).ready(function(){
             	    text: 'Es kann keine Verbindung zum Server hergestellt werden.',
             	    type: 'error'
             	});
+            	$('#loginButton').removeAttr('disabled');
             }
           });
     });
@@ -81,9 +91,6 @@ $(document).ready(function(){
               }
             });
         }
-    soundManager.onready(function() {
-    	//soundManager.play('notify');
-    	});
     });
 </script>
 </body>

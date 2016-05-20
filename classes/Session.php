@@ -1,15 +1,26 @@
 <?php
 
 /**
+ * The session class for setting / getting / destoying session data and the session it self
+ * 
  * @author Timo Stepputtis
  *
  */
 class Session {
 
+  /**
+   * @var resource
+   */
   private static $instance;
 
+  /**
+   * @var bool
+   */
   private $_sessionStarted = false;
 
+  /**
+   * @var resource
+   */
   private $sessionHandler = NULL;
 
   /**

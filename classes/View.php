@@ -1,10 +1,7 @@
 <?php
 /**
- * The View File
- */
-
-/**
  * The View class can output the template
+ * 
  * @author Timo Stepputtis
  *
  */

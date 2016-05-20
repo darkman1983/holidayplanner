@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * The PDF Controller handles PDF related requests
+ * 
+ * @author Timo Stepputtis
+ *
+ */
 class PdfController extends BaseController {
   // add to the parent constructor
   public function __construct( $action, $urlValues ) {
@@ -17,7 +23,10 @@ class PdfController extends BaseController {
     $this->db = Database::getInstance ( )->getCon ( );
   }
   
-  // default method
+
+  /**
+   * Sets the view output
+   */
   protected function showPdf( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->notAllowed ( ), 'Error/notallowed' );
@@ -27,6 +36,9 @@ class PdfController extends BaseController {
     $this->view->output ( $this->model->showPdf ( $this->urlValues ), '' );
   }
   
+  /**
+   * Sets the manager view output
+   */
   protected function managerShowPdf( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->notAllowed ( ), 'Error/notallowed' );

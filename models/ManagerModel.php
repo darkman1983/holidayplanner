@@ -1,11 +1,16 @@
 <?php
 
 /**
- * @author tstepputtis
+ * Processes all Manager related data and returns a viewModel for the requested action
+ * 
+ * @author Timo Stepputtis
  *
  */
 class ManagerModel extends BaseModel {
 
+  /**
+   * @var resource
+   */
   private $db = NULL;
 
   public function __construct( ) {
@@ -14,6 +19,12 @@ class ManagerModel extends BaseModel {
     $this->db = Database::getInstance ( )->getCon ( );
   }
 
+  /**
+   * Generates the index view data and returns a viewModel
+   * 
+   * @param array $urlValues
+   * @return ViewModel
+   */
   public function index( $urlValues ) {
     $getTotalUsersSql = "SELECT COUNT(*) FROM users";
     $totalResult = $this->db->query ( $getTotalUsersSql );
@@ -32,7 +43,13 @@ class ManagerModel extends BaseModel {
     return $this->viewModel;
   }
   
-  // data passed to the home index view
+  
+  /**
+   * Generates the user details view and returns a viewModel
+   * 
+   * @param array $urlValues
+   * @return ViewModel
+   */
   public function userDetails( $urlValues ) {
     $getTotalHolidaySql = sprintf ( "SELECT COUNT(*) FROM holiday WHERE employeeID = '%s'", $urlValues ['userID'] );
     $totalResult = $this->db->query ( $getTotalHolidaySql );
@@ -58,12 +75,24 @@ class ManagerModel extends BaseModel {
     return $this->viewModel;
   }
 
+  /**
+   * Sets uid template variable and returns the viewModel
+   * 
+   * @param array $urlValues
+   * @return ViewModel
+   */
   public function add( $urlValues ) {
     $this->viewModel->set ( 'uid', $urlValues ['userID'] );
     
     return $this->viewModel;
   }
 
+  /**
+   * Generates the data for processing holiday and returns the viewModel
+   * 
+   * @param array $urlValues
+   * @return ViewModel
+   */
   public function process( $urlValues ) {
     $getHolidaySql = sprintf ( "SELECT h.* FROM holiday h WHERE h.id = '%s'", $urlValues ['holidayProcessID'] );
     $result = $this->db->query ( $getHolidaySql );
@@ -76,12 +105,23 @@ class ManagerModel extends BaseModel {
     return $this->viewModel;
   }
 
+  /**
+   * Sets the status tempalate variable and returns the viewModel
+   * 
+   * @param string $status
+   * @return ViewModel
+   */
   public function error( $status ) {
     $this->viewModel->set ( "status", $status );
     
     return $this->viewModel;
   }
 
+  /**
+   * Returns the viewModel
+   * 
+   * @return ViewModel
+   */
   public function success( ) {
     return $this->viewModel;
   }

@@ -1,11 +1,16 @@
 <?php
 
 /**
- * @author tstepputtis
+ * Handles all holiday data for requested action
+ * 
+ * @author Timo Stepputtis
  *
  */
 class HolidayModel extends BaseModel {
 
+  /**
+   * @var resource
+   */
   private $db = NULL;
 
   public function __construct( ) {
@@ -14,7 +19,13 @@ class HolidayModel extends BaseModel {
     $this->db = Database::getInstance ( )->getCon ( );
   }
   
-  // data passed to the home index view
+
+  /**
+   * Generates the index view data and sets the view output
+   * 
+   * @param array $urlValues
+   * @return ViewModel
+   */
   public function index( $urlValues ) {
     $getTotalHolidaySql = sprintf("SELECT COUNT(*) FROM holiday WHERE employeeID = '%s'", $this->session->get('id'));
     $totalResult = $this->db->query ( $getTotalHolidaySql );
@@ -42,10 +53,22 @@ class HolidayModel extends BaseModel {
     return $this->viewModel;
   }
 
+  /**
+   * Returns the viewModel
+   * 
+   * @return ViewModel
+   */
   public function propose( ) {
     return $this->viewModel;
   }
 
+  /**
+   * Sets status and extra data for template and returns the viewModel
+   * 
+   * @param string $status
+   * @param array $extra
+   * @return ViewModel
+   */
   public function error( $status, $extra = array() ) {
     $this->viewModel->set ( "status", $status );
     $this->viewModel->set ( "extra", $extra );

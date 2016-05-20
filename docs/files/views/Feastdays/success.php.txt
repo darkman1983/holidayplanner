@@ -1,3 +1,3 @@
 <?php
-echo json_encode(array('status' => '4f4b', 'text' => 'Ihr Urlaubs- / Feiertag wurde eingetragen.'));
+echo json_encode(array('status' => 'OK', 'text' => 'Ihr Urlaubs- / Feiertag wurde eingetragen.'));
 ?>

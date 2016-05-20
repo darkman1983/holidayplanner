@@ -1,11 +1,16 @@
 <?php
 
 /**
- * @author tstepputtis
+ * Processes FeastDays data and returns the viewModel for the requested action
+ * 
+ * @author Timo Stepputtis
  *
  */
 class FeastDaysModel extends BaseModel {
 
+  /**
+   * @var resource
+   */
   private $db = NULL;
 
   public function __construct( ) {
@@ -14,7 +19,12 @@ class FeastDaysModel extends BaseModel {
     $this->db = Database::getInstance ( )->getCon ( );
   }
   
-  // data passed to the home index view
+  /**
+   * Generates all data needed for the index and returns the viewModel
+   * 
+   * @param array $urlValues
+   * @return ViewModel
+   */
   public function index( $urlValues ) {
     $this->viewModel->set ( "pageTitle", "It-Solutions Urlaubsplaner" );
     
@@ -37,6 +47,11 @@ class FeastDaysModel extends BaseModel {
     return $this->viewModel;
   }
 
+  /**
+   * Returns the viewModel for creating a FeastDay
+   * 
+   * @return ViewModel
+   */
   public function create( ) {
     return $this->viewModel;
   }
@@ -53,12 +68,23 @@ class FeastDaysModel extends BaseModel {
     return $this->viewModel;
   }
 
+  /**
+   * Sets the status template variable and returns the viewModel
+   * 
+   * @param string $status
+   * @return ViewModel
+   */
   public function error( $status ) {
     $this->viewModel->set ( "status", $status );
     
     return $this->viewModel;
   }
 
+  /**
+   * Returns the success viewModel
+   * 
+   * @return ViewModel
+   */
   public function success( ) {
     return $this->viewModel;
   }

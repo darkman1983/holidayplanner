@@ -17,13 +17,13 @@
       foreach($userData as &$data) {
     ?>
       <tr>
-        <td class="vertical-center">
+        <td class="col-xs-1 vertical-center">
           <span><?php echo str_pad($data['id'], $maxNum, 0, STR_PAD_LEFT); ?></span>
         </td>
         <td class="col-xs-2 vertical-center">
           <span><?php echo date("d.m.Y", $data['date']); ?></span>
         </td>
-        <td class="col-xs-3 vertical-center">
+        <td class="col-xs-5 vertical-center">
           <span><?php echo $data['description']; ?></span>
         </td>
         <td class="col-xs-2 vertical-center">

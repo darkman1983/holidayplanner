@@ -1,12 +1,23 @@
 <?php
 
+/**
+ * The FeastDaysController processes all data related to fest days
+ * 
+ * @author tstepputtis
+ *
+ */
 class FeastdaysController extends BaseController {
 
+  /**
+   * @var resource
+   */
   private $db = NULL;
 
+  /**
+   * @var array
+   */
   private $levels;
   
-  // add to the parent constructor
   public function __construct( $action, $urlValues ) {
     parent::__construct ( $action, $urlValues );
     
@@ -22,7 +33,9 @@ class FeastdaysController extends BaseController {
     $this->db = Database::getInstance ( )->getCon ( );
   }
   
-  // default method
+  /**
+   * Sets the index output
+   */
   protected function index( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->notAllowed ( ), 'Error/notallowed' );
@@ -32,6 +45,9 @@ class FeastdaysController extends BaseController {
     $this->view->output ( $this->model->index ( $this->urlValues ), '' );
   }
 
+  /**
+   * Creates a feastday and sets the create output
+   */
   protected function create( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->error ( 'NOACCESSEXPIRED' ), 'Feastdays/error' );
@@ -78,6 +94,9 @@ class FeastdaysController extends BaseController {
     $this->view->output ( $this->model->create ( ), '' );
   }
 
+  /**
+   * Processes the edited data, updates the database and sets the output
+   */
   protected function edit( ) {
     if ( ! $this->checkAccess ( $this->levels ) ) {
       $this->view->output ( $this->model->error ( 'NOACCESSEXPIRED' ), 'Feastdays/error' );

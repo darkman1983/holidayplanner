@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * The index Controller
+ * 
+ * @author Timo Stepputtis
+ *
+ */
 class IndexController extends BaseController
 {
     //add to the parent constructor
@@ -10,7 +16,9 @@ class IndexController extends BaseController
         $this->model = new IndexModel();
     }
     
-    //default method
+    /**
+     * Sets the view output
+     */
     protected function index()
     {
         $this->view->output($this->model->index(), '');
