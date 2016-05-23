@@ -74,15 +74,15 @@ class HolidayController extends BaseController {
       $result = $this->db->query ( $getHolidaySql );
       $resultsets = $result->fetch_all ( MYSQLI_ASSOC );
       
-      $remainingHoliday = $resultsets [0] ['remainingHoliday'];
-      $days = $resultsets [0] ['days'];
+      $remainingHoliday = @$resultsets [0] ['remainingHoliday'];
+      $days = @$resultsets [0] ['days'];
       $result->free ( );
       
       $getMaxHolidaySql = sprintf ( "SELECT maxHoliday FROM mhy WHERE year = FROM_UNIXTIME(%s, '%%Y') AND employeeID = '%s'", strtotime ( $dates [0] ), $this->session->get ( 'id' ) );
       $result = $this->db->query ( $getMaxHolidaySql );
       $resultsets = $result->fetch_all ( MYSQLI_ASSOC );
       
-      $maxHoliday = $resultsets [0] ['maxHoliday'];
+      $maxHoliday = @$resultsets [0] ['maxHoliday'];
       $result->free ( );
       
       if ( ($remainingHoliday + $days) > $maxHoliday ) {

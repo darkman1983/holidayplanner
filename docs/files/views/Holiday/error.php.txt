@@ -1,0 +1,24 @@
+<?php
+$extra = $viewModel->get ( 'extra' );
+
+switch ( $viewModel->get ( 'status' ) ) {
+  case 'NOTHINGINSERTED' :
+    echo json_encode ( array ('status' => 'NOTHINGINSERTED','text' => 'Es konnte kein neuer Eintrag erstellt werden.' ) );
+    break;
+  case 'DUPLICATE' :
+    echo json_encode ( array ('status' => 'DUPLICATE','text' => 'Dieser Urlaubsantrag kann nicht angelegt werden, da in diesem Zeitraum schon ein anderer Antrag existiert!' ) );
+    break;
+  case 'NOTENOUGH' :
+    echo json_encode ( array ('status' => 'NOTENOUGH','text' => 'Sie haben zu wenig Urlaub!<br>Aktuell haben sie noch ' . $extra [0] . ' Tage<br>Beantragt wurden aber ' . $extra [1] . ' Tage' ) );
+    break;
+  case 'NOACCESSEXPIRED' :
+    echo json_encode ( array ('status' => 'NOACCESSEXPIRED','text' => 'Sie haben keinen Zugriff oder Ihre Sitzung ist abgelaufen.' ) );
+    break;
+  case 'NOTCOMPLETE' :
+    echo json_encode ( array ('status' => 'NOTCOMPLETE','text' => 'Formulardaten sind nicht komplett.' ) );
+    break;
+  default :
+    break;
+}
+
+?>
