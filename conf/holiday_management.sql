@@ -108,8 +108,8 @@ INSERT INTO `feastdays` (`id`, `userID`, `date`, `description`) VALUES
 (17, 1, 1509404400, 'Reformationstag - HH'),
 (18, 1, 1514156400, '1. Weichnatchstag'),
 (19, 1, 1514242800, '2. Weichnatschtag'),
-(21, 1, 1464213600, 'FrÃ¶hlich'),
-(22, 1, 1452034800, 'Heilige drei KÃ¶nige');
+(21, 1, 1464213600, 'Fröhlich'),
+(22, 1, 1452034800, 'Heilige drei Könige');
 
 -- --------------------------------------------------------
 
@@ -166,7 +166,7 @@ CREATE TABLE `holiday_custom` (
 
 INSERT INTO `holiday_custom` (`id`, `userID`, `start`, `duration`, `description`) VALUES
 (6, 1, 1460325600, 12, 'Urlaub'),
-(7, 1, 1459720800, 3, 'BrÃ¼ckentage'),
+(7, 1, 1459720800, 3, 'Brückentage'),
 (8, 1, 1463349600, 3, 'Unternehmung Arbeit'),
 (9, 1, 1465768800, 2, 'Sonderurlaub'),
 (10, 1, 1470607200, 21, 'Ferien');
